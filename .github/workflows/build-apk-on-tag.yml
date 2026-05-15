@@ -1,0 +1,59 @@
+name: Build APK and app bundle on v* tag
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build release artifacts
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8"
+        run: ./gradlew --no-daemon :app:assembleRelease :app:bundleRelease
+
+      - name: Rename artifacts to include tag
+        run: |
+          mv "app/build/outputs/apk/release/app-release.apk" "navxs-${{ github.ref_name }}.apk"
+          mv "app/build/outputs/bundle/release/app-release.aab" "navxs-${{ github.ref_name }}.aab"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.ref_name }}
+          path: |
+            navxs-${{ github.ref_name }}.apk
+            navxs-${{ github.ref_name }}.aab
+          if-no-files-found: error
+
+      - name: Publish release artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            navxs-${{ github.ref_name }}.apk
+            navxs-${{ github.ref_name }}.aab

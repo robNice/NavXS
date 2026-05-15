@@ -1,0 +1,47 @@
+name: Build APK on devbuild tag
+
+on:
+  push:
+    tags:
+      - "devbuild"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build release APK
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8"
+        run: ./gradlew --no-daemon :app:assembleRelease
+
+      - name: Rename artifact to include tag
+        run: |
+          mv "app/build/outputs/apk/release/app-release.apk" "navxs-${{ github.ref_name }}.apk"
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.ref_name }}
+          path: |
+            navxs-${{ github.ref_name }}.apk
+          if-no-files-found: error
