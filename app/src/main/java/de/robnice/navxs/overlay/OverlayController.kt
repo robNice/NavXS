@@ -3,6 +3,11 @@ package de.robnice.navxs.overlay
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.PixelFormat
+import android.graphics.RadialGradient
+import android.graphics.Shader
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -16,6 +21,8 @@ import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ThemeRegistry
+import de.robnice.navxs.ui.settings.backgroundSizeDp
+import de.robnice.navxs.ui.theme.themeDrawableRes
 import kotlin.math.max
 
 class OverlayController(
@@ -82,6 +89,9 @@ class OverlayController(
     }
 
     private fun createButtonView(button: OverlayButtonConfig): FrameLayout {
+        val backgroundView = FrameLayout(context).apply {
+            id = VIEW_ID_BACKGROUND
+        }
         val imageView = ImageView(context).apply {
             id = VIEW_ID_ICON
             scaleType = ImageView.ScaleType.FIT_CENTER
@@ -92,6 +102,14 @@ class OverlayController(
             includeFontPadding = false
         }
         return FrameLayout(context).apply {
+            addView(
+                backgroundView,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
+                )
+            )
             addView(
                 imageView,
                 FrameLayout.LayoutParams(
@@ -119,18 +137,36 @@ class OverlayController(
         val theme = ThemeRegistry().resolve(button.type, button.themeId)
         val iconSizeDp = overlayIconSizeDp(button.sizePercent)
         val iconSizePx = iconSizePx(button.sizePercent, density)
+        val backgroundSizePx = withBackgroundSizePx(iconSizeDp, button.backgroundSizePercent, density)
+        val backgroundView = view.findViewById<FrameLayout>(VIEW_ID_BACKGROUND)
         val imageView = view.findViewById<ImageView>(VIEW_ID_ICON)
         val textView = view.findViewById<TextView>(VIEW_ID_TEXT)
-        view.alpha = button.opacity
         view.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         view.isClickable = true
         view.isFocusable = false
         view.minimumWidth = iconSizePx
         view.minimumHeight = iconSizePx
-        val drawableRes = overlayThemeDrawableRes(theme.vectorAssetName)
+        backgroundView.visibility = if (button.backgroundOpacity > 0f) FrameLayout.VISIBLE else FrameLayout.GONE
+        backgroundView.layoutParams = (backgroundView.layoutParams as FrameLayout.LayoutParams).apply {
+            width = backgroundSizePx
+            height = backgroundSizePx
+            gravity = Gravity.CENTER
+        }
+        backgroundView.background = GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(android.graphics.Color.TRANSPARENT)
+        }
+        backgroundView.background = createBackgroundDrawable(
+            sizePx = backgroundSizePx,
+            color = button.backgroundColorArgb.toInt(),
+            opacity = button.backgroundOpacity,
+            softnessPercent = button.backgroundSoftnessPercent
+        )
+        val drawableRes = themeDrawableRes(theme.vectorAssetName)
         if (drawableRes != null) {
             imageView.setImageResource(drawableRes)
             imageView.imageTintList = ColorStateList.valueOf(button.colorArgb.toInt())
+            imageView.alpha = button.opacity
             imageView.visibility = ImageView.VISIBLE
             imageView.layoutParams = (imageView.layoutParams as FrameLayout.LayoutParams).apply {
                 width = iconSizePx
@@ -145,7 +181,7 @@ class OverlayController(
             imageView.visibility = ImageView.GONE
             textView.visibility = TextView.VISIBLE
             textView.text = theme.fallbackText
-            textView.setTextColor(button.colorArgb.toInt())
+            textView.setTextColor(applyAlpha(button.colorArgb.toInt(), button.opacity))
             textView.textSize = fallbackFontSizeSp(iconSizeDp)
         }
         var activePressId = 0L
@@ -218,6 +254,7 @@ class OverlayController(
 
     private companion object {
         const val TAG = "OverlayController"
+        const val VIEW_ID_BACKGROUND = 1000
         const val VIEW_ID_ICON = 1001
         const val VIEW_ID_TEXT = 1002
     }
@@ -234,26 +271,46 @@ internal fun touchTargetPx(sizePercent: Int, density: Float): Int =
 
 private fun overlayIconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 16)
 
+private fun withBackgroundSizePx(iconSizeDp: Int, sizePercent: Int, density: Float): Int =
+    (backgroundSizeDp(iconSizeDp, sizePercent) * density).toInt()
+
 private fun fallbackFontSizeSp(iconSizeDp: Int): Float = iconSizeDp * 0.7f
 
-private fun overlayThemeDrawableRes(vectorAssetName: String): Int? = when (vectorAssetName) {
-    "ArrowBackNew" -> R.drawable.overlay_arrow_back_new
-    "ArrowBackNewFilled" -> R.drawable.overlay_arrow_back_new_filled
-    "ArrowLeft" -> R.drawable.overlay_arrow_left
-    "ArrowBackIosNew" -> R.drawable.overlay_arrow_back_ios_new
-    "ArrowBack" -> R.drawable.overlay_arrow_back_classic
-    "RadioButtonUnchecked" -> R.drawable.overlay_home_circle
-    "Circle" -> R.drawable.overlay_home_circle_filled
-    "HomeSquircleOutline" -> R.drawable.overlay_home_squircle_outline
-    "HomeSquircleFilled" -> R.drawable.overlay_home_squircle_filled
-    "HomeOutlined" -> R.drawable.overlay_home_house
-    "Home" -> R.drawable.overlay_home_house_filled
-    "CropSquare" -> R.drawable.overlay_recents_square
-    "RecentsLinesHorizontal" -> R.drawable.overlay_recents_lines_horizontal
-    "RecentsLinesVertical" -> R.drawable.overlay_recents_lines_vertical
-    "Layers" -> R.drawable.overlay_recents_layers
-    "DashboardCustomize" -> R.drawable.overlay_recents_grid
-    "Apps" -> R.drawable.overlay_recents_classic
-    "ViewAgenda" -> R.drawable.overlay_recents_outlined
-    else -> null
+private fun createBackgroundDrawable(
+    sizePx: Int,
+    color: Int,
+    opacity: Float,
+    softnessPercent: Int
+): android.graphics.drawable.Drawable {
+    val appliedColor = applyAlpha(color, opacity)
+    val softness = (softnessPercent.coerceIn(0, 100) / 100f)
+    if (softness <= 0f) {
+        return GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(appliedColor)
+        }
+    }
+    val innerStop = (1f - softness).coerceIn(0f, 1f)
+    return ShapeDrawable(OvalShape()).apply {
+        shaderFactory = object : ShapeDrawable.ShaderFactory() {
+            override fun resize(width: Int, height: Int): Shader {
+                val radius = minOf(width, height) / 2f
+                return RadialGradient(
+                    width / 2f,
+                    height / 2f,
+                    radius,
+                    intArrayOf(appliedColor, appliedColor, applyAlpha(color, 0f)),
+                    floatArrayOf(0f, innerStop, 1f),
+                    Shader.TileMode.CLAMP
+                )
+            }
+        }
+        intrinsicWidth = sizePx
+        intrinsicHeight = sizePx
+    }
+}
+
+private fun applyAlpha(color: Int, opacity: Float): Int {
+    val alpha = (opacity.coerceIn(0f, 1f) * 255).toInt()
+    return (color and 0x00FFFFFF) or (alpha shl 24)
 }

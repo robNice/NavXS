@@ -14,8 +14,13 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
 import de.robnice.navxs.R
 import de.robnice.navxs.ui.MainUiState
 
@@ -27,6 +32,8 @@ fun AppsScreen(
     onShowSystemAppsChange: (Boolean) -> Unit,
     onAppToggle: (String, Boolean) -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val enabledApps = state.installedApps.filter { it.enabled }
     val disabledApps = state.installedApps.filterNot { it.enabled }
     Column(
@@ -37,7 +44,16 @@ fun AppsScreen(
             modifier = Modifier.fillMaxWidth(),
             value = state.searchQuery,
             onValueChange = onSearchQueryChange,
-            label = { Text(stringResource(R.string.apps_search_hint)) }
+            label = { Text(stringResource(R.string.apps_search_hint)) },
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }
+            )
         )
         ListItem(
             headlineContent = { Text(stringResource(R.string.apps_show_system_apps)) },

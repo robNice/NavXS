@@ -1,11 +1,11 @@
 package de.robnice.navxs.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DensityMedium
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import de.robnice.navxs.R
 
 @Composable
@@ -58,9 +65,7 @@ fun AccessibilityGateScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(R.drawable.navxs_wordmark_white),
-                contentDescription = null,
+            AccessibilityGateWordmark(
                 modifier = Modifier
                     .fillMaxWidth(0.58f)
             )
@@ -123,5 +128,47 @@ fun AccessibilityGateScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AccessibilityGateWordmark(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = buildAnnotatedString {
+                withStyle(
+                    SpanStyle(
+                        color = Color(0xFFF3F8FE),
+                        fontWeight = FontWeight.Medium
+                    )
+                ) {
+                    append("Nav")
+                }
+                withStyle(
+                    SpanStyle(
+                        color = Color(0xFF39CFFF),
+                        fontWeight = FontWeight.Medium
+                    )
+                ) {
+                    append("XS")
+                }
+            },
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontSize = 28.sp,
+                letterSpacing = 0.sp
+            )
+        )
+        Icon(
+            imageVector = Icons.Outlined.DensityMedium,
+            contentDescription = null,
+            tint = Color(0xFF39CFFF),
+            modifier = Modifier
+                .padding(start = 3.dp, top = 1.dp)
+                .size(18.dp)
+        )
     }
 }

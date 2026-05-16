@@ -35,14 +35,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathBuilder
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import de.robnice.navxs.data.models.ButtonTheme
+import de.robnice.navxs.ui.theme.themeDrawableRes
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -79,9 +82,19 @@ fun ThemePicker(
                     modifier = Modifier.size(58.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    resolveThemeIcon(theme)?.let { icon ->
-                        Icon(imageVector = icon, contentDescription = theme.id)
-                    } ?: androidx.compose.material3.Text(theme.fallbackText)
+                    val drawableRes = themeDrawableRes(theme.vectorAssetName)
+                    when {
+                        drawableRes != null -> Icon(
+                            painter = painterResource(id = drawableRes),
+                            contentDescription = theme.id,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                        resolveThemeIcon(theme) != null -> Icon(
+                            imageVector = resolveThemeIcon(theme)!!,
+                            contentDescription = theme.id
+                        )
+                        else -> androidx.compose.material3.Text(theme.fallbackText)
+                    }
                 }
             }
         }

@@ -9,6 +9,9 @@ import kotlin.math.max
 object NavDefaults {
     const val DefaultOpacity = 1f
     const val DefaultSizePercent = 100
+    const val DefaultBackgroundOpacity = 0f
+    const val DefaultBackgroundSizePercent = 100
+    const val DefaultBackgroundSoftnessPercent = 0
     const val DefaultPrecisionStepPx = 5
 
     private const val DefaultBackColor = 0xFF4F7FFF
@@ -43,6 +46,10 @@ object NavDefaults {
             colorArgb = color,
             opacity = DefaultOpacity,
             sizePercent = DefaultSizePercent,
+            backgroundColorArgb = color,
+            backgroundOpacity = DefaultBackgroundOpacity,
+            backgroundSizePercent = DefaultBackgroundSizePercent,
+            backgroundSoftnessPercent = DefaultBackgroundSoftnessPercent,
             positionXPx = x,
             positionYPx = y,
             themeId = themeId

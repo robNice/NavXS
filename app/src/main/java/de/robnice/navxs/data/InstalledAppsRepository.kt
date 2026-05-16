@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class InstalledAppsRepository(private val context: Context) {
-    suspend fun loadApps(showSystemApps: Boolean, enabledPackages: Set<String>): List<InstalledAppInfo> {
+    suspend fun loadApps(showSystemApps: Boolean): List<InstalledAppInfo> {
         return withContext(Dispatchers.IO) {
             val packageManager = context.packageManager
             packageManager.getInstalledApplications(0)
@@ -25,13 +25,12 @@ class InstalledAppsRepository(private val context: Context) {
                         appName = safeLabel,
                         packageName = appInfo.packageName,
                         icon = loadSafeIcon(appInfo),
-                        systemApp = systemApp,
-                        enabled = enabledPackages.contains(appInfo.packageName)
+                        systemApp = systemApp
                     )
                 }
                 .filterNot { it.packageName == context.packageName }
                 .filter { showSystemApps || !it.systemApp }
-                .sortedWith(compareByDescending<InstalledAppInfo> { it.enabled }.thenBy { it.appName.lowercase() })
+                .sortedBy { it.appName.lowercase() }
         }
     }
 

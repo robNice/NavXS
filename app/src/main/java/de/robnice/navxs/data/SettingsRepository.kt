@@ -60,6 +60,10 @@ class SettingsRepository(
                 preferences[Keys.colorKey(button.type)] = button.colorArgb
                 preferences[Keys.opacityKey(button.type)] = button.opacity.coerceIn(0f, 1f)
                 preferences[Keys.sizeKey(button.type)] = button.sizePercent.coerceIn(25, 300)
+                preferences[Keys.backgroundColorKey(button.type)] = button.backgroundColorArgb
+                preferences[Keys.backgroundOpacityKey(button.type)] = button.backgroundOpacity.coerceIn(0f, 1f)
+                preferences[Keys.backgroundSizeKey(button.type)] = button.backgroundSizePercent.coerceIn(25, 300)
+                preferences[Keys.backgroundSoftnessKey(button.type)] = button.backgroundSoftnessPercent.coerceIn(0, 100)
                 preferences[Keys.xKey(button.type)] = button.positionXPx
                 preferences[Keys.yKey(button.type)] = button.positionYPx
                 preferences[Keys.themeKey(button.type)] = button.themeId
@@ -98,6 +102,10 @@ class SettingsRepository(
                 colorArgb = preferences[Keys.colorKey(type)] ?: fallback.colorArgb,
                 opacity = (preferences[Keys.opacityKey(type)] ?: fallback.opacity).coerceIn(0f, 1f),
                 sizePercent = (preferences[Keys.sizeKey(type)] ?: fallback.sizePercent).coerceIn(100, 300),
+                backgroundColorArgb = preferences[Keys.backgroundColorKey(type)] ?: fallback.backgroundColorArgb,
+                backgroundOpacity = (preferences[Keys.backgroundOpacityKey(type)] ?: fallback.backgroundOpacity).coerceIn(0f, 1f),
+                backgroundSizePercent = (preferences[Keys.backgroundSizeKey(type)] ?: fallback.backgroundSizePercent).coerceIn(25, 300),
+                backgroundSoftnessPercent = (preferences[Keys.backgroundSoftnessKey(type)] ?: fallback.backgroundSoftnessPercent).coerceIn(0, 100),
                 positionXPx = preferences[Keys.xKey(type)] ?: fallback.positionXPx,
                 positionYPx = preferences[Keys.yKey(type)] ?: fallback.positionYPx,
                 themeId = preferences[Keys.themeKey(type)] ?: fallback.themeId
@@ -127,6 +135,10 @@ class SettingsRepository(
         fun colorKey(type: NavButtonType) = longPreferencesKey("${type.name.lowercase()}_color")
         fun opacityKey(type: NavButtonType) = floatPreferencesKey("${type.name.lowercase()}_opacity")
         fun sizeKey(type: NavButtonType) = intPreferencesKey("${type.name.lowercase()}_size")
+        fun backgroundColorKey(type: NavButtonType) = longPreferencesKey("${type.name.lowercase()}_background_color")
+        fun backgroundOpacityKey(type: NavButtonType) = floatPreferencesKey("${type.name.lowercase()}_background_opacity")
+        fun backgroundSizeKey(type: NavButtonType) = intPreferencesKey("${type.name.lowercase()}_background_size")
+        fun backgroundSoftnessKey(type: NavButtonType) = intPreferencesKey("${type.name.lowercase()}_background_softness")
         fun xKey(type: NavButtonType) = intPreferencesKey("${type.name.lowercase()}_x")
         fun yKey(type: NavButtonType) = intPreferencesKey("${type.name.lowercase()}_y")
         fun themeKey(type: NavButtonType) = stringPreferencesKey("${type.name.lowercase()}_theme")

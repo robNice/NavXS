@@ -28,26 +28,35 @@ fun OverlayRenderer(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         settings.buttons.values.filter { it.active }.forEach { button ->
+            val buttonSizeDp = (56 * button.sizePercent / 100).coerceAtLeast(24)
+            val iconSizeDp = 32
+            val backgroundSizeDp = (iconSizeDp * button.backgroundSizePercent / 100).coerceAtLeast(16)
             Box(
                 modifier = Modifier
                     .offset { IntOffset(button.positionXPx, button.positionYPx) }
-                    .size((56 * button.sizePercent / 100).coerceAtLeast(24).dp)
-                    .background(Color(button.colorArgb).copy(alpha = button.opacity), CircleShape)
+                    .size(buttonSizeDp.dp)
                     .clickable { onButtonPress(button.type) },
                 contentAlignment = Alignment.Center
             ) {
+                if (button.backgroundOpacity > 0f) {
+                    Box(
+                        modifier = Modifier
+                            .size(backgroundSizeDp.dp)
+                            .background(Color(button.backgroundColorArgb).copy(alpha = button.backgroundOpacity), CircleShape)
+                    )
+                }
                 val icon = resolveThemeIcon(ThemeRegistry().resolve(button.type, button.themeId))
                 if (icon != null) {
                     Icon(
                         imageVector = icon,
                         contentDescription = button.type.name,
-                        tint = MaterialTheme.colorScheme.onPrimary,
+                        tint = Color(button.colorArgb).copy(alpha = button.opacity),
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(iconSizeDp.dp)
                             .background(Color.Transparent, CircleShape)
                     )
                 } else {
-                    Text(fallback(button.type), color = MaterialTheme.colorScheme.onPrimary)
+                    Text(fallback(button.type), color = Color(button.colorArgb).copy(alpha = button.opacity))
                 }
             }
         }

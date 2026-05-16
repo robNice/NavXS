@@ -285,11 +285,12 @@ private fun dragBoundsForButton(
     val iconPx = with(density) { iconSizeDp(sizePercent).dp.roundToPx() }
     val touchTargetPx = with(density) { max(iconSizeDp(sizePercent) + 24, 56).dp.roundToPx() }
     val overflowPx = max(touchTargetPx - iconPx, 0) / 2
+    val bottomAllowancePx = iconPx / 2
     return IntRect(
         left = -overflowPx,
         top = -overflowPx,
         right = max(viewportWidthPx - iconPx - overflowPx, -overflowPx),
-        bottom = max(viewportHeightPx - iconPx - overflowPx, -overflowPx)
+        bottom = max(viewportHeightPx - iconPx + bottomAllowancePx, -overflowPx)
     )
 }
 

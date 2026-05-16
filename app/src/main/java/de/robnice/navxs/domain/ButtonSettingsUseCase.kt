@@ -31,6 +31,22 @@ class ButtonSettingsUseCase {
         return updateButton(settings, type) { it.copy(sizePercent = sizePercent.coerceIn(100, 300)) }
     }
 
+    fun setBackgroundColor(settings: OverlaySettings, type: NavButtonType, colorArgb: Long): OverlaySettings {
+        return updateButton(settings, type) { it.copy(backgroundColorArgb = colorArgb) }
+    }
+
+    fun setBackgroundOpacity(settings: OverlaySettings, type: NavButtonType, opacity: Float): OverlaySettings {
+        return updateButton(settings, type) { it.copy(backgroundOpacity = opacity.coerceIn(0f, 1f)) }
+    }
+
+    fun setBackgroundSizePercent(settings: OverlaySettings, type: NavButtonType, sizePercent: Int): OverlaySettings {
+        return updateButton(settings, type) { it.copy(backgroundSizePercent = sizePercent.coerceIn(100, 300)) }
+    }
+
+    fun setBackgroundSoftnessPercent(settings: OverlaySettings, type: NavButtonType, softnessPercent: Int): OverlaySettings {
+        return updateButton(settings, type) { it.copy(backgroundSoftnessPercent = softnessPercent.coerceIn(0, 100)) }
+    }
+
     fun setTheme(settings: OverlaySettings, type: NavButtonType, themeId: String): OverlaySettings {
         return updateButton(settings, type) { it.copy(themeId = themeId) }
     }
@@ -52,6 +68,10 @@ class ButtonSettingsUseCase {
                 colorArgb = it.colorArgb,
                 opacity = it.opacity,
                 sizePercent = it.sizePercent,
+                backgroundColorArgb = it.backgroundColorArgb,
+                backgroundOpacity = it.backgroundOpacity,
+                backgroundSizePercent = it.backgroundSizePercent,
+                backgroundSoftnessPercent = it.backgroundSoftnessPercent,
                 themeId = it.themeId
             )
         }

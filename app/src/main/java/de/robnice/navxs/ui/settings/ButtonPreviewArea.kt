@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.Image
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,11 +32,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntOffset
@@ -43,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
+import de.robnice.navxs.domain.ThemeRegistry
+import de.robnice.navxs.ui.theme.themeDrawableRes
 import kotlin.math.max
 
 @Composable
@@ -203,8 +210,25 @@ fun ButtonPreviewArea(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                val icon = resolveThemeIcon(de.robnice.navxs.domain.ThemeRegistry().resolve(button.type, button.themeId))
-                if (icon != null) {
+                ButtonBackground(
+                    colorArgb = button.backgroundColorArgb,
+                    opacity = button.backgroundOpacity,
+                    sizePercent = button.backgroundSizePercent,
+                    softnessPercent = button.backgroundSoftnessPercent,
+                    iconSizeDp = iconSizeDp,
+                    enabled = true
+                )
+                val theme = ThemeRegistry().resolve(button.type, button.themeId)
+                val drawableRes = themeDrawableRes(theme.vectorAssetName)
+                val icon = resolveThemeIcon(theme)
+                if (drawableRes != null) {
+                    Image(
+                        painter = painterResource(id = drawableRes),
+                        contentDescription = button.type.name,
+                        modifier = Modifier.size(iconSizeDp.dp),
+                        colorFilter = ColorFilter.tint(iconTint)
+                    )
+                } else if (icon != null) {
                     Icon(
                         imageVector = icon,
                         contentDescription = button.type.name,
@@ -221,6 +245,44 @@ fun ButtonPreviewArea(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ButtonBackground(
+    colorArgb: Long,
+    opacity: Float,
+    sizePercent: Int,
+    softnessPercent: Int,
+    iconSizeDp: Int,
+    enabled: Boolean
+) {
+    if (!enabled || opacity <= 0f) return
+    val backgroundSizeDp = backgroundSizeDp(iconSizeDp, sizePercent)
+    val color = Color(colorArgb).copy(alpha = opacity)
+    val softness = (softnessPercent.coerceIn(0, 100) / 100f)
+    if (softness <= 0f) {
+        Box(
+            modifier = Modifier
+                .size(backgroundSizeDp.dp)
+                .background(color = color, shape = CircleShape)
+        )
+    } else {
+        val innerStop = (1f - softness).coerceIn(0f, 1f)
+        Box(
+            modifier = Modifier
+                .size(backgroundSizeDp.dp)
+                .background(
+                    brush = Brush.radialGradient(
+                        colorStops = arrayOf(
+                            0f to color,
+                            innerStop to color,
+                            1f to color.copy(alpha = 0f)
+                        )
+                    ),
+                    shape = CircleShape
+                )
+        )
     }
 }
 
@@ -249,6 +311,9 @@ private fun fallbackLabel(type: NavButtonType): String = when (type) {
 }
 
 internal fun iconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 16)
+
+internal fun backgroundSizeDp(iconSizeDp: Int, sizePercent: Int): Int =
+    max((iconSizeDp * sizePercent) / 100, 16)
 
 private fun touchTargetDp(iconSizeDp: Int, editMode: Boolean): Int {
     val padding = if (editMode) 24 else 0

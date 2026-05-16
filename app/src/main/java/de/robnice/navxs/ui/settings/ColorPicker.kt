@@ -127,7 +127,7 @@ private fun ColorPickerDialog(
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text(stringResource(R.string.settings_done))
+                Text(stringResource(R.string.dialog_cancel))
             }
         }
     )
@@ -180,7 +180,7 @@ private fun ColorWheel(
             }
 
             val selectorRadius = radius * saturation
-            val selectorAngle = Math.toRadians((hue - 90f).toDouble())
+            val selectorAngle = Math.toRadians(hue.toDouble())
             val selectorCenter = Offset(
                 x = center.x + (cos(selectorAngle) * selectorRadius).toFloat(),
                 y = center.y + (sin(selectorAngle) * selectorRadius).toFloat()
@@ -216,7 +216,7 @@ private fun updateWheelSelection(
     val distance = sqrt(dx * dx + dy * dy).coerceAtMost(radius)
     val saturation = (distance / radius).coerceIn(0f, 1f)
     val angle = Math.toDegrees(atan2(dy, dx).toDouble()).toFloat()
-    val hue = (angle + 90f + 360f).mod(360f)
+    val hue = (angle + 360f).mod(360f)
     onChange(hue, saturation)
 }
 

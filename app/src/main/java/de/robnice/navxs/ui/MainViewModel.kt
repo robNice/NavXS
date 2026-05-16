@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -82,17 +83,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             settings.copy(editMode = isEditMode)
         }
 
+    private val installedAppsBaseFlow: Flow<List<InstalledAppInfo>> =
+        settingsRepository.showSystemAppsFlow.map { showSystemApps ->
+            installedAppsRepository.loadApps(showSystemApps)
+        }
+
     private val installedAppsFlow: Flow<List<InstalledAppInfo>> = combine(
+        installedAppsBaseFlow,
         settingsRepository.selectedAppsFlow,
-        settingsRepository.showSystemAppsFlow,
         searchQuery
-    ) { selectedApps, showSystemApps, query ->
-        installedAppsRepository.loadApps(showSystemApps, selectedApps)
+    ) { installedApps, selectedApps, query ->
+        installedApps
+            .map { app -> app.copy(enabled = app.packageName in selectedApps) }
             .filter {
                 query.isBlank() ||
                     it.appName.contains(query, ignoreCase = true) ||
                     it.packageName.contains(query, ignoreCase = true)
             }
+            .sortedWith(compareByDescending<InstalledAppInfo> { it.enabled }.thenBy { it.appName.lowercase() })
     }
 
     private val uiStateBaseFlow: Flow<MainUiState> =
@@ -198,6 +206,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setSize(type: NavButtonType, sizePercent: Int) =
         persist(buttonSettingsUseCase.setSizePercent(uiState.value.settings, type, sizePercent))
+
+    fun setBackgroundColor(type: NavButtonType, colorArgb: Long) =
+        persist(buttonSettingsUseCase.setBackgroundColor(uiState.value.settings, type, colorArgb))
+
+    fun setBackgroundOpacity(type: NavButtonType, opacity: Float) =
+        persist(buttonSettingsUseCase.setBackgroundOpacity(uiState.value.settings, type, opacity))
+
+    fun setBackgroundSize(type: NavButtonType, sizePercent: Int) =
+        persist(buttonSettingsUseCase.setBackgroundSizePercent(uiState.value.settings, type, sizePercent))
+
+    fun setBackgroundSoftness(type: NavButtonType, softnessPercent: Int) =
+        persist(buttonSettingsUseCase.setBackgroundSoftnessPercent(uiState.value.settings, type, softnessPercent))
 
     fun setTheme(type: NavButtonType, themeId: String) =
         persist(buttonSettingsUseCase.setTheme(uiState.value.settings, type, themeId))

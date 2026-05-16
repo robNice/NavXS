@@ -39,6 +39,10 @@ fun SettingsScreen(
     onColorChange: (NavButtonType, Long) -> Unit,
     onOpacityChange: (NavButtonType, Float) -> Unit,
     onSizeChange: (NavButtonType, Int) -> Unit,
+    onBackgroundColorChange: (NavButtonType, Long) -> Unit,
+    onBackgroundOpacityChange: (NavButtonType, Float) -> Unit,
+    onBackgroundSizeChange: (NavButtonType, Int) -> Unit,
+    onBackgroundSoftnessChange: (NavButtonType, Int) -> Unit,
     onThemeChange: (NavButtonType, String) -> Unit,
     onOpenEditMode: () -> Unit
 ) {
@@ -96,54 +100,120 @@ fun SettingsScreen(
                         onCheckedChange = { onActiveChange(selectedType, it) }
                     )
                 }
-                SettingsDivider()
-                SettingHeader(
-                    title = stringResource(R.string.settings_colour),
-                    subtitle = stringResource(R.string.settings_colour_description)
-                ) {
-                    ColorPicker(
-                        selectedColor = selectedButton.colorArgb,
-                        enabled = controlsEnabled,
-                        onSelected = { onColorChange(selectedType, it) }
+            }
+        }
+        if (controlsEnabled) {
+            item {
+                SettingsCard {
+                    Text(
+                        text = stringResource(R.string.settings_button_section),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    SettingsDivider()
+                    SettingHeader(
+                        title = stringResource(R.string.settings_colour),
+                        subtitle = stringResource(R.string.settings_colour_description)
+                    ) {
+                        ColorPicker(
+                            selectedColor = selectedButton.colorArgb,
+                            enabled = true,
+                            onSelected = { onColorChange(selectedType, it) }
+                        )
+                    }
+                    SettingsDivider()
+                    SliderSetting(
+                        label = stringResource(R.string.settings_opacity),
+                        subtitle = stringResource(R.string.settings_opacity_description),
+                        value = selectedButton.opacity,
+                        valueText = stringResource(R.string.percent_format, (selectedButton.opacity * 100).toInt()),
+                        enabled = true,
+                        onValueChange = { onOpacityChange(selectedType, it) }
+                    )
+                    SettingsDivider()
+                    SliderSetting(
+                        label = stringResource(R.string.settings_size),
+                        subtitle = stringResource(R.string.settings_size_description),
+                        value = (selectedButton.sizePercent - 100) / 200f,
+                        valueText = stringResource(R.string.percent_format, selectedButton.sizePercent),
+                        enabled = true,
+                        onValueChange = { onSizeChange(selectedType, (100 + it * 200).toInt()) }
                     )
                 }
-                SettingsDivider()
-                SliderSetting(
-                    label = stringResource(R.string.settings_opacity),
-                    subtitle = stringResource(R.string.settings_opacity_description),
-                    value = selectedButton.opacity,
-                    valueText = stringResource(R.string.percent_format, (selectedButton.opacity * 100).toInt()),
-                    enabled = controlsEnabled,
-                    onValueChange = { onOpacityChange(selectedType, it) }
-                )
-                SettingsDivider()
-                SliderSetting(
-                    label = stringResource(R.string.settings_size),
-                    subtitle = stringResource(R.string.settings_size_description),
-                    value = (selectedButton.sizePercent - 100) / 200f,
-                    valueText = stringResource(R.string.percent_format, selectedButton.sizePercent),
-                    enabled = controlsEnabled,
-                    onValueChange = { onSizeChange(selectedType, (100 + it * 200).toInt()) }
-                )
-                SettingsDivider()
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            }
+            item {
+                SettingsCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(
-                            text = stringResource(R.string.settings_theme),
+                            text = stringResource(R.string.settings_button_background_section),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = stringResource(R.string.settings_theme_description),
+                            text = stringResource(R.string.settings_button_background_description),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                    }
-                    ThemePicker(
-                        themes = themes,
-                        selectedThemeId = selectedButton.themeId,
-                        enabled = controlsEnabled,
-                        onThemeSelected = { onThemeChange(selectedType, it) }
+                        SettingsDivider()
+                        SettingHeader(
+                            title = stringResource(R.string.settings_button_background_colour),
+                            subtitle = stringResource(R.string.settings_button_background_colour_description)
+                        ) {
+                            ColorPicker(
+                                selectedColor = selectedButton.backgroundColorArgb,
+                                enabled = true,
+                                onSelected = { onBackgroundColorChange(selectedType, it) }
+                            )
+                        }
+                        SettingsDivider()
+                        SliderSetting(
+                            label = stringResource(R.string.settings_button_background_opacity),
+                            subtitle = stringResource(R.string.settings_button_background_opacity_description),
+                            value = selectedButton.backgroundOpacity,
+                            valueText = stringResource(R.string.percent_format, (selectedButton.backgroundOpacity * 100).toInt()),
+                            enabled = true,
+                            onValueChange = { onBackgroundOpacityChange(selectedType, it) }
+                        )
+                        SettingsDivider()
+                        SliderSetting(
+                        label = stringResource(R.string.settings_button_background_size),
+                        subtitle = stringResource(R.string.settings_button_background_size_description),
+                        value = (selectedButton.backgroundSizePercent - 100) / 200f,
+                        valueText = stringResource(R.string.percent_format, selectedButton.backgroundSizePercent),
+                        enabled = true,
+                        onValueChange = { onBackgroundSizeChange(selectedType, (100 + it * 200).toInt()) }
                     )
+                    SettingsDivider()
+                    SliderSetting(
+                        label = stringResource(R.string.settings_button_background_softness),
+                        subtitle = stringResource(R.string.settings_button_background_softness_description),
+                        value = selectedButton.backgroundSoftnessPercent / 100f,
+                        valueText = stringResource(R.string.percent_format, selectedButton.backgroundSoftnessPercent),
+                        enabled = true,
+                        onValueChange = { onBackgroundSoftnessChange(selectedType, (it * 100).toInt()) }
+                    )
+                }
+            }
+        }
+            item {
+                SettingsCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                text = stringResource(R.string.settings_theme),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_theme_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        ThemePicker(
+                            themes = themes,
+                            selectedThemeId = selectedButton.themeId,
+                            enabled = true,
+                            onThemeSelected = { onThemeChange(selectedType, it) }
+                        )
+                    }
                 }
             }
         }
@@ -197,12 +267,15 @@ private fun SettingsCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
+        modifier = Modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(14.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             content = content
         )

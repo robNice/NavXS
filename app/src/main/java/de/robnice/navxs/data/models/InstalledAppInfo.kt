@@ -7,5 +7,5 @@ data class InstalledAppInfo(
     val packageName: String,
     val icon: Drawable?,
     val systemApp: Boolean,
-    val enabled: Boolean
+    val enabled: Boolean = false
 )

@@ -16,7 +16,6 @@ class ThemeRegistry {
         val themes = listOf(
             ButtonTheme("back_new", NavButtonType.BACK, "new", "ArrowBackNew", "◁"),
             ButtonTheme("back_new_filled", NavButtonType.BACK, "new_filled", "ArrowBackNewFilled", "◀"),
-            ButtonTheme("back_left", NavButtonType.BACK, "left", "ArrowLeft", "‹"),
             ButtonTheme("back_ios_new", NavButtonType.BACK, "ios_new", "ArrowBackIosNew", "❮"),
             ButtonTheme("back_classic", NavButtonType.BACK, "classic", "ArrowBack", "←"),
             ButtonTheme("home_circle", NavButtonType.HOME, "circle", "RadioButtonUnchecked", "○"),
@@ -28,10 +27,7 @@ class ThemeRegistry {
             ButtonTheme("recents_square", NavButtonType.RECENTS, "square", "CropSquare", "□"),
             ButtonTheme("recents_lines_horizontal", NavButtonType.RECENTS, "lines_horizontal", "RecentsLinesHorizontal", "☰"),
             ButtonTheme("recents_lines_vertical", NavButtonType.RECENTS, "lines_vertical", "RecentsLinesVertical", "⋮"),
-            ButtonTheme("recents_layers", NavButtonType.RECENTS, "layers", "Layers", "⧉"),
-            ButtonTheme("recents_grid", NavButtonType.RECENTS, "grid", "DashboardCustomize", "▦"),
-            ButtonTheme("recents_classic", NavButtonType.RECENTS, "classic", "Apps", "⋯"),
-            ButtonTheme("recents_outlined", NavButtonType.RECENTS, "outlined", "ViewAgenda", "▤")
+            ButtonTheme("recents_grid", NavButtonType.RECENTS, "grid", "DashboardCustomize", "▦")
         )
     }
 }
