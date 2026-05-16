@@ -70,12 +70,9 @@ fun MainTabsScreen(
         }.getOrNull().orEmpty()
     }
     val privacyMarkdown = remember(configuration.locales[0], context) {
-        val language = configuration.locales[0]?.language ?: ""
-        val assetName = if (language.equals("de", ignoreCase = true)) {
-            "privacy_policy_de.md"
-        } else {
-            "privacy_policy_en.md"
-        }
+        val language = configuration.locales[0]?.language?.lowercase() ?: ""
+        val supported = setOf("de", "fr", "es", "it", "pt", "nl", "pl", "ru", "tr", "ja", "ko", "uk")
+        val assetName = if (language in supported) "privacy_policy_$language.md" else "privacy_policy_en.md"
         runCatching {
             context.assets.open(assetName).use { input ->
                 input.readBytes().toString(StandardCharsets.UTF_8)

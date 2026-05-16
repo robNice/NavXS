@@ -28,6 +28,7 @@ A lightweight Android app that places a floating navigation overlay — **Back**
    - [3.4 Button](#34-button)
    - [3.5 Button background](#35-button-background)
 4. [Preview flag](#4-preview-flag)
+5. [License](#5-license)
 
 ---
 
@@ -129,3 +130,9 @@ The small flag at the top-right of the settings screen slides open a side panel 
 <p>
   <img src="docs/preview_dark.png" width="380" alt="Preview panel – dark mode">
 </p>
+
+---
+
+## 5 License
+
+NavXS is released under the [MIT License](LICENSE.md).
