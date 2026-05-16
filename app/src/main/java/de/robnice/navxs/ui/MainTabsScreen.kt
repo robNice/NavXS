@@ -161,7 +161,7 @@ fun MainTabsScreen(
                     else -> SettingsScreen(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 96.dp),
+                            .padding(start = 16.dp, top = 16.dp, end = 0.dp, bottom = 96.dp),
                         state = state,
                         onSelectButton = viewModel::setSelectedButton,
                         onActiveChange = viewModel::setActive,
@@ -186,16 +186,7 @@ fun MainTabsScreen(
         }
 
         if (helpOpen) {
-            AlertDialog(
-                onDismissRequest = { helpOpen = false },
-                confirmButton = {
-                    TextButton(onClick = { helpOpen = false }) {
-                        Text(stringResource(R.string.dialog_ok))
-                    }
-                },
-                title = { Text(stringResource(R.string.help_dialog_title)) },
-                text = { Text(stringResource(R.string.help_dialog_message)) }
-            )
+            HelpDialog(onDismiss = { helpOpen = false })
         }
 
         if (privacyOpen) {

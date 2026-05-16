@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -47,6 +46,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.robnice.navxs.data.models.NavButtonType
+import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ThemeRegistry
 import de.robnice.navxs.ui.theme.themeDrawableRes
@@ -191,10 +191,7 @@ fun ButtonPreviewArea(
             val selected = button.type == effectiveSelectedType
             val iconSizeDp = iconSizeDp(button.sizePercent)
             val touchTargetDp = touchTargetDp(iconSizeDp, settings.editMode)
-            val iconTint = when {
-                settings.editMode && !selected -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                else -> Color(button.colorArgb).copy(alpha = button.opacity)
-            }
+            val iconTint = Color(button.colorArgb).copy(alpha = button.opacity)
             val position = buttonPosition(button.type)
             val buttonOffset = IntOffset(position.x.toInt(), position.y.toInt())
             Box(
@@ -323,27 +320,81 @@ private fun touchTargetDp(iconSizeDp: Int, editMode: Boolean): Int {
 private fun fallbackFontSize(iconSizeDp: Int): TextUnit = (iconSizeDp * 0.7f).sp
 
 private fun Modifier.drawButtonOutline(selected: Boolean): Modifier = drawBehind {
-    val cornerRadius = 12.dp.toPx()
-    val strokeWidth = if (selected) 2.dp.toPx() else 1.5.dp.toPx()
-    val outlineColor = if (selected) {
-        Color(0xFFB6BCCF)
+    val radius = minOf(size.width, size.height) / 2f
+    if (selected) {
+        val strokeWidth = 3.dp.toPx()
+        drawCircle(
+            color = Color(0xFFFF69B4).copy(alpha = 0.15f),
+            radius = radius - strokeWidth / 2f
+        )
+        drawCircle(
+            color = Color(0xFFFF69B4),
+            radius = radius - strokeWidth / 2f,
+            style = Stroke(width = strokeWidth)
+        )
     } else {
-        Color(0xFFB6BCCF).copy(alpha = 0.38f)
-    }
-    drawRoundRect(
-        color = outlineColor,
-        cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-        style = Stroke(
-            width = strokeWidth,
-            pathEffect = if (selected) {
-                null
-            } else {
-                PathEffect.dashPathEffect(
+        val strokeWidth = 1.5.dp.toPx()
+        drawCircle(
+            color = Color(0xFFB6BCCF).copy(alpha = 0.38f),
+            radius = radius - strokeWidth / 2f,
+            style = Stroke(
+                width = strokeWidth,
+                pathEffect = PathEffect.dashPathEffect(
                     intervals = floatArrayOf(8.dp.toPx(), 6.dp.toPx())
                 )
-            }
+            )
         )
-    )
+    }
+}
+
+@Composable
+internal fun SingleButtonPreview(
+    config: OverlayButtonConfig,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier
+) {
+    val iconSizeDp = iconSizeDp(config.sizePercent)
+    val iconTint = Color(config.colorArgb).copy(alpha = config.opacity)
+    val theme = remember(config.type, config.themeId) {
+        ThemeRegistry().resolve(config.type, config.themeId)
+    }
+    val drawableRes = themeDrawableRes(theme.vectorAssetName)
+    val icon = resolveThemeIcon(theme)
+    Box(
+        modifier = modifier.background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        ButtonBackground(
+            colorArgb = config.backgroundColorArgb,
+            opacity = config.backgroundOpacity,
+            sizePercent = config.backgroundSizePercent,
+            softnessPercent = config.backgroundSoftnessPercent,
+            iconSizeDp = iconSizeDp,
+            enabled = true
+        )
+        if (drawableRes != null) {
+            Image(
+                painter = painterResource(id = drawableRes),
+                contentDescription = null,
+                modifier = Modifier.size(iconSizeDp.dp),
+                colorFilter = ColorFilter.tint(iconTint)
+            )
+        } else if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(iconSizeDp.dp),
+                tint = iconTint
+            )
+        } else {
+            Text(
+                text = fallbackLabel(config.type),
+                color = iconTint,
+                fontSize = fallbackFontSize(iconSizeDp),
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
 }
 
 private const val TAG = "ButtonPreviewArea"

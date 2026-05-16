@@ -9,7 +9,7 @@ class OverlayControllerTest {
         val density = 1f
 
         assertThat(iconSizePx(sizePercent = 100, density = density)).isEqualTo(32)
-        assertThat(touchTargetPx(sizePercent = 100, density = density)).isEqualTo(88)
+        assertThat(touchTargetPx(sizePercent = 100, density = density)).isEqualTo(56)
     }
 
     @Test

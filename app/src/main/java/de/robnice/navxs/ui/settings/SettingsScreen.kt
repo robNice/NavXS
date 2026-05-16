@@ -1,7 +1,17 @@
 package de.robnice.navxs.ui.settings
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -9,24 +19,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.robnice.navxs.R
 import de.robnice.navxs.data.models.NavButtonType
+import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.domain.ThemeRegistry
 import de.robnice.navxs.ui.MainUiState
 
@@ -50,8 +73,10 @@ fun SettingsScreen(
     val selectedButton = state.settings.buttons.getValue(selectedType)
     val controlsEnabled = selectedButton.active
     val themes = ThemeRegistry().themesFor(selectedType)
+    var previewOpen by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxSize()) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().padding(end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
@@ -108,6 +133,24 @@ fun SettingsScreen(
                     Text(
                         text = stringResource(R.string.settings_button_section),
                         style = MaterialTheme.typography.titleMedium
+                    )
+                    SettingsDivider()
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            text = stringResource(R.string.settings_theme),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_theme_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    ThemePicker(
+                        themes = themes,
+                        selectedThemeId = selectedButton.themeId,
+                        enabled = true,
+                        onThemeSelected = { onThemeChange(selectedType, it) }
                     )
                     SettingsDivider()
                     SettingHeader(
@@ -193,30 +236,21 @@ fun SettingsScreen(
                 }
             }
         }
-            item {
-                SettingsCard {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(
-                                text = stringResource(R.string.settings_theme),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = stringResource(R.string.settings_theme_description),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        ThemePicker(
-                            themes = themes,
-                            selectedThemeId = selectedButton.themeId,
-                            enabled = true,
-                            onThemeSelected = { onThemeChange(selectedType, it) }
-                        )
-                    }
-                }
-            }
         }
+    }
+    AnimatedVisibility(
+        visible = previewOpen,
+        enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(tween(220)),
+        exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(tween(180)),
+        modifier = Modifier.align(Alignment.TopEnd).padding(top = 56.dp)
+    ) {
+        PreviewOffCanvas(config = selectedButton)
+    }
+    PreviewFlag(
+        isOpen = previewOpen,
+        onClick = { previewOpen = !previewOpen },
+        modifier = Modifier.align(Alignment.TopEnd).padding(top = 8.dp)
+    )
     }
 }
 
@@ -311,6 +345,65 @@ private fun SettingHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             trailing()
+        }
+    }
+}
+
+@Composable
+private fun PreviewFlag(
+    isOpen: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp)
+    Box(
+        modifier = modifier
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = if (isOpen) Icons.Rounded.Close else Icons.Outlined.Visibility,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+private fun PreviewOffCanvas(
+    config: OverlayButtonConfig,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
+        shadowElevation = 0.dp,
+        tonalElevation = 2.dp,
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            SingleButtonPreview(
+                config = config,
+                backgroundColor = Color.White,
+                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+            )
+            SingleButtonPreview(
+                config = config,
+                backgroundColor = Color(0xFF9E9E9E),
+                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+            )
+            SingleButtonPreview(
+                config = config,
+                backgroundColor = Color.Black,
+                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+            )
         }
     }
 }

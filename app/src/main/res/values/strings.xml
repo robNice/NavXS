@@ -9,7 +9,24 @@
     <string name="app_loading">Checking accessibility permission…</string>
     <string name="header_help">Open help</string>
     <string name="help_dialog_title">Help</string>
-    <string name="help_dialog_message">Choose the apps that should show the overlay in Apps. Configure the selected navigation button in Settings.</string>
+    <!-- Help dialog content -->
+    <string name="help_toc_title">Contents</string>
+    <string name="help_section_preview">Preview flag</string>
+    <string name="help_sub_select">Select a button</string>
+    <string name="help_body_apps">The list shows all installed apps on your device. Enable an app to make the NavXS overlay appear whenever it is in the foreground. Use the search bar to filter by name, or toggle Show system apps to include system apps.</string>
+    <string name="help_body_position">Opens a full-screen editor. Drag any active button to exactly where it should sit in the live overlay. Tap a button to select it without moving it. The reset icon restores all default positions. The precision panel moves the selected button by an exact pixel step size.</string>
+    <string name="help_body_select">Tap Back, Home, or Recents to pick a button. All settings below apply to the selected button only.</string>
+    <string name="help_body_active">Switches the selected button on or off in the overlay. At least one button must remain active at all times.</string>
+    <string name="help_desc_theme">Chooses the icon style.</string>
+    <string name="help_desc_colour">Sets the icon colour.</string>
+    <string name="help_desc_opacity">Icon transparency — 0 invisible, 100 fully opaque.</string>
+    <string name="help_desc_size">Scales the icon relative to its default size.</string>
+    <string name="help_button_bg_intro">An optional circle drawn behind the icon to improve visibility on any background.</string>
+    <string name="help_desc_bg_colour">Fill colour of the background circle.</string>
+    <string name="help_desc_bg_opacity">Transparency of the background circle.</string>
+    <string name="help_desc_bg_size">Diameter of the circle relative to the icon.</string>
+    <string name="help_desc_bg_softness">0 = hard edge; 100 = fully faded gradient edge.</string>
+    <string name="help_body_preview">The small flag at the top-right of the settings screen slides open a panel showing the selected button on white, grey, and black backgrounds — judge visibility on any app without leaving settings.</string>
     <string name="footer_privacy">Privacy</string>
     <string name="footer_version">Version: %1$s</string>
     <string name="privacy_dialog_title">Privacy</string>

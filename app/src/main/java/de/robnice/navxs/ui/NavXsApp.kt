@@ -1,5 +1,6 @@
 package de.robnice.navxs.ui
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,6 +15,7 @@ fun NavXsApp(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = snackbarHost
     ) { innerPadding ->
         if (!state.accessibilityCheckComplete) {

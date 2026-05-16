@@ -9,7 +9,24 @@
     <string name="app_loading">Berechtigung für Bedienungshilfe wird geprüft…</string>
     <string name="header_help">Hilfe öffnen</string>
     <string name="help_dialog_title">Hilfe</string>
-    <string name="help_dialog_message">Wähle unter Apps aus, für welche Apps das Overlay angezeigt werden soll. Konfiguriere den ausgewählten Navigations-Button unter Einstellungen.</string>
+    <!-- Hilfe-Dialog Inhalt -->
+    <string name="help_toc_title">Inhalt</string>
+    <string name="help_section_preview">Vorschau-Fahne</string>
+    <string name="help_sub_select">Button auswählen</string>
+    <string name="help_body_apps">Die Liste zeigt alle installierten Apps auf deinem Gerät. Aktiviere eine App, damit das NavXS-Overlay erscheint, sobald sie im Vordergrund ist. Nutze die Suchleiste, um Apps nach Namen zu filtern, oder aktiviere System-Apps anzeigen, um Systemapps einzublenden.</string>
+    <string name="help_body_position">Öffnet einen Vollbild-Editor. Ziehe einen aktiven Button an die genaue Position, an der er im Live-Overlay erscheinen soll. Tippe ihn an, um ihn auszuwählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln.</string>
+    <string name="help_body_select">Tippe auf Zurück, Home oder Letzte Apps, um einen Button auszuwählen. Alle folgenden Einstellungen betreffen nur den ausgewählten Button.</string>
+    <string name="help_body_active">Schaltet den ausgewählten Button im Overlay ein oder aus. Mindestens ein Button muss jederzeit aktiv bleiben.</string>
+    <string name="help_desc_theme">Legt den Icon-Stil fest.</string>
+    <string name="help_desc_colour">Setzt die Farbe des Icons.</string>
+    <string name="help_desc_opacity">Icon-Transparenz — 0 unsichtbar, 100 vollständig deckend.</string>
+    <string name="help_desc_size">Skaliert das Icon relativ zur Standardgröße.</string>
+    <string name="help_button_bg_intro">Ein optionaler Kreis hinter dem Icon, der die Erkennbarkeit auf jedem Hintergrund verbessert.</string>
+    <string name="help_desc_bg_colour">Füllfarbe des Hintergrundkreises.</string>
+    <string name="help_desc_bg_opacity">Transparenz des Hintergrundkreises.</string>
+    <string name="help_desc_bg_size">Durchmesser des Kreises relativ zum Icon.</string>
+    <string name="help_desc_bg_softness">0 = harte Kante; 100 = vollständig ausgeblendete Kante.</string>
+    <string name="help_body_preview">Die kleine Fahne oben rechts öffnet ein Panel mit dem ausgewählten Button auf weißem, grauem und schwarzem Hintergrund — so beurteilst du die Sichtbarkeit auf jeder App, ohne die Einstellungen zu verlassen.</string>
     <string name="footer_privacy">Datenschutz</string>
     <string name="footer_version">Version: %1$s</string>
     <string name="privacy_dialog_title">Datenschutz</string>

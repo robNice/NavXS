@@ -12,10 +12,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.setPadding
 import de.robnice.navxs.R
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlayButtonConfig
@@ -173,7 +173,6 @@ class OverlayController(
                 height = iconSizePx
                 gravity = Gravity.CENTER
             }
-            imageView.setPadding((iconSizePx * 0.08f).toInt())
             textView.visibility = TextView.GONE
             textView.text = ""
         } else {
@@ -234,9 +233,7 @@ class OverlayController(
 
     private fun layoutParams(button: OverlayButtonConfig): WindowManager.LayoutParams {
         val density = context.resources.displayMetrics.density
-        val iconSizePx = iconSizePx(button.sizePercent, density)
         val touchTargetPx = touchTargetPx(button.sizePercent, density)
-        val insetPx = ((touchTargetPx - iconSizePx) / 2f).toInt()
         return WindowManager.LayoutParams(
             touchTargetPx,
             touchTargetPx,
@@ -247,8 +244,9 @@ class OverlayController(
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = button.positionXPx - insetPx
-            y = button.positionYPx - insetPx
+            x = button.positionXPx
+            y = button.positionYPx
+            layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
     }
 
@@ -264,10 +262,7 @@ internal fun iconSizePx(sizePercent: Int, density: Float): Int =
     max(((32 * sizePercent) / 100f * density).toInt(), (16 * density).toInt())
 
 internal fun touchTargetPx(sizePercent: Int, density: Float): Int =
-    max(
-        ((if (sizePercent > 100) 32 * sizePercent / 100 else 56) * density).toInt(),
-        88
-    )
+    max(iconSizePx(sizePercent, density), (56 * density).toInt())
 
 private fun overlayIconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 16)
 

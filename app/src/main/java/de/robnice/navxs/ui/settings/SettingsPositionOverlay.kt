@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.util.Log
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntRect
@@ -61,6 +61,10 @@ fun SettingsPositionOverlay(
 ) {
     PositioningImmersiveModeEffect()
     val density = LocalDensity.current
+    val context = LocalContext.current
+    val displayMetrics = context.resources.displayMetrics
+    val viewportWidthPx = displayMetrics.widthPixels
+    val viewportHeightPx = displayMetrics.heightPixels
     var localSelectedButtonType by remember { mutableStateOf(settings.selectedButtonType) }
     var dragButtonType by remember { mutableStateOf<NavButtonType?>(null) }
     var dragPreviewPosition by remember { mutableStateOf<Offset?>(null) }
@@ -75,11 +79,9 @@ fun SettingsPositionOverlay(
     }
     var isDragging by remember { mutableStateOf(false) }
 
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         val activeButtonType = dragButtonType ?: localSelectedButtonType
         val activeButton = settings.buttons.getValue(activeButtonType)
-        val viewportWidthPx = with(density) { maxWidth.roundToPx() }
-        val viewportHeightPx = with(density) { maxHeight.roundToPx() }
         val activeDragBounds = remember(viewportWidthPx, viewportHeightPx, density, activeButton.sizePercent) {
             dragBoundsForButton(
                 viewportWidthPx = viewportWidthPx,
@@ -221,6 +223,8 @@ fun SettingsPositionOverlay(
                             ).mapValues { (type, position) ->
                                 clampPosition(position, type)
                             }
+                            settlingButtonType = null
+                            settlingPosition = null
                             localButtonPositions = localButtonPositions + clampedPositions
                             onResetPosition(
                                 clampedPositions.mapValues { (_, position) ->
@@ -262,6 +266,8 @@ fun SettingsPositionOverlay(
                             ).mapValues { (type, position) ->
                                 clampPosition(position, type)
                             }
+                            settlingButtonType = null
+                            settlingPosition = null
                             localButtonPositions = localButtonPositions + clampedPositions
                             onResetPosition(
                                 clampedPositions.mapValues { (_, position) ->
