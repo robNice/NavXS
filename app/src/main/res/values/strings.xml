@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Enable the accessibility service so the app can react to the current foreground package name and show the navigation overlay for selected apps.</string>
     <string name="open_accessibility_settings">Open accessibility settings</string>
     <string name="check_again">Check again</string>
+    <string name="disclosure_title">Accessibility Service</string>
+    <string name="disclosure_item_1">NavXS uses the Android Accessibility Service.</string>
+    <string name="disclosure_item_2">The service is required to display floating navigation buttons over selected apps.</string>
+    <string name="disclosure_item_3">NavXS can detect which app is currently in the foreground.</string>
+    <string name="disclosure_item_4">NavXS uses Accessibility actions: Back, Home and Recent Apps.</string>
+    <string name="disclosure_item_5">NavXS does not read typed text, passwords or message content.</string>
+    <string name="disclosure_item_6">NavXS does not sell or share this data.</string>
+    <string name="disclosure_item_7">Processing is performed solely to provide the navigation overlay feature.</string>
+    <string name="disclosure_checkbox">I understand why NavXS needs the Accessibility Service.</string>
+    <string name="disclosure_continue">I agree — Open Accessibility Settings</string>
     <string name="app_loading">Checking accessibility permission…</string>
     <string name="header_help">Open help</string>
     <string name="help_dialog_title">Help</string>

@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Aktiviere den Bedienungshilfe-Dienst, damit die App auf den Paketnamen der Vordergrund-App reagieren und das Navigations-Overlay für ausgewählte Apps anzeigen kann.</string>
     <string name="open_accessibility_settings">Bedienungshilfe-Einstellungen öffnen</string>
     <string name="check_again">Erneut prüfen</string>
+    <string name="disclosure_title">Accessibility Service</string>
+    <string name="disclosure_item_1">NavXS verwendet den Android Accessibility Service.</string>
+    <string name="disclosure_item_2">Der Dienst wird benötigt, um schwebende Navigationsbuttons über ausgewählten Apps anzuzeigen.</string>
+    <string name="disclosure_item_3">NavXS kann erkennen, welche App gerade im Vordergrund ist.</string>
+    <string name="disclosure_item_4">NavXS verwendet Accessibility-Aktionen: Zurück, Home und Letzte Apps.</string>
+    <string name="disclosure_item_5">NavXS liest keine eingegebenen Texte, keine Passwörter und keine Nachrichteninhalte.</string>
+    <string name="disclosure_item_6">NavXS verkauft oder teilt diese Daten nicht.</string>
+    <string name="disclosure_item_7">Die Verarbeitung erfolgt nur zur Bereitstellung der Navigations-Overlay-Funktion.</string>
+    <string name="disclosure_checkbox">Ich verstehe, warum NavXS den Accessibility Service benötigt.</string>
+    <string name="disclosure_continue">Ich stimme zu — Einstellungen öffnen</string>
     <string name="app_loading">Berechtigung für Bedienungshilfe wird geprüft…</string>
     <string name="header_help">Hilfe öffnen</string>
     <string name="help_dialog_title">Hilfe</string>
