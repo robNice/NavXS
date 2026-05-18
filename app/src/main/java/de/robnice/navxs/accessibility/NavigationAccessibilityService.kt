@@ -1,6 +1,7 @@
 package de.robnice.navxs.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.graphics.Rect
 import android.os.SystemClock
 import android.util.Log
 import android.view.accessibility.AccessibilityWindowInfo
@@ -109,10 +110,11 @@ class NavigationAccessibilityService : AccessibilityService() {
             selectedApps = selectedApps,
             appUiInForeground = appUiInForeground
         )
-        val shouldShow = baseShouldShow
+        val isWindowed = baseShouldShow && isForegroundAppWindowed()
+        val shouldShow = baseShouldShow && !isWindowed
         Log.d(
             TAG,
-            "updateOverlay package=$foregroundPackage selected=${selectedApps.contains(foregroundPackage)} appUiInForeground=$appUiInForeground shouldShow=$shouldShow baseShouldShow=$baseShouldShow pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
+            "updateOverlay package=$foregroundPackage selected=${selectedApps.contains(foregroundPackage)} appUiInForeground=$appUiInForeground shouldShow=$shouldShow baseShouldShow=$baseShouldShow isWindowed=$isWindowed pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
         )
         logRecentsTraceEvent(
             stage = "updateOverlay",
@@ -290,6 +292,23 @@ class NavigationAccessibilityService : AccessibilityService() {
             append(",cls=")
             append(root?.className)
         }
+    }
+
+    private fun isForegroundAppWindowed(): Boolean {
+        val appWindows = try {
+            windows.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }
+        } catch (e: Exception) {
+            Log.d(TAG, "isForegroundAppWindowed windowsError=${e::class.java.simpleName}")
+            return false
+        }
+        val activeWindow = appWindows.firstOrNull { it.isActive } ?: return false
+        val bounds = Rect()
+        activeWindow.getBoundsInScreen(bounds)
+        val displayWidth = resources.displayMetrics.widthPixels
+        val displayHeight = resources.displayMetrics.heightPixels
+        val isWindowed = bounds.width() < displayWidth * 0.95f || bounds.height() < displayHeight * 0.75f
+        Log.d(TAG, "isForegroundAppWindowed=$isWindowed bounds=$bounds display=${displayWidth}x${displayHeight}")
+        return isWindowed
     }
 
     private data class RecentsTrace(

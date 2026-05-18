@@ -1,17 +1,20 @@
 package de.robnice.navxs.ui.settings
 
 import android.app.Activity
-import android.content.Context
 import android.content.ContextWrapper
 import android.util.Log
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CenterFocusStrong
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.OpenWith
 import androidx.compose.material.icons.outlined.RestartAlt
@@ -36,9 +39,6 @@ import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import de.robnice.navxs.R
 import de.robnice.navxs.data.NavDefaults
 import de.robnice.navxs.data.models.NavButtonType
@@ -59,12 +59,31 @@ fun SettingsPositionOverlay(
     onPrecisionMove: (Int, Int) -> Unit,
     onResetPosition: (Map<NavButtonType, Pair<Int, Int>>) -> Unit
 ) {
-    PositioningImmersiveModeEffect()
     val density = LocalDensity.current
     val context = LocalContext.current
     val displayMetrics = context.resources.displayMetrics
     val viewportWidthPx = displayMetrics.widthPixels
     val viewportHeightPx = displayMetrics.heightPixels
+    val rawNavBarBottomPx = WindowInsets.navigationBars.getBottom(density)
+    val stableNavBarBottomPx = remember { rawNavBarBottomPx }
+    val view = LocalView.current
+    DisposableEffect(view) {
+        var ctx: android.content.Context? = view.context
+        while (ctx is ContextWrapper && ctx !is Activity) ctx = ctx.baseContext
+        val window = (ctx as? Activity)?.window
+        if (window != null) {
+            val controller = WindowInsetsControllerCompat(window, view)
+            val prevBehavior = controller.systemBarsBehavior
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.navigationBars())
+            onDispose {
+                controller.systemBarsBehavior = prevBehavior
+                controller.show(WindowInsetsCompat.Type.navigationBars())
+            }
+        } else {
+            onDispose {}
+        }
+    }
     var localSelectedButtonType by remember { mutableStateOf(settings.selectedButtonType) }
     var dragButtonType by remember { mutableStateOf<NavButtonType?>(null) }
     var dragPreviewPosition by remember { mutableStateOf<Offset?>(null) }
@@ -107,22 +126,6 @@ fun SettingsPositionOverlay(
         LaunchedEffect(settings.buttons, viewportWidthPx, viewportHeightPx, isDragging, dragButtonType) {
             val persistedPositions = settings.buttons.mapValues { (type, button) ->
                 clampPosition(Offset(button.positionXPx.toFloat(), button.positionYPx.toFloat()), type)
-            }
-            persistedPositions.forEach { (type, position) ->
-                val button = settings.buttons.getValue(type)
-                val dragBounds = dragBoundsForButton(
-                    viewportWidthPx = viewportWidthPx,
-                    viewportHeightPx = viewportHeightPx,
-                    sizePercent = button.sizePercent,
-                    density = density
-                )
-                if (position.x.roundToInt() != button.positionXPx || position.y.roundToInt() != button.positionYPx) {
-                    Log.d(
-                        TAG,
-                        "clampPersisted type=$type from=(${button.positionXPx},${button.positionYPx}) to=$position bounds=$dragBounds"
-                    )
-                    onCommitMoveButtonPosition(type, position.x.roundToInt(), position.y.roundToInt())
-                }
             }
             if (
                 settlingButtonType != null &&
@@ -198,6 +201,7 @@ fun SettingsPositionOverlay(
             Column(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .statusBarsPadding()
                     .padding(top = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -219,6 +223,7 @@ fun SettingsPositionOverlay(
                             val clampedPositions = navBarResetPositions(
                                 settings = settings,
                                 viewportSize = IntSize(viewportWidthPx, viewportHeightPx),
+                                navBarBottomPx = stableNavBarBottomPx,
                                 density = density
                             ).mapValues { (type, position) ->
                                 clampPosition(position, type)
@@ -262,6 +267,7 @@ fun SettingsPositionOverlay(
                             val clampedPositions = navBarResetPositions(
                                 settings = settings,
                                 viewportSize = IntSize(viewportWidthPx, viewportHeightPx),
+                                navBarBottomPx = stableNavBarBottomPx,
                                 density = density
                             ).mapValues { (type, position) ->
                                 clampPosition(position, type)
@@ -291,23 +297,24 @@ private fun dragBoundsForButton(
     val iconPx = with(density) { iconSizeDp(sizePercent).dp.roundToPx() }
     val touchTargetPx = with(density) { max(iconSizeDp(sizePercent) + 24, 56).dp.roundToPx() }
     val overflowPx = max(touchTargetPx - iconPx, 0) / 2
-    val bottomAllowancePx = iconPx / 2
+    val halfIconPx = iconPx / 2
     return IntRect(
         left = -overflowPx,
         top = -overflowPx,
         right = max(viewportWidthPx - iconPx - overflowPx, -overflowPx),
-        bottom = max(viewportHeightPx - iconPx + bottomAllowancePx, -overflowPx)
+        bottom = max(viewportHeightPx - iconPx + halfIconPx, -overflowPx)
     )
 }
 
 private fun navBarResetPositions(
     settings: OverlaySettings,
     viewportSize: IntSize,
+    navBarBottomPx: Int,
     density: androidx.compose.ui.unit.Density
 ): Map<NavButtonType, Offset> {
     val metrics = android.util.DisplayMetrics().apply {
         widthPixels = viewportSize.width
-        heightPixels = viewportSize.height
+        heightPixels = viewportSize.height - navBarBottomPx
         this.density = density.density
     }
     val positions = NavDefaults.defaultButtonPositions(
@@ -318,35 +325,6 @@ private fun navBarResetPositions(
         val (x, y) = positions.getValue(type)
         Offset(x.toFloat(), y.toFloat())
     }
-}
-
-@Composable
-private fun PositioningImmersiveModeEffect() {
-    val view = LocalView.current
-    val activity = remember(view) { view.context.findActivity() }
-
-    DisposableEffect(activity, view) {
-        val window = activity?.window
-        if (window != null) {
-            val controller = WindowCompat.getInsetsController(window, view)
-            val previousBehavior = controller.systemBarsBehavior
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-
-            onDispose {
-                controller.systemBarsBehavior = previousBehavior
-                controller.show(WindowInsetsCompat.Type.systemBars())
-            }
-        } else {
-            onDispose {}
-        }
-    }
-}
-
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }
 
 private const val TAG = "PositionOverlay"
