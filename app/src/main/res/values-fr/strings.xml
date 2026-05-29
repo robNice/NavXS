@@ -68,6 +68,7 @@
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
     <string name="help_toc_title">Sommaire</string>
+    <string name="settings_preview_title">Aperçu</string>
     <string name="help_section_preview">Aperçu</string>
     <string name="help_sub_select">Sélectionner un bouton</string>
     <string name="help_body_apps">La liste affiche toutes les apps installées sur votre appareil. Activez une app pour que l\'overlay NavXS apparaisse dès qu\'elle est au premier plan. Utilisez la barre de recherche pour filtrer par nom, ou activez Afficher les apps système.</string>

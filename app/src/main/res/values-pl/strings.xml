@@ -10,6 +10,7 @@
     <string name="header_help">Otwórz pomoc</string>
     <string name="help_dialog_title">Pomoc</string>
     <string name="help_toc_title">Spis treści</string>
+    <string name="settings_preview_title">Podgląd</string>
     <string name="help_section_preview">Podgląd</string>
     <string name="help_sub_select">Wybierz przycisk</string>
     <string name="help_body_apps">Lista pokazuje wszystkie zainstalowane aplikacje na urządzeniu. Włącz aplikację, aby nakładka NavXS pojawiała się, gdy jest na pierwszym planie. Użyj paska wyszukiwania, aby filtrować według nazwy, lub włącz Pokaż aplikacje systemowe.</string>

@@ -10,6 +10,7 @@
     <string name="header_help">도움말 열기</string>
     <string name="help_dialog_title">도움말</string>
     <string name="help_toc_title">목차</string>
+    <string name="settings_preview_title">미리보기</string>
     <string name="help_section_preview">미리보기</string>
     <string name="help_sub_select">버튼 선택</string>
     <string name="help_body_apps">목록에는 기기에 설치된 모든 앱이 표시됩니다. 앱을 활성화하면 해당 앱이 포그라운드에 있을 때 NavXS 오버레이가 나타납니다. 검색창으로 이름을 필터링하거나 시스템 앱 표시를 켜세요.</string>

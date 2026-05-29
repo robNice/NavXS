@@ -214,7 +214,7 @@ fun MainTabsScreen(
                 onOpenPrecision = { viewModel.setPrecisionDialogOpen(true) },
                 onClosePrecision = { viewModel.setPrecisionDialogOpen(false) },
                 onStepChange = viewModel::setPrecisionStep,
-                onPrecisionMove = { dx, dy -> viewModel.moveSelectedButton(dx.toFloat(), dy.toFloat()) },
+                onPrecisionMove = { type, x, y -> viewModel.setButtonPosition(type, x, y) },
                 onResetPosition = viewModel::setButtonPositions
             )
         }

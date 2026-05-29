@@ -21,6 +21,7 @@
     <string name="help_dialog_title">Hilfe</string>
     <!-- Hilfe-Dialog Inhalt -->
     <string name="help_toc_title">Inhalt</string>
+    <string name="settings_preview_title">Vorschau</string>
     <string name="help_section_preview">Vorschau-Fahne</string>
     <string name="help_sub_select">Button auswählen</string>
     <string name="help_body_apps">Die Liste zeigt alle installierten Apps auf deinem Gerät. Aktiviere eine App, damit das NavXS-Overlay erscheint, sobald sie im Vordergrund ist. Nutze die Suchleiste, um Apps nach Namen zu filtern, oder aktiviere System-Apps anzeigen, um Systemapps einzublenden.</string>

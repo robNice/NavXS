@@ -56,7 +56,7 @@ fun SettingsPositionOverlay(
     onOpenPrecision: () -> Unit,
     onClosePrecision: () -> Unit,
     onStepChange: (Int) -> Unit,
-    onPrecisionMove: (Int, Int) -> Unit,
+    onPrecisionMove: (NavButtonType, Int, Int) -> Unit,
     onResetPosition: (Map<NavButtonType, Pair<Int, Int>>) -> Unit
 ) {
     val density = LocalDensity.current
@@ -123,7 +123,7 @@ fun SettingsPositionOverlay(
             )
         }
 
-        LaunchedEffect(settings.buttons, viewportWidthPx, viewportHeightPx, isDragging, dragButtonType) {
+        LaunchedEffect(settings.buttons, viewportWidthPx, viewportHeightPx, isDragging, dragButtonType, precisionOpen) {
             val persistedPositions = settings.buttons.mapValues { (type, button) ->
                 clampPosition(Offset(button.positionXPx.toFloat(), button.positionYPx.toFloat()), type)
             }
@@ -135,14 +135,14 @@ fun SettingsPositionOverlay(
                 settlingButtonType = null
                 settlingPosition = null
             }
-            if (!isDragging) {
+            if (!isDragging && !precisionOpen) {
                 localButtonPositions = persistedPositions
+                localSelectedButtonType = settings.selectedButtonType
                 dragButtonType = null
                 if (settlingButtonType == null) {
                     dragPreviewPosition = null
                 }
             }
-            localSelectedButtonType = settings.selectedButtonType
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -262,7 +262,16 @@ fun SettingsPositionOverlay(
                         settings = settings,
                         onDismiss = onClosePrecision,
                         onStepChange = onStepChange,
-                        onMove = onPrecisionMove,
+                        onMove = { dx, dy ->
+                            val type = localSelectedButtonType
+                            val currentPos = localButtonPositions[type] ?: return@PrecisionControls
+                            val newPos = clampPosition(
+                                Offset(currentPos.x + dx, currentPos.y + dy),
+                                type
+                            )
+                            localButtonPositions = localButtonPositions + (type to newPos)
+                            onPrecisionMove(type, newPos.x.roundToInt(), newPos.y.roundToInt())
+                        },
                         onResetPosition = {
                             val clampedPositions = navBarResetPositions(
                                 settings = settings,

@@ -8,7 +8,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,11 +35,19 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -355,12 +362,45 @@ private fun PreviewFlag(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isBlinking by remember { mutableStateOf(false) }
+    LaunchedEffect(isOpen) {
+        if (!isOpen) {
+            delay(3000)
+            while (true) {
+                isBlinking = true
+                delay(130)
+                isBlinking = false
+                delay(4500)
+            }
+        } else {
+            isBlinking = false
+        }
+    }
+    val blinkScale by animateFloatAsState(
+        targetValue = if (isBlinking) 0.05f else 1f,
+        animationSpec = tween(durationMillis = if (isBlinking) 60 else 90),
+        label = "blink"
+    )
+    val outlineColor = MaterialTheme.colorScheme.outlineVariant
     val shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp)
     Box(
         modifier = modifier
+            .shadow(elevation = 4.dp, shape = shape, clip = false)
+            .drawBehind {
+                val stroke = 1.dp.toPx()
+                val r = 12.dp.toPx()
+                val path = Path().apply {
+                    moveTo(size.width, 0f)
+                    lineTo(r, 0f)
+                    quadraticTo(0f, 0f, 0f, r)
+                    lineTo(0f, size.height - r)
+                    quadraticTo(0f, size.height, r, size.height)
+                    lineTo(size.width, size.height)
+                }
+                drawPath(path, outlineColor, style = Stroke(width = stroke))
+            }
             .clip(shape)
             .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape)
             .clickable(onClick = onClick)
             .padding(horizontal = 10.dp, vertical = 12.dp),
         contentAlignment = Alignment.Center
@@ -369,7 +409,9 @@ private fun PreviewFlag(
             imageVector = if (isOpen) Icons.Rounded.Close else Icons.Outlined.Visibility,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier
+                .size(20.dp)
+                .graphicsLayer { scaleY = blinkScale }
         )
     }
 }
@@ -381,29 +423,37 @@ private fun PreviewOffCanvas(
 ) {
     Surface(
         shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
-        shadowElevation = 0.dp,
+        shadowElevation = 8.dp,
         tonalElevation = 2.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = modifier
     ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        Column(
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SingleButtonPreview(
-                config = config,
-                backgroundColor = Color.White,
-                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+            Text(
+                text = stringResource(R.string.settings_preview_title),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            SingleButtonPreview(
-                config = config,
-                backgroundColor = Color(0xFF9E9E9E),
-                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
-            )
-            SingleButtonPreview(
-                config = config,
-                backgroundColor = Color.Black,
-                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                SingleButtonPreview(
+                    config = config,
+                    backgroundColor = Color.White,
+                    modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+                )
+                SingleButtonPreview(
+                    config = config,
+                    backgroundColor = Color(0xFF9E9E9E),
+                    modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+                )
+                SingleButtonPreview(
+                    config = config,
+                    backgroundColor = Color.Black,
+                    modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp))
+                )
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
     <string name="header_help">Открыть справку</string>
     <string name="help_dialog_title">Справка</string>
     <string name="help_toc_title">Содержание</string>
+    <string name="settings_preview_title">Предпросмотр</string>
     <string name="help_section_preview">Предпросмотр</string>
     <string name="help_sub_select">Выбрать кнопку</string>
     <string name="help_body_apps">Список отображает все установленные приложения на устройстве. Включите приложение, чтобы оверлей NavXS появлялся, когда оно находится на переднем плане. Используйте строку поиска для фильтрации по имени или включите отображение системных приложений.</string>

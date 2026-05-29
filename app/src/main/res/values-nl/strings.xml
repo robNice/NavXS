@@ -10,6 +10,7 @@
     <string name="header_help">Help openen</string>
     <string name="help_dialog_title">Help</string>
     <string name="help_toc_title">Inhoud</string>
+    <string name="settings_preview_title">Voorbeeld</string>
     <string name="help_section_preview">Voorbeeld</string>
     <string name="help_sub_select">Knop selecteren</string>
     <string name="help_body_apps">De lijst toont alle geïnstalleerde apps op je apparaat. Activeer een app zodat de NavXS-overlay verschijnt wanneer die app op de voorgrond is. Gebruik de zoekbalk om op naam te filteren, of schakel Systeemapps tonen in.</string>

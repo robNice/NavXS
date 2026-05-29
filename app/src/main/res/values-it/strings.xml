@@ -10,6 +10,7 @@
     <string name="header_help">Apri guida</string>
     <string name="help_dialog_title">Guida</string>
     <string name="help_toc_title">Indice</string>
+    <string name="settings_preview_title">Anteprima</string>
     <string name="help_section_preview">Anteprima</string>
     <string name="help_sub_select">Seleziona un pulsante</string>
     <string name="help_body_apps">L\'elenco mostra tutte le app installate sul dispositivo. Attiva un\'app per far apparire l\'overlay NavXS quando è in primo piano. Usa la barra di ricerca per filtrare per nome, o attiva Mostra app di sistema.</string>

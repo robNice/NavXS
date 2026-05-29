@@ -10,6 +10,7 @@
     <string name="header_help">Yardımı aç</string>
     <string name="help_dialog_title">Yardım</string>
     <string name="help_toc_title">İçindekiler</string>
+    <string name="settings_preview_title">Önizleme</string>
     <string name="help_section_preview">Önizleme</string>
     <string name="help_sub_select">Düğme seç</string>
     <string name="help_body_apps">Liste, cihazınızda yüklü tüm uygulamaları gösterir. Bir uygulamayı etkinleştirerek NavXS katmanının o uygulama ön plandayken görünmesini sağlayın. Ada göre filtrelemek için arama çubuğunu kullanın veya Sistem uygulamalarını göster seçeneğini açın.</string>

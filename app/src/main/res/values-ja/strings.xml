@@ -10,6 +10,7 @@
     <string name="header_help">ヘルプを開く</string>
     <string name="help_dialog_title">ヘルプ</string>
     <string name="help_toc_title">目次</string>
+    <string name="settings_preview_title">プレビュー</string>
     <string name="help_section_preview">プレビュー</string>
     <string name="help_sub_select">ボタンを選択</string>
     <string name="help_body_apps">リストにはデバイスにインストールされているすべてのアプリが表示されます。アプリを有効にすると、そのアプリがフォアグラウンドのときにNavXSオーバーレイが表示されます。検索バーで名前フィルタリングするか、システムアプリを表示をオンにしてください。</string>

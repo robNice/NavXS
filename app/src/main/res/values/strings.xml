@@ -21,6 +21,7 @@
     <string name="help_dialog_title">Help</string>
     <!-- Help dialog content -->
     <string name="help_toc_title">Contents</string>
+    <string name="settings_preview_title">Preview</string>
     <string name="help_section_preview">Preview flag</string>
     <string name="help_sub_select">Select a button</string>
     <string name="help_body_apps">The list shows all installed apps on your device. Enable an app to make the NavXS overlay appear whenever it is in the foreground. Use the search bar to filter by name, or toggle Show system apps to include system apps.</string>
