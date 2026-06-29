@@ -43,6 +43,7 @@ import de.robnice.navxs.R
 import de.robnice.navxs.data.NavDefaults
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
+import de.robnice.navxs.overlay.OverlayViewport
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -61,7 +62,7 @@ fun SettingsPositionOverlay(
 ) {
     val density = LocalDensity.current
     val context = LocalContext.current
-    val displayMetrics = context.resources.displayMetrics
+    val displayMetrics = remember(context) { OverlayViewport.metrics(context) }
     val viewportWidthPx = displayMetrics.widthPixels
     val viewportHeightPx = displayMetrics.heightPixels
     val rawNavBarBottomPx = WindowInsets.navigationBars.getBottom(density)
@@ -304,7 +305,7 @@ private fun dragBoundsForButton(
     density: androidx.compose.ui.unit.Density
 ): IntRect {
     val iconPx = with(density) { iconSizeDp(sizePercent).dp.roundToPx() }
-    val touchTargetPx = with(density) { max(iconSizeDp(sizePercent) + 24, 56).dp.roundToPx() }
+    val touchTargetPx = with(density) { max(iconSizeDp(sizePercent), 56).dp.roundToPx() }
     val overflowPx = max(touchTargetPx - iconPx, 0) / 2
     val halfIconPx = iconPx / 2
     return IntRect(

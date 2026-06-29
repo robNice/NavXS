@@ -15,6 +15,7 @@ import de.robnice.navxs.data.models.InstalledAppInfo
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ButtonSettingsUseCase
+import de.robnice.navxs.overlay.OverlayViewport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -205,7 +206,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         persist(buttonSettingsUseCase.setOpacity(uiState.value.settings, type, opacity))
 
     fun setSize(type: NavButtonType, sizePercent: Int) =
-        persist(buttonSettingsUseCase.setSizePercent(uiState.value.settings, type, sizePercent))
+        persist(
+            buttonSettingsUseCase.setSizePercent(
+                uiState.value.settings,
+                type,
+                sizePercent,
+                getApplication<Application>().resources.displayMetrics.density
+            )
+        )
 
     fun setBackgroundColor(type: NavButtonType, colorArgb: Long) =
         persist(buttonSettingsUseCase.setBackgroundColor(uiState.value.settings, type, colorArgb))
@@ -268,7 +276,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         persist(
             buttonSettingsUseCase.resetPosition(
                 uiState.value.settings,
-                uiState.value.settings.selectedButtonType
+                uiState.value.settings.selectedButtonType,
+                OverlayViewport.metrics(getApplication())
             )
         )
     }

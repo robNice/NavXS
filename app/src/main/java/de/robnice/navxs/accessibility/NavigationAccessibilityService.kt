@@ -4,50 +4,54 @@ import android.accessibilityservice.AccessibilityService
 import android.graphics.Rect
 import android.os.SystemClock
 import android.util.Log
-import android.view.accessibility.AccessibilityWindowInfo
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityWindowInfo
 import de.robnice.navxs.R
 import de.robnice.navxs.data.SettingsRepository
 import de.robnice.navxs.data.models.NavButtonType
-import de.robnice.navxs.domain.OverlayVisibilityPolicy
 import de.robnice.navxs.overlay.OverlayController
+import de.robnice.navxs.overlay.OverlayViewport
 import de.robnice.navxs.ui.AppForegroundState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class NavigationAccessibilityService : AccessibilityService() {
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var overlayController: OverlayController
-    private lateinit var visibilityPolicy: OverlayVisibilityPolicy
     private lateinit var foregroundResolver: ForegroundPackageResolver
+    private val visibilityStateMachine = OverlayVisibilityStateMachine()
+
     private var currentForegroundPackage: String? = null
     private var latestSettings = de.robnice.navxs.data.NavDefaults.defaultOverlaySettings()
     private var selectedApps: Set<String> = emptySet()
     private var appUiInForeground: Boolean = false
-    private var pendingHideJob: Job? = null
+    private var pendingVisibilityJob: Job? = null
     private var lastPressId: Long? = null
     private var lastPressStartedUptimeMs: Long = 0L
     private var lastActionType: NavButtonType? = null
     private var lastActionUptimeMs: Long = 0L
     private var recentsTrace: RecentsTrace? = null
+    private var lastEventPackage: String? = null
+    private var lastEventTimestampMs: Long = 0L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         settingsRepository = SettingsRepository.create(this)
         overlayController = OverlayController(this, ::performAction)
-        visibilityPolicy = OverlayVisibilityPolicy(packageName)
         foregroundResolver = ForegroundPackageResolver(packageName, IgnoredForegroundPackages)
         scope.launch {
             combine(
                 settingsRepository.settingsFlow,
                 settingsRepository.selectedAppsFlow,
                 AppForegroundState.isInForeground
-            ) { settings, apps, isInForeground -> Triple(settings, apps, isInForeground) }.collect { (settings, apps, isInForeground) ->
+            ) { settings, apps, isInForeground ->
+                Triple(settings, apps, isInForeground)
+            }.collect { (settings, apps, isInForeground) ->
                 latestSettings = settings
                 selectedApps = apps
                 appUiInForeground = isInForeground
@@ -64,14 +68,17 @@ class NavigationAccessibilityService : AccessibilityService() {
             return
         }
         val nextPackage = event.packageName?.toString()
+        val rootPackage = rootInActiveWindow?.packageName?.toString()
         if (!nextPackage.isNullOrBlank() &&
             nextPackage !in IgnoredForegroundPackages &&
-            !(nextPackage == packageName && !appUiInForeground)
+            !shouldIgnoreOwnPackageEvent(nextPackage, rootPackage)
         ) {
+            lastEventPackage = nextPackage
+            lastEventTimestampMs = SystemClock.uptimeMillis()
             currentForegroundPackage = foregroundResolver.onAccessibilityPackage(
                 packageName = nextPackage,
                 appUiInForeground = appUiInForeground,
-                nowMs = SystemClock.uptimeMillis()
+                nowMs = lastEventTimestampMs
             )
             Log.d(
                 TAG,
@@ -80,9 +87,9 @@ class NavigationAccessibilityService : AccessibilityService() {
         } else if (!nextPackage.isNullOrBlank()) {
             Log.d(
                 TAG,
-                "ignoredForegroundPackage=$nextPackage eventType=$eventType appUiInForeground=$appUiInForeground pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
+                "ignoredForegroundPackage=$nextPackage eventType=$eventType rootPackage=$rootPackage appUiInForeground=$appUiInForeground pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
             )
-            if (nextPackage == packageName && !appUiInForeground) {
+            if (shouldIgnoreOwnPackageEvent(nextPackage, rootPackage)) {
                 return
             }
         }
@@ -96,65 +103,58 @@ class NavigationAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     override fun onDestroy() {
-        pendingHideJob?.cancel()
+        pendingVisibilityJob?.cancel()
         overlayController.hide()
         super.onDestroy()
     }
 
     private fun updateOverlay() {
+        pendingVisibilityJob?.cancel()
+        pendingVisibilityJob = null
+
         val rootPackage = rootInActiveWindow?.packageName?.toString()
-        val foregroundPackage = resolveForegroundPackage()
-        val baseShouldShow = visibilityPolicy.shouldShowOverlay(
-            accessibilityEnabled = true,
-            foregroundPackageName = foregroundPackage,
-            selectedApps = selectedApps,
-            appUiInForeground = appUiInForeground
+        val resolvedForegroundPackage = resolveForegroundPackage()
+        val nowMs = SystemClock.uptimeMillis()
+        val decision = visibilityStateMachine.evaluate(
+            OverlayVisibilityStateMachine.Snapshot(
+                accessibilityEnabled = true,
+                selectedApps = selectedApps,
+                ownPackageName = packageName,
+                appUiInForeground = appUiInForeground,
+                resolvedForegroundPackage = resolvedForegroundPackage,
+                rootPackage = rootPackage,
+                eventPackage = lastEventPackage,
+                eventTimestampMs = lastEventTimestampMs.takeIf { it > 0L },
+                nowMs = nowMs
+            )
         )
+        val trackedPackage = decision.trackedPackage ?: resolvedForegroundPackage ?: rootPackage
+        val baseShouldShow = decision.overlayVisible
         val isWindowed = baseShouldShow && isForegroundAppWindowed()
         val shouldShow = baseShouldShow && !isWindowed
+
         Log.d(
             TAG,
-            "updateOverlay package=$foregroundPackage selected=${selectedApps.contains(foregroundPackage)} appUiInForeground=$appUiInForeground shouldShow=$shouldShow baseShouldShow=$baseShouldShow isWindowed=$isWindowed pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
+            "updateOverlay state=${decision.state} package=$trackedPackage resolved=$resolvedForegroundPackage rootPackage=$rootPackage eventPackage=$lastEventPackage selected=${selectedApps.contains(trackedPackage)} appUiInForeground=$appUiInForeground shouldShow=$shouldShow baseShouldShow=$baseShouldShow isWindowed=$isWindowed reevaluateAfterMs=${decision.reevaluateAfterMs} pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
         )
         logRecentsTraceEvent(
             stage = "updateOverlay",
-            detail = "rootPackage=$rootPackage foregroundPackage=$foregroundPackage shouldShow=$shouldShow selected=${selectedApps.contains(foregroundPackage)}"
+            detail = "state=${decision.state} rootPackage=$rootPackage foregroundPackage=$trackedPackage shouldShow=$shouldShow selected=${selectedApps.contains(trackedPackage)}"
         )
         logRecentsTraceWindows("updateOverlay")
+
         if (shouldShow) {
-            pendingHideJob?.cancel()
-            pendingHideJob = null
             overlayController.show(latestSettings)
         } else {
-            if (pendingHideJob?.isActive == true) {
-                Log.d(TAG, "updateOverlay hidePendingAlready pressId=$lastPressId")
-                return
-            }
-            Log.d(TAG, "updateOverlay scheduleHide delayMs=$TransientHideDelayMs pressId=$lastPressId")
-            pendingHideJob = scope.launch {
-                delay(TransientHideDelayMs)
-                val foregroundAfterDelay = resolveForegroundPackage()
-                val stillShouldHide = !visibilityPolicy.shouldShowOverlay(
-                    accessibilityEnabled = true,
-                    foregroundPackageName = foregroundAfterDelay,
-                    selectedApps = selectedApps,
-                    appUiInForeground = appUiInForeground
-                )
-                val shouldDeferHide = shouldDeferHideForTransientLauncher(foregroundAfterDelay)
-                Log.d(
-                    TAG,
-                    "updateOverlay hideCheck package=$foregroundAfterDelay stillShouldHide=$stillShouldHide shouldDeferHide=$shouldDeferHide pressId=$lastPressId sincePressMs=${elapsedSinceLastPress()}"
-                )
-                logRecentsTraceEvent(
-                    stage = "hideCheck",
-                    detail = "foregroundAfterDelay=$foregroundAfterDelay stillShouldHide=$stillShouldHide shouldDeferHide=$shouldDeferHide"
-                )
-                if (stillShouldHide && !shouldDeferHide) {
-                    overlayController.hide()
-                } else if (stillShouldHide) {
-                    Log.d(TAG, "updateOverlay hideDeferred package=$foregroundAfterDelay action=$lastActionType")
-                }
-                pendingHideJob = null
+            overlayController.hide()
+        }
+
+        decision.reevaluateAfterMs?.takeIf { it > 0L }?.let { delayMs ->
+            Log.d(TAG, "updateOverlay scheduleReevaluate delayMs=$delayMs state=${decision.state}")
+            pendingVisibilityJob = scope.launch {
+                delay(delayMs)
+                pendingVisibilityJob = null
+                updateOverlay()
             }
         }
     }
@@ -231,16 +231,18 @@ class NavigationAccessibilityService : AccessibilityService() {
         return resolved
     }
 
+    private fun shouldIgnoreOwnPackageEvent(
+        eventPackage: String,
+        rootPackage: String?
+    ): Boolean {
+        if (eventPackage != packageName) return false
+        if (!appUiInForeground) return true
+        return rootPackage != packageName
+    }
+
     private fun elapsedSinceLastPress(): Long? {
         if (lastPressStartedUptimeMs == 0L) return null
         return SystemClock.uptimeMillis() - lastPressStartedUptimeMs
-    }
-
-    private fun shouldDeferHideForTransientLauncher(foregroundPackage: String?): Boolean {
-        if (foregroundPackage != LauncherPackageName) return false
-        if (lastActionType != NavButtonType.RECENTS && lastActionType != NavButtonType.HOME) return false
-        val elapsedSinceAction = SystemClock.uptimeMillis() - lastActionUptimeMs
-        return elapsedSinceAction <= LauncherHideGraceMs
     }
 
     private fun logRecentsTraceEvent(stage: String, detail: String) {
@@ -304,8 +306,9 @@ class NavigationAccessibilityService : AccessibilityService() {
         val activeWindow = appWindows.firstOrNull { it.isActive } ?: return false
         val bounds = Rect()
         activeWindow.getBoundsInScreen(bounds)
-        val displayWidth = resources.displayMetrics.widthPixels
-        val displayHeight = resources.displayMetrics.heightPixels
+        val displayMetrics = OverlayViewport.metrics(this)
+        val displayWidth = displayMetrics.widthPixels
+        val displayHeight = displayMetrics.heightPixels
         val isWindowed = bounds.width() < displayWidth * 0.95f || bounds.height() < displayHeight * 0.75f
         Log.d(TAG, "isForegroundAppWindowed=$isWindowed bounds=$bounds display=${displayWidth}x${displayHeight}")
         return isWindowed
@@ -319,11 +322,8 @@ class NavigationAccessibilityService : AccessibilityService() {
 
     private companion object {
         const val TAG = "NavXsA11yService"
-        const val TransientHideDelayMs = 350L
         const val ActionResyncDelayMs = 700L
         const val RecentsTraceWindowMs = 2_500L
-        const val LauncherHideGraceMs = 1_800L
-        const val LauncherPackageName = "com.google.android.apps.nexuslauncher"
         val IgnoredForegroundPackages = setOf(
             "com.android.systemui",
             "com.google.android.inputmethod.latin",

@@ -4,6 +4,7 @@ import de.robnice.navxs.data.NavDefaults
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.data.models.OverlaySettings
+import android.util.DisplayMetrics
 import kotlin.math.roundToInt
 
 class ButtonSettingsUseCase {
@@ -27,8 +28,23 @@ class ButtonSettingsUseCase {
         return updateButton(settings, type) { it.copy(opacity = opacity.coerceIn(0f, 1f)) }
     }
 
-    fun setSizePercent(settings: OverlaySettings, type: NavButtonType, sizePercent: Int): OverlaySettings {
-        return updateButton(settings, type) { it.copy(sizePercent = sizePercent.coerceIn(100, 300)) }
+    fun setSizePercent(
+        settings: OverlaySettings,
+        type: NavButtonType,
+        sizePercent: Int,
+        density: Float
+    ): OverlaySettings {
+        return updateButton(settings, type) {
+            val clampedSizePercent = sizePercent.coerceIn(100, 300)
+            val currentTouchTargetPx = touchTargetPx(it.sizePercent, density)
+            val nextTouchTargetPx = touchTargetPx(clampedSizePercent, density)
+            val delta = nextTouchTargetPx - currentTouchTargetPx
+            it.copy(
+                sizePercent = clampedSizePercent,
+                positionXPx = it.positionXPx - (delta / 2f).roundToInt(),
+                positionYPx = it.positionYPx - (delta / 2f).roundToInt()
+            )
+        }
     }
 
     fun setBackgroundColor(settings: OverlaySettings, type: NavButtonType, colorArgb: Long): OverlaySettings {
@@ -61,18 +77,16 @@ class ButtonSettingsUseCase {
         return settings.copy(precisionStepPx = safeStep)
     }
 
-    fun resetPosition(settings: OverlaySettings, type: NavButtonType): OverlaySettings {
+    fun resetPosition(settings: OverlaySettings, type: NavButtonType, displayMetrics: DisplayMetrics): OverlaySettings {
+        val positions = NavDefaults.defaultButtonPositions(
+            displayMetrics = displayMetrics,
+            sizePercentByType = settings.buttons.mapValues { it.value.sizePercent }
+        )
+        val (defaultX, defaultY) = positions.getValue(type)
         return updateButton(settings, type) {
-            NavDefaults.defaultButtonConfig(type).copy(
-                active = it.active,
-                colorArgb = it.colorArgb,
-                opacity = it.opacity,
-                sizePercent = it.sizePercent,
-                backgroundColorArgb = it.backgroundColorArgb,
-                backgroundOpacity = it.backgroundOpacity,
-                backgroundSizePercent = it.backgroundSizePercent,
-                backgroundSoftnessPercent = it.backgroundSoftnessPercent,
-                themeId = it.themeId
+            it.copy(
+                positionXPx = defaultX,
+                positionYPx = defaultY
             )
         }
     }
@@ -114,5 +128,10 @@ class ButtonSettingsUseCase {
     ): OverlaySettings {
         val current = settings.buttons[type] ?: return settings
         return settings.copy(buttons = settings.buttons + (type to transform(current)))
+    }
+
+    private fun touchTargetPx(sizePercent: Int, density: Float): Int {
+        val iconPx = maxOf(((32 * sizePercent) / 100f * density).toInt(), (16 * density).toInt())
+        return maxOf(iconPx, (56 * density).toInt())
     }
 }

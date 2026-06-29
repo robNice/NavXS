@@ -4,7 +4,7 @@ import android.util.DisplayMetrics
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.data.models.OverlaySettings
-import kotlin.math.max
+import de.robnice.navxs.overlay.touchTargetPx
 
 object NavDefaults {
     const val DefaultOpacity = 1f
@@ -83,9 +83,9 @@ object NavDefaults {
         )
         return NavButtonType.entries.associateWith { type ->
             val sizePercent = sizePercentByType.getValue(type)
-            val iconPx = max(((32 * sizePercent) / 100f * density).toInt(), (16 * density).toInt())
-            val x = (viewportWidthPx * anchorFractions.getValue(type) - (iconPx / 2f)).toInt()
-            val y = (viewportHeightPx - iconPx - bottomMarginPx.toFloat()).toInt()
+            val touchTargetPx = touchTargetPx(sizePercent, density)
+            val x = (viewportWidthPx * anchorFractions.getValue(type) - (touchTargetPx / 2f)).toInt()
+            val y = (viewportHeightPx - touchTargetPx - bottomMarginPx.toFloat()).toInt()
             x to y
         }
     }

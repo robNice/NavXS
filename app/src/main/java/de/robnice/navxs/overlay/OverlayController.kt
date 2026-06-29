@@ -36,10 +36,6 @@ class OverlayController(
     private var nextPressId = 1L
 
     fun show(settings: OverlaySettings) {
-        if (showing && lastRenderedSettings == settings) {
-            Log.d(TAG, "showSkipped unchangedSettings active=${settings.buttons.values.count { it.active }}")
-            return
-        }
         Log.d(TAG, "show active=${settings.buttons.values.count { it.active }} showing=$showing")
         render(settings)
         lastRenderedSettings = settings
@@ -50,9 +46,7 @@ class OverlayController(
         if (!showing && buttonViews.isEmpty()) return
         Log.d(TAG, "hide attached=${buttonViews.values.count { it.isAttachedToWindow }} total=${buttonViews.size}")
         buttonViews.values.toList().forEach { view ->
-            if (view.isAttachedToWindow) {
-                windowManager.removeView(view)
-            }
+            safelyRemoveView(view)
         }
         buttonViews.clear()
         lastRenderedSettings = null
@@ -60,25 +54,28 @@ class OverlayController(
     }
 
     private fun render(settings: OverlaySettings) {
-        val activeButtons = settings.buttons.values.filter { it.active }
+        val activeButtons = settings.buttons.values
+            .filter { it.active }
+            .map(::clampToDisplayBounds)
         val activeTypes = activeButtons.map { it.type }.toSet()
 
         buttonViews.entries.toList().forEach { (type, view) ->
             if (type !in activeTypes) {
-                if (view.isAttachedToWindow) {
-                    windowManager.removeView(view)
-                }
+                safelyRemoveView(view)
                 buttonViews.remove(type)
             }
         }
 
         activeButtons.forEach { button ->
             val existingView = buttonViews[button.type]
-            if (existingView != null && existingView.isAttachedToWindow) {
+            if (existingView != null && existingView.windowToken != null) {
                 bindButtonView(existingView, button)
                 Log.d(TAG, "render update type=${button.type} x=${button.positionXPx} y=${button.positionYPx}")
                 windowManager.updateViewLayout(existingView, layoutParams(button))
             } else {
+                if (existingView != null) {
+                    safelyRemoveView(existingView)
+                }
                 createButtonView(button).also { view ->
                     buttonViews[button.type] = view
                     Log.d(TAG, "render add type=${button.type} x=${button.positionXPx} y=${button.positionYPx}")
@@ -86,6 +83,41 @@ class OverlayController(
                 }
             }
         }
+    }
+
+    private fun safelyRemoveView(view: FrameLayout) {
+        view.visibility = FrameLayout.GONE
+        runCatching {
+            windowManager.removeViewImmediate(view)
+        }.onFailure { error ->
+            Log.d(TAG, "removeSkipped attached=${view.isAttachedToWindow} token=${view.windowToken != null} error=${error::class.java.simpleName}")
+        }
+    }
+
+    private fun clampToDisplayBounds(button: OverlayButtonConfig): OverlayButtonConfig {
+        val displayMetrics = OverlayViewport.metrics(context)
+        val touchTargetPx = touchTargetPx(button.sizePercent, displayMetrics.density)
+        val clampedX = clampOverlayPositionPx(
+            positionPx = button.positionXPx,
+            viewportPx = displayMetrics.widthPixels,
+            touchTargetPx = touchTargetPx
+        )
+        val clampedY = clampOverlayPositionPx(
+            positionPx = button.positionYPx,
+            viewportPx = displayMetrics.heightPixels,
+            touchTargetPx = touchTargetPx
+        )
+        if (clampedX == button.positionXPx && clampedY == button.positionYPx) {
+            return button
+        }
+        Log.d(
+            TAG,
+            "clampedPosition type=${button.type} from=(${button.positionXPx},${button.positionYPx}) to=($clampedX,$clampedY) display=${displayMetrics.widthPixels}x${displayMetrics.heightPixels}"
+        )
+        return button.copy(
+            positionXPx = clampedX,
+            positionYPx = clampedY
+        )
     }
 
     private fun createButtonView(button: OverlayButtonConfig): FrameLayout {
@@ -183,6 +215,11 @@ class OverlayController(
             textView.setTextColor(applyAlpha(button.colorArgb.toInt(), button.opacity))
             textView.textSize = fallbackFontSizeSp(iconSizeDp)
         }
+        imageView.invalidate()
+        textView.invalidate()
+        backgroundView.invalidate()
+        view.requestLayout()
+        view.invalidate()
         var activePressId = 0L
         var downUptimeMs = 0L
         view.setOnTouchListener { touchedView, event ->
@@ -232,7 +269,7 @@ class OverlayController(
     }
 
     private fun layoutParams(button: OverlayButtonConfig): WindowManager.LayoutParams {
-        val density = context.resources.displayMetrics.density
+        val density = OverlayViewport.metrics(context).density
         val touchTargetPx = touchTargetPx(button.sizePercent, density)
         return WindowManager.LayoutParams(
             touchTargetPx,
@@ -264,6 +301,11 @@ internal fun iconSizePx(sizePercent: Int, density: Float): Int =
 
 internal fun touchTargetPx(sizePercent: Int, density: Float): Int =
     max(iconSizePx(sizePercent, density), (56 * density).toInt())
+
+internal fun clampOverlayPositionPx(positionPx: Int, viewportPx: Int, touchTargetPx: Int): Int {
+    val maxPosition = (viewportPx - touchTargetPx).coerceAtLeast(0)
+    return positionPx.coerceIn(0, maxPosition)
+}
 
 private fun overlayIconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 16)
 

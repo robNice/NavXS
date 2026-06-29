@@ -93,12 +93,26 @@ fun ButtonPreviewArea(
             ?: Offset.Zero
     }
 
+    fun previewFrame(type: NavButtonType): Pair<Offset, Int> {
+        val storedPosition = buttonPosition(type)
+        val button = currentSettings.buttons.getValue(type)
+        val iconSizeDp = iconSizeDp(button.sizePercent)
+        val actualTouchTargetDp = actualTouchTargetDp(iconSizeDp)
+        val editTouchTargetDp = editTouchTargetDp(iconSizeDp)
+        if (!currentSettings.editMode || editTouchTargetDp == actualTouchTargetDp) {
+            return storedPosition to actualTouchTargetDp
+        }
+        val overflowPx = with(density) { ((editTouchTargetDp - actualTouchTargetDp).dp / 2).toPx() }
+        return Offset(
+            x = storedPosition.x - overflowPx,
+            y = storedPosition.y - overflowPx
+        ) to editTouchTargetDp
+    }
+
     fun hitButtonAt(offset: Offset) = currentSettings.buttons.values
         .filter { it.active }
         .lastOrNull { button ->
-            val iconSizeDp = iconSizeDp(button.sizePercent)
-            val touchTargetDp = touchTargetDp(iconSizeDp, currentSettings.editMode)
-            val topLeft = buttonPosition(button.type)
+            val (topLeft, touchTargetDp) = previewFrame(button.type)
             Rect(
                 offset = topLeft,
                 size = Size(
@@ -190,9 +204,9 @@ fun ButtonPreviewArea(
         settings.buttons.values.filter { it.active }.forEach { button ->
             val selected = button.type == effectiveSelectedType
             val iconSizeDp = iconSizeDp(button.sizePercent)
-            val touchTargetDp = touchTargetDp(iconSizeDp, settings.editMode)
+            val (_, touchTargetDp) = previewFrame(button.type)
             val iconTint = Color(button.colorArgb).copy(alpha = button.opacity)
-            val position = buttonPosition(button.type)
+            val (position, _) = previewFrame(button.type)
             val buttonOffset = IntOffset(position.x.toInt(), position.y.toInt())
             Box(
                 modifier = Modifier
@@ -312,10 +326,9 @@ internal fun iconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 1
 internal fun backgroundSizeDp(iconSizeDp: Int, sizePercent: Int): Int =
     max((iconSizeDp * sizePercent) / 100, 16)
 
-private fun touchTargetDp(iconSizeDp: Int, editMode: Boolean): Int {
-    val padding = if (editMode) 24 else 0
-    return max(iconSizeDp + padding, 56)
-}
+private fun actualTouchTargetDp(iconSizeDp: Int): Int = max(iconSizeDp, 56)
+
+private fun editTouchTargetDp(iconSizeDp: Int): Int = max(iconSizeDp + 24, 56)
 
 private fun fallbackFontSize(iconSizeDp: Int): TextUnit = (iconSizeDp * 0.7f).sp
 

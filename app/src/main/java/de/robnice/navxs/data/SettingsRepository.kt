@@ -15,6 +15,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlayButtonConfig
 import de.robnice.navxs.data.models.OverlaySettings
+import de.robnice.navxs.overlay.OverlayViewport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -154,7 +155,7 @@ class SettingsRepository(
                     PreferenceDataStoreFactory.create(
                         produceFile = { File(context.applicationContext.filesDir, "navxs_settings.preferences_pb") }
                     ),
-                    context.applicationContext.resources.displayMetrics
+                    OverlayViewport.metrics(context.applicationContext)
                 ).also { instance = it }
             }
         }

@@ -19,4 +19,15 @@ class OverlayControllerTest {
         assertThat(iconSizePx(sizePercent = 300, density = density)).isEqualTo(96)
         assertThat(touchTargetPx(sizePercent = 300, density = density)).isEqualTo(96)
     }
+
+    @Test
+    fun overlayPositionIsClampedIntoViewport() {
+        assertThat(clampOverlayPositionPx(positionPx = -10, viewportPx = 320, touchTargetPx = 56)).isEqualTo(0)
+        assertThat(clampOverlayPositionPx(positionPx = 300, viewportPx = 320, touchTargetPx = 56)).isEqualTo(264)
+    }
+
+    @Test
+    fun overlayPositionFallsBackToZeroWhenButtonIsLargerThanViewport() {
+        assertThat(clampOverlayPositionPx(positionPx = 40, viewportPx = 48, touchTargetPx = 96)).isEqualTo(0)
+    }
 }

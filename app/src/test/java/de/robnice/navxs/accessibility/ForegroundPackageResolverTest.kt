@@ -48,7 +48,7 @@ class ForegroundPackageResolverTest {
         val resolved = resolver.resolveFromRoot(
             rootPackage = "de.robnice.homeshoplist",
             appUiInForeground = false,
-            nowMs = start + 1_500L
+            nowMs = start + 2_600L
         )
 
         assertThat(resolved).isEqualTo("de.robnice.homeshoplist")

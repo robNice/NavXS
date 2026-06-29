@@ -3,7 +3,7 @@ package de.robnice.navxs.accessibility
 class ForegroundPackageResolver(
     private val ownPackageName: String,
     private val ignoredPackages: Set<String>,
-    private val rootOverrideBlockMs: Long = 1_200L
+    private val rootOverrideBlockMs: Long = 2_500L
 ) {
     private var eventPackage: String? = null
     private var eventTimestampMs: Long = 0L

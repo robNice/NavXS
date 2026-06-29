@@ -15,8 +15,8 @@ android {
         applicationId = "de.robnice.navxs"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10000005
-        versionName = "1.0.5"
+        versionCode = 10000006
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,8 @@ android {
     buildTypes {
         release {
             signingConfig = if (!keystorePath.isNullOrEmpty()) signingConfigs.getByName("release") else null
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

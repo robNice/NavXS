@@ -53,6 +53,6 @@ class SettingsRepositoryTest {
         val dataStore = PreferenceDataStoreFactory.create(
             produceFile = { File(context.filesDir, fileName).apply { delete() } }
         )
-        return SettingsRepository(dataStore)
+        return SettingsRepository(dataStore, context.resources.displayMetrics)
     }
 }
