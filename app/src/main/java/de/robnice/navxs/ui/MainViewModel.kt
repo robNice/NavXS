@@ -17,6 +17,7 @@ import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ButtonSettingsUseCase
 import de.robnice.navxs.overlay.OverlayViewport
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +30,7 @@ import kotlinx.coroutines.yield
 data class MainUiState(
     val accessibilityCheckComplete: Boolean = false,
     val accessibilityEnabled: Boolean = false,
+    val appsLoading: Boolean = false,
     val settings: OverlaySettings = NavDefaults.defaultOverlaySettings(),
     val selectedApps: Set<String> = emptySet(),
     val installedApps: List<InstalledAppInfo> = emptyList(),
@@ -47,7 +49,8 @@ private data class UiStateBaseInput(
     val selectedTabIndex: Int,
     val showSystemApps: Boolean,
     val searchQuery: String,
-    val precisionDialogOpen: Boolean
+    val precisionDialogOpen: Boolean,
+    val appsLoading: Boolean
 )
 
 private data class AccessibilitySettingsState(
@@ -74,6 +77,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val message = MutableStateFlow<String?>(null)
     private val accessibilityEnabled = MutableStateFlow(false)
     private val accessibilityCheckComplete = MutableStateFlow(false)
+    private val appsLoading = MutableStateFlow(false)
+    private val installedApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
 
     init {
         refreshAccessibilityStatus()
@@ -84,13 +89,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             settings.copy(editMode = isEditMode)
         }
 
-    private val installedAppsBaseFlow: Flow<List<InstalledAppInfo>> =
-        settingsRepository.showSystemAppsFlow.map { showSystemApps ->
-            installedAppsRepository.loadApps(showSystemApps)
-        }
-
     private val installedAppsFlow: Flow<List<InstalledAppInfo>> = combine(
-        installedAppsBaseFlow,
+        installedApps,
         settingsRepository.selectedAppsFlow,
         searchQuery
     ) { installedApps, selectedApps, query ->
@@ -127,7 +127,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 selectedTabIndex = selectedTabIndex,
                 showSystemApps = false,
                 searchQuery = "",
-                precisionDialogOpen = false
+                precisionDialogOpen = false,
+                appsLoading = false
             )
         }.combine(settingsRepository.showSystemAppsFlow) { base, showSystemApps ->
             base.copy(showSystemApps = showSystemApps)
@@ -135,10 +136,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             base.copy(searchQuery = query)
         }.combine(precisionDialogOpen) { base, precisionOpen ->
             base.copy(precisionDialogOpen = precisionOpen)
+        }.combine(appsLoading) { base, isAppsLoading ->
+            base.copy(appsLoading = isAppsLoading)
         }.combine(message) { base, currentMessage ->
             MainUiState(
                 accessibilityCheckComplete = base.accessibilityCheckComplete,
                 accessibilityEnabled = base.accessibilityEnabled,
+                appsLoading = base.appsLoading,
                 settings = base.settings,
                 selectedApps = base.selectedApps,
                 selectedTabIndex = base.selectedTabIndex,
@@ -157,8 +161,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             accessibilityCheckComplete.value = false
             yield()
-            accessibilityEnabled.value = checkAccessibility()
+            val enabled = checkAccessibility()
+            accessibilityEnabled.value = enabled
             accessibilityCheckComplete.value = true
+            if (enabled) {
+                loadInstalledApps()
+            } else {
+                appsLoading.value = false
+            }
         }
     }
 
@@ -178,6 +188,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setShowSystemApps(show: Boolean) {
         viewModelScope.launch {
             settingsRepository.setShowSystemApps(show)
+            if (accessibilityEnabled.value) {
+                loadInstalledApps()
+            }
         }
     }
 
@@ -309,6 +322,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun checkAccessibility(): Boolean {
         return detector.isAccessibilityServiceEnabled(NavigationAccessibilityService::class.java.name)
+    }
+
+    private suspend fun loadInstalledApps() {
+        appsLoading.value = true
+        installedApps.value = installedAppsRepository.loadApps(settingsRepository.showSystemAppsFlow.first())
+        appsLoading.value = false
     }
 
     private fun persist(settings: OverlaySettings) {

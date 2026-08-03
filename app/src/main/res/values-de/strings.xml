@@ -44,6 +44,8 @@
     <string name="privacy_dialog_message">NavXS verarbeitet den Paketnamen der aktuellen Vordergrund-App nur lokal auf deinem Gerät, um zu entscheiden, ob das Overlay angezeigt werden soll. Es werden keine App-Auswahlen oder Vordergrund-App-Daten an externe Dienste gesendet.</string>
     <string name="apps_search_hint">Apps suchen</string>
     <string name="apps_show_system_apps">System-Apps anzeigen</string>
+    <string name="apps_scanning">Apps werden durchsucht…</string>
+    <string name="apps_scanning_detail">Bitte einen Moment warten.</string>
     <string name="apps_enabled_section">Aktivierte Apps</string>
     <string name="apps_installed_section">Installierte Apps</string>
     <string name="apps_empty">Keine Apps passen zum aktuellen Filter.</string>

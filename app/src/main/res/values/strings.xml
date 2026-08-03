@@ -44,6 +44,8 @@
     <string name="privacy_dialog_message">NavXS processes the current foreground package name locally on your device to decide whether the overlay should be shown. No app selection or foreground-app data is sent to external services.</string>
     <string name="apps_search_hint">Search apps</string>
     <string name="apps_show_system_apps">Show system apps</string>
+    <string name="apps_scanning">Scanning apps…</string>
+    <string name="apps_scanning_detail">Please wait a moment.</string>
     <string name="apps_enabled_section">Enabled apps</string>
     <string name="apps_installed_section">Installed apps</string>
     <string name="apps_empty">No apps match the current filter.</string>
