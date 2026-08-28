@@ -15,12 +15,14 @@ import de.robnice.navxs.ui.AppForegroundState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class NavigationAccessibilityService : AccessibilityService() {
-    private val scope = CoroutineScope(Dispatchers.Main + Job())
+    private var scope = createServiceScope()
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var overlayController: OverlayController
     private lateinit var foregroundResolver: ForegroundPackageResolver
@@ -38,9 +40,13 @@ class NavigationAccessibilityService : AccessibilityService() {
     private var recentsTrace: RecentsTrace? = null
     private var lastEventPackage: String? = null
     private var lastEventTimestampMs: Long = 0L
+    private var serviceConnected = false
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        scope.cancel()
+        scope = createServiceScope()
+        serviceConnected = true
         settingsRepository = SettingsRepository.create(this)
         overlayController = OverlayController(this, ::performAction)
         foregroundResolver = ForegroundPackageResolver(packageName, IgnoredForegroundPackages)
@@ -102,13 +108,31 @@ class NavigationAccessibilityService : AccessibilityService() {
 
     override fun onInterrupt() = Unit
 
+    override fun onUnbind(intent: android.content.Intent?): Boolean {
+        disconnectService()
+        return super.onUnbind(intent)
+    }
+
     override fun onDestroy() {
-        pendingVisibilityJob?.cancel()
-        overlayController.hide()
+        disconnectService()
         super.onDestroy()
     }
 
+    private fun disconnectService() {
+        serviceConnected = false
+        pendingVisibilityJob?.cancel()
+        pendingVisibilityJob = null
+        scope.cancel()
+        if (::overlayController.isInitialized) {
+            overlayController.hide()
+        }
+    }
+
     private fun updateOverlay() {
+        if (!serviceConnected) {
+            Log.d(TAG, "updateOverlay skipped: service disconnected")
+            return
+        }
         pendingVisibilityJob?.cancel()
         pendingVisibilityJob = null
 
@@ -331,3 +355,6 @@ class NavigationAccessibilityService : AccessibilityService() {
         )
     }
 }
+
+private fun createServiceScope(): CoroutineScope =
+    CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())

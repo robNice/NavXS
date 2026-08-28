@@ -153,6 +153,7 @@ fun MainTabsScreen(
                         state = state,
                         onSearchQueryChange = viewModel::setSearchQuery,
                         onShowSystemAppsChange = viewModel::setShowSystemApps,
+                        onRescanApps = viewModel::rescanInstalledApps,
                         onAppToggle = viewModel::toggleApp
                     )
                     else -> SettingsScreen(

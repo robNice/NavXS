@@ -12,9 +12,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DensityMedium
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -46,6 +48,7 @@ fun AppsScreen(
     state: MainUiState,
     onSearchQueryChange: (String) -> Unit,
     onShowSystemAppsChange: (Boolean) -> Unit,
+    onRescanApps: () -> Unit,
     onAppToggle: (String, Boolean) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -141,7 +144,15 @@ fun AppsScreen(
             ListItem(
                 headlineContent = { Text(stringResource(R.string.apps_show_system_apps)) },
                 trailingContent = {
-                    Switch(checked = state.showSystemApps, onCheckedChange = onShowSystemAppsChange)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = onRescanApps) {
+                            Icon(
+                                imageVector = Icons.Outlined.Refresh,
+                                contentDescription = stringResource(R.string.apps_rescan)
+                            )
+                        }
+                        Switch(checked = state.showSystemApps, onCheckedChange = onShowSystemAppsChange)
+                    }
                 }
             )
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {

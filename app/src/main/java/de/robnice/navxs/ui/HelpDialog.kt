@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -166,6 +167,27 @@ fun HelpDialog(onDismiss: () -> Unit) {
                     Spacer(Modifier.height(6.dp))
                     HelpBody(stringResource(R.string.help_body_preview))
 
+                    HelpSectionDivider()
+
+                    HelpSectionTitle(
+                        number = "4",
+                        text = stringResource(R.string.help_section_support),
+                        modifier = Modifier.anchor("support")
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    HelpBody(stringResource(R.string.help_body_support))
+                    Spacer(Modifier.height(4.dp))
+                    HelpSupportLink(
+                        value = "github.com/robNice/NavXS/issues",
+                        uri = "https://github.com/robNice/NavXS/issues"
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpBody(stringResource(R.string.help_support_email_intro))
+                    HelpSupportLink(
+                        value = "support@robnice.de",
+                        uri = "mailto:support@robnice.de"
+                    )
+
                     Spacer(Modifier.height(16.dp))
                 }
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
@@ -211,7 +233,22 @@ private fun HelpTableOfContents(onScrollTo: (String) -> Unit) {
         TocSecondary("2.4", stringResource(R.string.settings_button_section)) { onScrollTo("button") }
         TocSecondary("2.5", stringResource(R.string.settings_button_background_section)) { onScrollTo("button_bg") }
         TocPrimary("3", stringResource(R.string.help_section_preview)) { onScrollTo("preview") }
+        TocPrimary("4", stringResource(R.string.help_section_support)) { onScrollTo("support") }
     }
+}
+
+@Composable
+private fun HelpSupportLink(value: String, uri: String) {
+    val uriHandler = LocalUriHandler.current
+    Text(
+        text = value,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { runCatching { uriHandler.openUri(uri) } }
+            .padding(vertical = 6.dp)
+    )
 }
 
 @Composable

@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
+import android.view.WindowManager.BadTokenException
 import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -37,9 +38,12 @@ class OverlayController(
 
     fun show(settings: OverlaySettings) {
         Log.d(TAG, "show active=${settings.buttons.values.count { it.active }} showing=$showing")
-        render(settings)
-        lastRenderedSettings = settings
-        showing = true
+        if (render(settings)) {
+            lastRenderedSettings = settings
+            showing = true
+        } else {
+            hide()
+        }
     }
 
     fun hide() {
@@ -53,7 +57,7 @@ class OverlayController(
         showing = false
     }
 
-    private fun render(settings: OverlaySettings) {
+    private fun render(settings: OverlaySettings): Boolean {
         val activeButtons = settings.buttons.values
             .filter { it.active }
             .map(::clampToDisplayBounds)
@@ -71,18 +75,41 @@ class OverlayController(
             if (existingView != null && existingView.windowToken != null) {
                 bindButtonView(existingView, button)
                 Log.d(TAG, "render update type=${button.type} x=${button.positionXPx} y=${button.positionYPx}")
-                windowManager.updateViewLayout(existingView, layoutParams(button))
+                if (!safelyUpdateView(existingView, button)) return false
             } else {
                 if (existingView != null) {
                     safelyRemoveView(existingView)
                 }
                 createButtonView(button).also { view ->
-                    buttonViews[button.type] = view
                     Log.d(TAG, "render add type=${button.type} x=${button.positionXPx} y=${button.positionYPx}")
-                    windowManager.addView(view, layoutParams(button))
+                    if (!safelyAddView(view, button)) return false
+                    buttonViews[button.type] = view
                 }
             }
         }
+        return true
+    }
+
+    private fun safelyAddView(view: FrameLayout, button: OverlayButtonConfig): Boolean = try {
+        windowManager.addView(view, layoutParams(button))
+        true
+    } catch (error: BadTokenException) {
+        Log.w(TAG, "add skipped: accessibility window token is no longer valid", error)
+        false
+    } catch (error: SecurityException) {
+        Log.w(TAG, "add skipped: accessibility overlay is no longer permitted", error)
+        false
+    }
+
+    private fun safelyUpdateView(view: FrameLayout, button: OverlayButtonConfig): Boolean = try {
+        windowManager.updateViewLayout(view, layoutParams(button))
+        true
+    } catch (error: IllegalArgumentException) {
+        Log.w(TAG, "update skipped: overlay view is no longer attached", error)
+        false
+    } catch (error: BadTokenException) {
+        Log.w(TAG, "update skipped: accessibility window token is no longer valid", error)
+        false
     }
 
     private fun safelyRemoveView(view: FrameLayout) {

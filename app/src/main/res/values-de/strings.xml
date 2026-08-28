@@ -38,12 +38,16 @@
     <string name="help_desc_bg_size">Durchmesser des Kreises relativ zum Icon.</string>
     <string name="help_desc_bg_softness">0 = harte Kante; 100 = vollständig ausgeblendete Kante.</string>
     <string name="help_body_preview">Die kleine Fahne oben rechts öffnet ein Panel mit dem ausgewählten Button auf weißem, grauem und schwarzem Hintergrund — so beurteilst du die Sichtbarkeit auf jeder App, ohne die Einstellungen zu verlassen.</string>
+    <string name="help_section_support">Support</string>
+    <string name="help_body_support">Bei Problemen mit dieser App erhältst du Unterstützung über den Issue-Tracker.</string>
+    <string name="help_support_email_intro">Oder per E-Mail:</string>
     <string name="footer_privacy">Datenschutz</string>
     <string name="footer_version">Version: %1$s</string>
     <string name="privacy_dialog_title">Datenschutz</string>
     <string name="privacy_dialog_message">NavXS verarbeitet den Paketnamen der aktuellen Vordergrund-App nur lokal auf deinem Gerät, um zu entscheiden, ob das Overlay angezeigt werden soll. Es werden keine App-Auswahlen oder Vordergrund-App-Daten an externe Dienste gesendet.</string>
     <string name="apps_search_hint">Apps suchen</string>
     <string name="apps_show_system_apps">System-Apps anzeigen</string>
+    <string name="apps_rescan">Apps neu einlesen</string>
     <string name="apps_scanning">Apps werden durchsucht…</string>
     <string name="apps_scanning_detail">Bitte einen Moment warten.</string>
     <string name="apps_enabled_section">Aktivierte Apps</string>

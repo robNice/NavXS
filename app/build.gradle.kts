@@ -15,8 +15,8 @@ android {
         applicationId = "de.robnice.navxs"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10000007
-        versionName = "1.0.7"
+        versionCode = 10000008
+        versionName = "1.0.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

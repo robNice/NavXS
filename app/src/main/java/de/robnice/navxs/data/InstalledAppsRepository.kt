@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class InstalledAppsRepository(private val context: Context) {
-    suspend fun loadApps(showSystemApps: Boolean): List<InstalledAppInfo> {
+    suspend fun loadApps(): List<InstalledAppInfo> {
         return withContext(Dispatchers.IO) {
             val packageManager = context.packageManager
             packageManager.getInstalledApplications(0)
@@ -29,7 +29,6 @@ class InstalledAppsRepository(private val context: Context) {
                     )
                 }
                 .filterNot { it.packageName == context.packageName }
-                .filter { showSystemApps || !it.systemApp }
                 .sortedBy { it.appName.lowercase() }
         }
     }

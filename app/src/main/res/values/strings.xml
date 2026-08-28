@@ -38,12 +38,16 @@
     <string name="help_desc_bg_size">Diameter of the circle relative to the icon.</string>
     <string name="help_desc_bg_softness">0 = hard edge; 100 = fully faded gradient edge.</string>
     <string name="help_body_preview">The small flag at the top-right of the settings screen slides open a panel showing the selected button on white, grey, and black backgrounds — judge visibility on any app without leaving settings.</string>
+    <string name="help_section_support">Support</string>
+    <string name="help_body_support">For problems with this app, get support through the issue tracker.</string>
+    <string name="help_support_email_intro">Or by email:</string>
     <string name="footer_privacy">Privacy</string>
     <string name="footer_version">Version: %1$s</string>
     <string name="privacy_dialog_title">Privacy</string>
     <string name="privacy_dialog_message">NavXS processes the current foreground package name locally on your device to decide whether the overlay should be shown. No app selection or foreground-app data is sent to external services.</string>
     <string name="apps_search_hint">Search apps</string>
     <string name="apps_show_system_apps">Show system apps</string>
+    <string name="apps_rescan">Rescan apps</string>
     <string name="apps_scanning">Scanning apps…</string>
     <string name="apps_scanning_detail">Please wait a moment.</string>
     <string name="apps_enabled_section">Enabled apps</string>
