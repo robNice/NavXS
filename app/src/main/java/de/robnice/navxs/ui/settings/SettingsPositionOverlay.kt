@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.OpenWith
@@ -35,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -44,7 +46,6 @@ import de.robnice.navxs.data.NavDefaults
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.overlay.OverlayViewport
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Composable
@@ -100,33 +101,9 @@ fun SettingsPositionOverlay(
     var isDragging by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val activeButtonType = dragButtonType ?: localSelectedButtonType
-        val activeButton = settings.buttons.getValue(activeButtonType)
-        val activeDragBounds = remember(viewportWidthPx, viewportHeightPx, density, activeButton.sizePercent) {
-            dragBoundsForButton(
-                viewportWidthPx = viewportWidthPx,
-                viewportHeightPx = viewportHeightPx,
-                sizePercent = activeButton.sizePercent,
-                density = density
-            )
-        }
-
-        fun clampPosition(position: Offset, type: NavButtonType = activeButtonType): Offset {
-            val dragBounds = dragBoundsForButton(
-                viewportWidthPx = viewportWidthPx,
-                viewportHeightPx = viewportHeightPx,
-                sizePercent = settings.buttons.getValue(type).sizePercent,
-                density = density
-            )
-            return Offset(
-                x = position.x.coerceIn(dragBounds.left.toFloat(), dragBounds.right.toFloat()),
-                y = position.y.coerceIn(dragBounds.top.toFloat(), dragBounds.bottom.toFloat())
-            )
-        }
-
         LaunchedEffect(settings.buttons, viewportWidthPx, viewportHeightPx, isDragging, dragButtonType, precisionOpen) {
-            val persistedPositions = settings.buttons.mapValues { (type, button) ->
-                clampPosition(Offset(button.positionXPx.toFloat(), button.positionYPx.toFloat()), type)
+            val persistedPositions = settings.buttons.mapValues { (_, button) ->
+                Offset(button.positionXPx.toFloat(), button.positionYPx.toFloat())
             }
             if (
                 settlingButtonType != null &&
@@ -155,7 +132,6 @@ fun SettingsPositionOverlay(
                 draggedButtonType = dragButtonType ?: settlingButtonType,
                 draggedButtonPosition = dragPreviewPosition ?: settlingPosition,
                 selectedButtonTypeOverride = dragButtonType ?: localSelectedButtonType,
-                dragBounds = activeDragBounds,
                 onSelectButton = {
                     localSelectedButtonType = it
                     onSelectButton(it)
@@ -164,18 +140,15 @@ fun SettingsPositionOverlay(
                     dragButtonType = type
                     localSelectedButtonType = type
                     isDragging = true
-                    dragPreviewPosition = clampPosition(startPosition, type)
+                    dragPreviewPosition = startPosition
                     onSelectButton(type)
                 },
                 onMoveSelectedButton = { deltaX, deltaY ->
                     val type = dragButtonType ?: return@ButtonPreviewArea
                     val currentPosition = dragPreviewPosition ?: localButtonPositions[type] ?: return@ButtonPreviewArea
-                    val nextPosition = clampPosition(
-                        Offset(
-                            x = currentPosition.x + deltaX,
-                            y = currentPosition.y + deltaY,
-                        ),
-                        type
+                    val nextPosition = Offset(
+                        x = currentPosition.x + deltaX,
+                        y = currentPosition.y + deltaY,
                     )
                     if (nextPosition != currentPosition) {
                         dragPreviewPosition = nextPosition
@@ -187,7 +160,7 @@ fun SettingsPositionOverlay(
                     val localPosition = dragPreviewPosition ?: localButtonPositions.getValue(commitType)
                     Log.d(
                         TAG,
-                        "commitDrag type=$commitType target=$localPosition bounds=$activeDragBounds"
+                        "commitDrag type=$commitType target=$localPosition"
                     )
                     localButtonPositions = localButtonPositions + (commitType to localPosition)
                     settlingButtonType = commitType
@@ -202,7 +175,9 @@ fun SettingsPositionOverlay(
             Column(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .statusBarsPadding()
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+                    )
                     .padding(top = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -221,19 +196,17 @@ fun SettingsPositionOverlay(
                     }
                     FilledTonalIconButton(
                         onClick = {
-                            val clampedPositions = navBarResetPositions(
+                            val resetPositions = navBarResetPositions(
                                 settings = settings,
                                 viewportSize = IntSize(viewportWidthPx, viewportHeightPx),
                                 navBarBottomPx = stableNavBarBottomPx,
                                 density = density
-                            ).mapValues { (type, position) ->
-                                clampPosition(position, type)
-                            }
+                            )
                             settlingButtonType = null
                             settlingPosition = null
-                            localButtonPositions = localButtonPositions + clampedPositions
+                            localButtonPositions = localButtonPositions + resetPositions
                             onResetPosition(
-                                clampedPositions.mapValues { (_, position) ->
+                                resetPositions.mapValues { (_, position) ->
                                     position.x.roundToInt() to position.y.roundToInt()
                                 }
                             )
@@ -266,27 +239,22 @@ fun SettingsPositionOverlay(
                         onMove = { dx, dy ->
                             val type = localSelectedButtonType
                             val currentPos = localButtonPositions[type] ?: return@PrecisionControls
-                            val newPos = clampPosition(
-                                Offset(currentPos.x + dx, currentPos.y + dy),
-                                type
-                            )
+                            val newPos = Offset(currentPos.x + dx, currentPos.y + dy)
                             localButtonPositions = localButtonPositions + (type to newPos)
                             onPrecisionMove(type, newPos.x.roundToInt(), newPos.y.roundToInt())
                         },
                         onResetPosition = {
-                            val clampedPositions = navBarResetPositions(
+                            val resetPositions = navBarResetPositions(
                                 settings = settings,
                                 viewportSize = IntSize(viewportWidthPx, viewportHeightPx),
                                 navBarBottomPx = stableNavBarBottomPx,
                                 density = density
-                            ).mapValues { (type, position) ->
-                                clampPosition(position, type)
-                            }
+                            )
                             settlingButtonType = null
                             settlingPosition = null
-                            localButtonPositions = localButtonPositions + clampedPositions
+                            localButtonPositions = localButtonPositions + resetPositions
                             onResetPosition(
-                                clampedPositions.mapValues { (_, position) ->
+                                resetPositions.mapValues { (_, position) ->
                                     position.x.roundToInt() to position.y.roundToInt()
                                 }
                             )
@@ -296,24 +264,6 @@ fun SettingsPositionOverlay(
             }
         }
     }
-}
-
-private fun dragBoundsForButton(
-    viewportWidthPx: Int,
-    viewportHeightPx: Int,
-    sizePercent: Int,
-    density: androidx.compose.ui.unit.Density
-): IntRect {
-    val iconPx = with(density) { iconSizeDp(sizePercent).dp.roundToPx() }
-    val touchTargetPx = with(density) { max(iconSizeDp(sizePercent), 56).dp.roundToPx() }
-    val overflowPx = max(touchTargetPx - iconPx, 0) / 2
-    val halfIconPx = iconPx / 2
-    return IntRect(
-        left = -overflowPx,
-        top = -overflowPx,
-        right = max(viewportWidthPx - iconPx - overflowPx, -overflowPx),
-        bottom = max(viewportHeightPx - iconPx + halfIconPx, -overflowPx)
-    )
 }
 
 private fun navBarResetPositions(

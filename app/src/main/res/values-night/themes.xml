@@ -5,8 +5,5 @@
         <item name="postSplashScreenTheme">@style/Theme.NavXS</item>
     </style>
 
-    <style name="Theme.NavXS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
+    <style name="Theme.NavXS" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>

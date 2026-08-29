@@ -1,5 +1,7 @@
 package de.robnice.navxs.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
@@ -183,10 +186,7 @@ fun HelpDialog(onDismiss: () -> Unit) {
                     )
                     Spacer(Modifier.height(4.dp))
                     HelpBody(stringResource(R.string.help_support_email_intro))
-                    HelpSupportLink(
-                        value = "support@robnice.de",
-                        uri = "mailto:support@robnice.de"
-                    )
+                    HelpEmailLink("navxs@robnice.de")
 
                     Spacer(Modifier.height(16.dp))
                 }
@@ -235,6 +235,25 @@ private fun HelpTableOfContents(onScrollTo: (String) -> Unit) {
         TocPrimary("3", stringResource(R.string.help_section_preview)) { onScrollTo("preview") }
         TocPrimary("4", stringResource(R.string.help_section_support)) { onScrollTo("support") }
     }
+}
+
+@Composable
+private fun HelpEmailLink(address: String) {
+    val context = LocalContext.current
+    Text(
+        text = address,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$address"))
+                runCatching {
+                    context.startActivity(Intent.createChooser(emailIntent, null))
+                }
+            }
+            .padding(vertical = 6.dp)
+    )
 }
 
 @Composable

@@ -40,7 +40,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -61,7 +60,6 @@ fun ButtonPreviewArea(
     draggedButtonType: NavButtonType? = null,
     draggedButtonPosition: Offset? = null,
     selectedButtonTypeOverride: NavButtonType? = null,
-    dragBounds: IntRect? = null,
     onSelectButton: (NavButtonType) -> Unit = {},
     onDragStarted: (NavButtonType, Offset) -> Unit = { _, _ -> },
     onMoveSelectedButton: (Float, Float) -> Unit,
@@ -72,7 +70,6 @@ fun ButtonPreviewArea(
     val currentButtonPositions by rememberUpdatedState(buttonPositions)
     val currentDraggedButtonType by rememberUpdatedState(draggedButtonType)
     val currentDraggedButtonPosition by rememberUpdatedState(draggedButtonPosition)
-    val currentDragBounds by rememberUpdatedState(dragBounds)
     val currentSettings by rememberUpdatedState(settings)
     val currentOnSelectButton by rememberUpdatedState(onSelectButton)
     val currentOnDragStarted by rememberUpdatedState(onDragStarted)
@@ -171,7 +168,7 @@ fun ButtonPreviewArea(
                             }
                             Log.d(
                                 TAG,
-                                "dragStart type=${hitButton?.type} hit=$dragActive start=$offset current=${dragType?.let(::buttonPosition)} bounds=$currentDragBounds"
+                                "dragStart type=${hitButton?.type} hit=$dragActive start=$offset current=${dragType?.let(::buttonPosition)}"
                             )
                         },
                         onDragCancel = {

@@ -8,12 +8,13 @@ import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
+import android.os.Build
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.WindowManager.BadTokenException
-import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -60,7 +61,6 @@ class OverlayController(
     private fun render(settings: OverlaySettings): Boolean {
         val activeButtons = settings.buttons.values
             .filter { it.active }
-            .map(::clampToDisplayBounds)
         val activeTypes = activeButtons.map { it.type }.toSet()
 
         buttonViews.entries.toList().forEach { (type, view) ->
@@ -119,32 +119,6 @@ class OverlayController(
         }.onFailure { error ->
             Log.d(TAG, "removeSkipped attached=${view.isAttachedToWindow} token=${view.windowToken != null} error=${error::class.java.simpleName}")
         }
-    }
-
-    private fun clampToDisplayBounds(button: OverlayButtonConfig): OverlayButtonConfig {
-        val displayMetrics = OverlayViewport.metrics(context)
-        val touchTargetPx = touchTargetPx(button.sizePercent, displayMetrics.density)
-        val clampedX = clampOverlayPositionPx(
-            positionPx = button.positionXPx,
-            viewportPx = displayMetrics.widthPixels,
-            touchTargetPx = touchTargetPx
-        )
-        val clampedY = clampOverlayPositionPx(
-            positionPx = button.positionYPx,
-            viewportPx = displayMetrics.heightPixels,
-            touchTargetPx = touchTargetPx
-        )
-        if (clampedX == button.positionXPx && clampedY == button.positionYPx) {
-            return button
-        }
-        Log.d(
-            TAG,
-            "clampedPosition type=${button.type} from=(${button.positionXPx},${button.positionYPx}) to=($clampedX,$clampedY) display=${displayMetrics.widthPixels}x${displayMetrics.heightPixels}"
-        )
-        return button.copy(
-            positionXPx = clampedX,
-            positionYPx = clampedY
-        )
     }
 
     private fun createButtonView(button: OverlayButtonConfig): FrameLayout {
@@ -311,7 +285,9 @@ class OverlayController(
             gravity = Gravity.TOP or Gravity.START
             x = button.positionXPx
             y = button.positionYPx
-            layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            }
         }
     }
 
@@ -328,11 +304,6 @@ internal fun iconSizePx(sizePercent: Int, density: Float): Int =
 
 internal fun touchTargetPx(sizePercent: Int, density: Float): Int =
     max(iconSizePx(sizePercent, density), (56 * density).toInt())
-
-internal fun clampOverlayPositionPx(positionPx: Int, viewportPx: Int, touchTargetPx: Int): Int {
-    val maxPosition = (viewportPx - touchTargetPx).coerceAtLeast(0)
-    return positionPx.coerceIn(0, maxPosition)
-}
 
 private fun overlayIconSizeDp(sizePercent: Int): Int = max((32 * sizePercent) / 100, 16)
 

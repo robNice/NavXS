@@ -15,8 +15,8 @@ android {
         applicationId = "de.robnice.navxs"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10000008
-        versionName = "1.0.8"
+        versionCode = 10000009
+        versionName = "1.0.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,7 +66,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
