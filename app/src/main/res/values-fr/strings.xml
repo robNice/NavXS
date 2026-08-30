@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Activez le service d\'accessibilité pour que l\'application détecte l\'app en premier plan et affiche l\'overlay de navigation pour les apps sélectionnées.</string>
     <string name="open_accessibility_settings">Ouvrir les paramètres d\'accessibilité</string>
     <string name="check_again">Vérifier à nouveau</string>
+    <string name="disclosure_title">Service d\'accessibilité</string>
+    <string name="disclosure_item_1">NavXS utilise le service d\'accessibilité d\'Android.</string>
+    <string name="disclosure_item_2">Le service est nécessaire pour afficher des boutons de navigation flottants au-dessus des applications sélectionnées.</string>
+    <string name="disclosure_item_3">NavXS peut détecter quelle application est au premier plan.</string>
+    <string name="disclosure_item_4">NavXS utilise les actions d\'accessibilité : Retour, Accueil et Applications récentes.</string>
+    <string name="disclosure_item_5">NavXS ne lit ni les textes saisis, ni les mots de passe, ni le contenu des messages.</string>
+    <string name="disclosure_item_6">NavXS ne vend ni ne partage ces données.</string>
+    <string name="disclosure_item_7">Le traitement sert uniquement à fournir la fonction de superposition de navigation.</string>
+    <string name="disclosure_checkbox">Je comprends pourquoi NavXS a besoin du service d\'accessibilité.</string>
+    <string name="disclosure_continue">J\'accepte — Ouvrir les paramètres d\'accessibilité</string>
     <string name="app_loading">Vérification de l\'autorisation d\'accessibilité…</string>
     <string name="header_help">Ouvrir l\'aide</string>
     <string name="help_dialog_title">Aide</string>
@@ -15,6 +25,9 @@
     <string name="privacy_dialog_message">NavXS traite le nom du package de l\'application en premier plan localement sur votre appareil pour décider si l\'overlay doit être affiché. Aucune donnée n\'est transmise à des services externes.</string>
     <string name="apps_search_hint">Rechercher des apps</string>
     <string name="apps_show_system_apps">Afficher les apps système</string>
+    <string name="apps_rescan">Réanalyser les applications</string>
+    <string name="apps_scanning">Analyse des applications…</string>
+    <string name="apps_scanning_detail">Merci de patienter un instant.</string>
     <string name="apps_enabled_section">Apps activées</string>
     <string name="apps_installed_section">Apps installées</string>
     <string name="apps_empty">Aucune app ne correspond au filtre actuel.</string>
@@ -48,6 +61,11 @@
     <string name="settings_position_y">Position Y</string>
     <string name="settings_reset_position">Réinitialiser la position</string>
     <string name="settings_open_precision">Ouvrir les contrôles de précision</string>
+    <string name="settings_position_background_manage">Gérer l’arrière-plan de positionnement</string>
+    <string name="settings_position_background_title">Arrière-plan de positionnement</string>
+    <string name="settings_position_background_reset">Réinitialiser l’arrière-plan</string>
+    <string name="settings_position_background_select">Sélectionner un arrière-plan</string>
+    <string name="settings_position_background_opacity">Opacité de l\'arrière-plan %1$d%%</string>
     <string name="settings_color_hex">HEX : %1$s</string>
     <string name="settings_color_hue">Teinte %1$d°</string>
     <string name="settings_color_brightness">Luminosité %1$d%%</string>
@@ -62,6 +80,7 @@
     <string name="button_recents">Récents</string>
     <string name="error_last_active_button">Au moins un bouton doit rester actif.</string>
     <string name="error_action_failed">L\'action n\'a pas pu être exécutée.</string>
+    <string name="error_position_background_load">Impossible de charger l’image d’arrière-plan.</string>
     <string name="accessibility_service_label">Navigation overlay NavXS</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>
@@ -74,6 +93,8 @@
     <string name="help_body_apps">La liste affiche toutes les apps installées sur votre appareil. Activez une app pour que l\'overlay NavXS apparaisse dès qu\'elle est au premier plan. Utilisez la barre de recherche pour filtrer par nom, ou activez Afficher les apps système.</string>
     <string name="help_body_position">Ouvre un éditeur plein écran. Faites glisser un bouton actif vers l\'endroit exact où il doit apparaître dans l\'overlay. Touchez un bouton pour le sélectionner sans le déplacer. L\'icône de réinitialisation restaure toutes les positions par défaut. Le panneau de précision déplace le bouton sélectionné d\'un pas exact en pixels.</string>
     <string name="help_body_select">Touchez Retour, Accueil ou Récents pour sélectionner un bouton. Tous les paramètres ci-dessous s\'appliquent uniquement au bouton sélectionné.</string>
+    <string name="help_sub_position_background">Arrière-plan de positionnement</string>
+    <string name="help_body_position_background">Utilisez une capture d\'écran comme arrière-plan pour placer les boutons exactement là où vous en aurez besoin.\n\nChoisissez une capture de votre application avec l\'icône d\'image, puis faites glisser les boutons aux endroits voulus. Le curseur assombrit l\'arrière-plan pour mieux voir les boutons.\n\n« Réinitialiser l\'arrière-plan » retire la capture. Vos positions de boutons sont conservées.\n\nLa capture sert uniquement d\'aide au réglage et n\'apparaît jamais dans l\'overlay normal.</string>
     <string name="help_body_active">Active ou désactive le bouton sélectionné dans l\'overlay. Au moins un bouton doit rester actif en permanence.</string>
     <string name="help_desc_theme">Choisit le style d\'icône.</string>
     <string name="help_desc_colour">Définit la couleur de l\'icône.</string>
@@ -85,4 +106,7 @@
     <string name="help_desc_bg_size">Diamètre du cercle par rapport à l\'icône.</string>
     <string name="help_desc_bg_softness">0 = bord net ; 100 = bord entièrement estompé.</string>
     <string name="help_body_preview">Le petit onglet en haut à droite de l\'écran des paramètres ouvre un panneau latéral affichant le bouton sélectionné sur fond blanc, gris et noir — évaluez la visibilité sur n\'importe quelle app sans quitter les paramètres.</string>
+    <string name="help_section_support">Assistance</string>
+    <string name="help_body_support">En cas de problème avec cette application, obtenez de l\'aide via le gestionnaire de tickets.</string>
+    <string name="help_support_email_intro">Ou par e-mail :</string>
 </resources>

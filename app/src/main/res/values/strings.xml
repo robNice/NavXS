@@ -27,6 +27,8 @@
     <string name="help_body_apps">The list shows all installed apps on your device. Enable an app to make the NavXS overlay appear whenever it is in the foreground. Use the search bar to filter by name, or toggle Show system apps to include system apps.</string>
     <string name="help_body_position">Opens a full-screen editor. Drag any active button to exactly where it should sit in the live overlay. Tap a button to select it without moving it. The reset icon restores all default positions. The precision panel moves the selected button by an exact pixel step size.</string>
     <string name="help_body_select">Tap Back, Home, or Recents to pick a button. All settings below apply to the selected button only.</string>
+    <string name="help_sub_position_background">Positioning background</string>
+    <string name="help_body_position_background">Use a screenshot as the background to place the buttons exactly where you will need them later.\n\nPick a screenshot of your app with the image icon and drag the buttons to the spots you want. The slider dims the background so the buttons stay easier to see.\n\n“Reset background” removes the screenshot again. Your button positions are kept.\n\nThe screenshot is only a setup aid and is never shown in the normal overlay.</string>
     <string name="help_body_active">Switches the selected button on or off in the overlay. At least one button must remain active at all times.</string>
     <string name="help_desc_theme">Chooses the icon style.</string>
     <string name="help_desc_colour">Sets the icon colour.</string>
@@ -83,6 +85,11 @@
     <string name="settings_position_y">Position Y</string>
     <string name="settings_reset_position">Reset position</string>
     <string name="settings_open_precision">Open precision controls</string>
+    <string name="settings_position_background_manage">Manage positioning background</string>
+    <string name="settings_position_background_title">Positioning background</string>
+    <string name="settings_position_background_reset">Reset background</string>
+    <string name="settings_position_background_select">Select background</string>
+    <string name="settings_position_background_opacity">Background opacity %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Hue %1$d°</string>
     <string name="settings_color_brightness">Brightness %1$d%%</string>
@@ -97,6 +104,7 @@
     <string name="button_recents">Recents</string>
     <string name="error_last_active_button">At least one button must stay active.</string>
     <string name="error_action_failed">Action could not be executed.</string>
+    <string name="error_position_background_load">The background image could not be loaded.</string>
     <string name="accessibility_service_label">NavXS overlay navigation</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_ok">OK</string>

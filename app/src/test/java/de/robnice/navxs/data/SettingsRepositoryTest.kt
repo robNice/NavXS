@@ -48,6 +48,70 @@ class SettingsRepositoryTest {
         assertThat(repository.selectedTabFlow.first()).isEqualTo(1)
     }
 
+    @Test
+    fun positionBackgroundUriIsSavedAndLoaded() = runTest {
+        val repository = createRepository("position_background_saved.preferences_pb")
+        val uri = "content://media/picker/0/com.android.providers.media.photopicker/media/42"
+
+        repository.setPositionBackgroundUri(uri)
+
+        assertThat(repository.positionBackgroundUriFlow.first()).isEqualTo(uri)
+    }
+
+    @Test
+    fun positionBackgroundUriCanBeCleared() = runTest {
+        val repository = createRepository("position_background_cleared.preferences_pb")
+        repository.setPositionBackgroundUri("content://screenshots/example")
+
+        repository.setPositionBackgroundUri(null)
+
+        assertThat(repository.positionBackgroundUriFlow.first()).isNull()
+    }
+
+    @Test
+    fun blankPositionBackgroundUriIsTreatedAsMissing() = runTest {
+        val repository = createRepository("position_background_blank.preferences_pb")
+
+        repository.setPositionBackgroundUri("   ")
+
+        assertThat(repository.positionBackgroundUriFlow.first()).isNull()
+    }
+
+    @Test
+    fun positionBackgroundAlphaDefaultsToFullyOpaque() = runTest {
+        val repository = createRepository("position_background_alpha_default.preferences_pb")
+
+        assertThat(repository.positionBackgroundAlphaFlow.first())
+            .isEqualTo(SettingsRepository.DefaultPositionBackgroundAlpha)
+    }
+
+    @Test
+    fun positionBackgroundAlphaIsSavedAndCoerced() = runTest {
+        val repository = createRepository("position_background_alpha_saved.preferences_pb")
+
+        repository.setPositionBackgroundAlpha(45)
+        assertThat(repository.positionBackgroundAlphaFlow.first()).isEqualTo(45)
+
+        repository.setPositionBackgroundAlpha(0)
+        assertThat(repository.positionBackgroundAlphaFlow.first())
+            .isEqualTo(SettingsRepository.MinPositionBackgroundAlpha)
+
+        repository.setPositionBackgroundAlpha(500)
+        assertThat(repository.positionBackgroundAlphaFlow.first())
+            .isEqualTo(SettingsRepository.MaxPositionBackgroundAlpha)
+    }
+
+    @Test
+    fun clearingPositionBackgroundUriKeepsAlpha() = runTest {
+        val repository = createRepository("position_background_alpha_kept.preferences_pb")
+        repository.setPositionBackgroundAlpha(30)
+        repository.setPositionBackgroundUri("content://screenshots/example")
+
+        repository.setPositionBackgroundUri(null)
+
+        assertThat(repository.positionBackgroundAlphaFlow.first()).isEqualTo(30)
+    }
+
     private fun createRepository(fileName: String): SettingsRepository {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val dataStore = PreferenceDataStoreFactory.create(

@@ -80,7 +80,7 @@ Alle Einstellungen betreffen nur den aktuell ausgewählten Button. Die drei Butt
 
 ### 3.1 Buttons positionieren
 
-Öffnet einen Vollbild-Editor, in dem du Buttons an die genaue Position ziehst, die sie im Live-Overlay einnehmen sollen. Tippe einen Button an, um ihn zu wählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol (↺) stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln.
+Öffnet einen Vollbild-Editor, in dem du Buttons an die genaue Position ziehst, die sie im Live-Overlay einnehmen sollen. Tippe einen Button an, um ihn zu wählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol (↺) stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln. Das Bild-Symbol öffnet den Dialog für den Positionierungs-Hintergrund: Wähle einen beliebigen Screenshot aus der Galerie als Editor-Hintergrund, um die Buttons an einer echten App-Oberfläche auszurichten, oder setze ihn auf das gepunktete Standardraster zurück. Sobald ein Bild gesetzt ist, erscheint im selben Dialog ein Regler, der den Screenshot schwächer einblendet, damit die Buttons beim Ziehen gut sichtbar bleiben. Der Dialog bleibt während der Bildauswahl offen, sodass sich der Regler direkt danach anpassen lässt. Gespeichert wird nur die Bild-URI, niemals eine Kopie der Datei; im Live-Overlay erscheint der Screenshot nicht.
 
 <p>
   <img src="docs/button_positioning_light.png" width="270" alt="Positionierungsmodus – helles Design">

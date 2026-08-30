@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">アプリがフォアグラウンドのアプリを検出し、選択したアプリにナビゲーションオーバーレイを表示できるよう、ユーザー補助サービスを有効にしてください。</string>
     <string name="open_accessibility_settings">ユーザー補助設定を開く</string>
     <string name="check_again">再確認</string>
+    <string name="disclosure_title">ユーザー補助サービス</string>
+    <string name="disclosure_item_1">NavXS は Android のユーザー補助サービスを使用します。</string>
+    <string name="disclosure_item_2">選択したアプリの上にフローティングのナビゲーションボタンを表示するために、このサービスが必要です。</string>
+    <string name="disclosure_item_3">NavXS は現在フォアグラウンドにあるアプリを検出できます。</string>
+    <string name="disclosure_item_4">NavXS はユーザー補助の操作（戻る、ホーム、最近のアプリ）を使用します。</string>
+    <string name="disclosure_item_5">NavXS は入力したテキスト、パスワード、メッセージの内容を読み取りません。</string>
+    <string name="disclosure_item_6">NavXS はこれらのデータを販売または共有しません。</string>
+    <string name="disclosure_item_7">処理はナビゲーションオーバーレイ機能の提供のためだけに行われます。</string>
+    <string name="disclosure_checkbox">NavXS がユーザー補助サービスを必要とする理由を理解しました。</string>
+    <string name="disclosure_continue">同意する — ユーザー補助設定を開く</string>
     <string name="app_loading">ユーザー補助の権限を確認中…</string>
     <string name="header_help">ヘルプを開く</string>
     <string name="help_dialog_title">ヘルプ</string>
@@ -16,6 +26,8 @@
     <string name="help_body_apps">リストにはデバイスにインストールされているすべてのアプリが表示されます。アプリを有効にすると、そのアプリがフォアグラウンドのときにNavXSオーバーレイが表示されます。検索バーで名前フィルタリングするか、システムアプリを表示をオンにしてください。</string>
     <string name="help_body_position">全画面エディターを開きます。アクティブなボタンをオーバーレイ内の正確な位置にドラッグします。移動せずに選択するにはボタンをタップしてください。リセットアイコンですべてのデフォルト位置に戻せます。精度パネルでは選択したボタンを正確なピクセル単位で移動できます。</string>
     <string name="help_body_select">「戻る」「ホーム」「最近」をタップしてボタンを選択します。以下の設定はすべて選択したボタンにのみ適用されます。</string>
+    <string name="help_sub_position_background">配置用の背景</string>
+    <string name="help_body_position_background">スクリーンショットを背景にして、ボタンを実際に必要な位置へ正確に配置できます。\n\n画像アイコンからアプリのスクリーンショットを選び、ボタンを好きな位置へドラッグしてください。スライダーで背景を暗くすると、ボタンが見やすくなります。\n\n「背景をリセット」でスクリーンショットを削除できます。ボタンの位置はそのまま残ります。\n\nスクリーンショットは設定時の目安としてのみ使われ、通常のオーバーレイには表示されません。</string>
     <string name="help_body_active">オーバーレイで選択したボタンのオン／オフを切り替えます。常に少なくとも1つのボタンがアクティブである必要があります。</string>
     <string name="help_desc_theme">アイコンのスタイルを選択します。</string>
     <string name="help_desc_colour">アイコンの色を設定します。</string>
@@ -27,12 +39,18 @@
     <string name="help_desc_bg_size">アイコンに対する円の直径。</string>
     <string name="help_desc_bg_softness">0 = くっきりしたエッジ；100 = 完全にぼかしたエッジ。</string>
     <string name="help_body_preview">設定画面の右上にある小さなタブを開くと、選択したボタンを白・グレー・黒の背景で確認できるパネルが表示されます。設定を離れずにあらゆるアプリでの視認性を確認できます。</string>
+    <string name="help_section_support">サポート</string>
+    <string name="help_body_support">このアプリに問題がある場合は、イシュートラッカーからサポートを受けられます。</string>
+    <string name="help_support_email_intro">またはメールで:</string>
     <string name="footer_privacy">プライバシー</string>
     <string name="footer_version">バージョン: %1$s</string>
     <string name="privacy_dialog_title">プライバシー</string>
     <string name="privacy_dialog_message">NavXSはオーバーレイを表示するかどうかの判断のみに、フォアグラウンドアプリのパッケージ名をデバイス内でローカルに処理します。外部サービスへのデータ送信は一切行いません。</string>
     <string name="apps_search_hint">アプリを検索</string>
     <string name="apps_show_system_apps">システムアプリを表示</string>
+    <string name="apps_rescan">アプリを再スキャン</string>
+    <string name="apps_scanning">アプリをスキャンしています…</string>
+    <string name="apps_scanning_detail">少しお待ちください。</string>
     <string name="apps_enabled_section">有効なアプリ</string>
     <string name="apps_installed_section">インストール済みアプリ</string>
     <string name="apps_empty">現在のフィルターに一致するアプリがありません。</string>
@@ -66,6 +84,11 @@
     <string name="settings_position_y">位置 Y</string>
     <string name="settings_reset_position">位置をリセット</string>
     <string name="settings_open_precision">精密コントロールを開く</string>
+    <string name="settings_position_background_manage">配置用の背景を管理</string>
+    <string name="settings_position_background_title">配置用の背景</string>
+    <string name="settings_position_background_reset">背景をリセット</string>
+    <string name="settings_position_background_select">背景を選択</string>
+    <string name="settings_position_background_opacity">背景の不透明度 %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">色相 %1$d°</string>
     <string name="settings_color_brightness">明度 %1$d%%</string>
@@ -80,6 +103,7 @@
     <string name="button_recents">最近</string>
     <string name="error_last_active_button">少なくとも1つのボタンがアクティブである必要があります。</string>
     <string name="error_action_failed">アクションを実行できませんでした。</string>
+    <string name="error_position_background_load">背景画像を読み込めませんでした。</string>
     <string name="accessibility_service_label">NavXS オーバーレイナビゲーション</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="dialog_ok">OK</string>

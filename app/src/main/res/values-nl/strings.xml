@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Schakel de toegankelijkheidsservice in zodat de app de actieve app op de voorgrond kan detecteren en de navigatie-overlay voor geselecteerde apps kan tonen.</string>
     <string name="open_accessibility_settings">Toegankelijkheidsinstellingen openen</string>
     <string name="check_again">Opnieuw controleren</string>
+    <string name="disclosure_title">Toegankelijkheidsservice</string>
+    <string name="disclosure_item_1">NavXS gebruikt de toegankelijkheidsservice van Android.</string>
+    <string name="disclosure_item_2">De service is nodig om zwevende navigatieknoppen over geselecteerde apps te tonen.</string>
+    <string name="disclosure_item_3">NavXS kan detecteren welke app op de voorgrond staat.</string>
+    <string name="disclosure_item_4">NavXS gebruikt toegankelijkheidsacties: Terug, Home en Recente apps.</string>
+    <string name="disclosure_item_5">NavXS leest geen ingevoerde tekst, wachtwoorden of berichtinhoud.</string>
+    <string name="disclosure_item_6">NavXS verkoopt of deelt deze gegevens niet.</string>
+    <string name="disclosure_item_7">De verwerking dient uitsluitend om de navigatie-overlay te leveren.</string>
+    <string name="disclosure_checkbox">Ik begrijp waarom NavXS de toegankelijkheidsservice nodig heeft.</string>
+    <string name="disclosure_continue">Ik ga akkoord — Toegankelijkheidsinstellingen openen</string>
     <string name="app_loading">Toegankelijkheidstoestemming controleren…</string>
     <string name="header_help">Help openen</string>
     <string name="help_dialog_title">Help</string>
@@ -16,6 +26,8 @@
     <string name="help_body_apps">De lijst toont alle geïnstalleerde apps op je apparaat. Activeer een app zodat de NavXS-overlay verschijnt wanneer die app op de voorgrond is. Gebruik de zoekbalk om op naam te filteren, of schakel Systeemapps tonen in.</string>
     <string name="help_body_position">Opent een schermvullende editor. Sleep een actieve knop naar precies de positie die hij in de live-overlay moet innemen. Tik op een knop om hem te selecteren zonder hem te verplaatsen. Het terugzetpictogram herstelt alle standaardposities. Het precisiepaneel verplaatst de geselecteerde knop met een exact pixelstapgrootte.</string>
     <string name="help_body_select">Tik op Terug, Home of Recent om een knop te selecteren. Alle instellingen hieronder gelden alleen voor de geselecteerde knop.</string>
+    <string name="help_sub_position_background">Positioneringsachtergrond</string>
+    <string name="help_body_position_background">Gebruik een schermafbeelding als achtergrond om de knoppen precies daar te plaatsen waar je ze later nodig hebt.\n\nKies met het afbeeldingspictogram een schermafbeelding van je app en sleep de knoppen naar de gewenste plek. Met de schuifregelaar maak je de achtergrond donkerder, zodat de knoppen beter zichtbaar blijven.\n\n‘Achtergrond herstellen’ verwijdert de schermafbeelding weer. Je knopposities blijven behouden.\n\nDe schermafbeelding is alleen een hulpmiddel bij het instellen en verschijnt nooit in de normale overlay.</string>
     <string name="help_body_active">Schakelt de geselecteerde knop in of uit in de overlay. Er moet altijd minimaal één knop actief blijven.</string>
     <string name="help_desc_theme">Kiest de stijl van het pictogram.</string>
     <string name="help_desc_colour">Stelt de kleur van het pictogram in.</string>
@@ -27,12 +39,18 @@
     <string name="help_desc_bg_size">Diameter van de cirkel ten opzichte van het pictogram.</string>
     <string name="help_desc_bg_softness">0 = scherpe rand; 100 = volledig vervaagde rand.</string>
     <string name="help_body_preview">Het kleine tabje rechtsboven in het instellingenscherm opent een paneel met de geselecteerde knop op witte, grijze en zwarte achtergronden — beoordeel de zichtbaarheid op elke app zonder de instellingen te verlaten.</string>
+    <string name="help_section_support">Ondersteuning</string>
+    <string name="help_body_support">Bij problemen met deze app krijg je ondersteuning via de issue tracker.</string>
+    <string name="help_support_email_intro">Of per e-mail:</string>
     <string name="footer_privacy">Privacy</string>
     <string name="footer_version">Versie: %1$s</string>
     <string name="privacy_dialog_title">Privacy</string>
     <string name="privacy_dialog_message">NavXS verwerkt de pakketnaam van de actieve voorgrondapp lokaal op je apparaat om te bepalen of de overlay getoond moet worden. Er worden geen gegevens naar externe diensten verzonden.</string>
     <string name="apps_search_hint">Apps zoeken</string>
     <string name="apps_show_system_apps">Systeemapps tonen</string>
+    <string name="apps_rescan">Apps opnieuw scannen</string>
+    <string name="apps_scanning">Apps worden gescand…</string>
+    <string name="apps_scanning_detail">Even geduld.</string>
     <string name="apps_enabled_section">Geactiveerde apps</string>
     <string name="apps_installed_section">Geïnstalleerde apps</string>
     <string name="apps_empty">Geen apps komen overeen met het huidige filter.</string>
@@ -66,6 +84,11 @@
     <string name="settings_position_y">Positie Y</string>
     <string name="settings_reset_position">Positie herstellen</string>
     <string name="settings_open_precision">Precisiebesturing openen</string>
+    <string name="settings_position_background_manage">Positioneringsachtergrond beheren</string>
+    <string name="settings_position_background_title">Positioneringsachtergrond</string>
+    <string name="settings_position_background_reset">Achtergrond herstellen</string>
+    <string name="settings_position_background_select">Achtergrond selecteren</string>
+    <string name="settings_position_background_opacity">Dekking van de achtergrond %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Tint %1$d°</string>
     <string name="settings_color_brightness">Helderheid %1$d%%</string>
@@ -80,6 +103,7 @@
     <string name="button_recents">Recent</string>
     <string name="error_last_active_button">Er moet minimaal één knop actief blijven.</string>
     <string name="error_action_failed">Actie kon niet worden uitgevoerd.</string>
+    <string name="error_position_background_load">De achtergrondafbeelding kon niet worden geladen.</string>
     <string name="accessibility_service_label">NavXS overlay-navigatie</string>
     <string name="dialog_cancel">Annuleren</string>
     <string name="dialog_ok">OK</string>

@@ -52,6 +52,14 @@ class SettingsRepository(
         }
         .map { (it[Keys.SelectedTab] ?: 0).coerceIn(0, 1) }
 
+    val positionBackgroundUriFlow: Flow<String?> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
+        .map { preferences ->
+            preferences[Keys.PositionBackgroundUri]?.takeIf { it.isNotBlank() }
+        }
+
     suspend fun saveSettings(settings: OverlaySettings) {
         dataStore.edit { preferences ->
             preferences[Keys.SelectedButtonType] = settings.selectedButtonType.name
@@ -90,6 +98,30 @@ class SettingsRepository(
         }
     }
 
+    val positionBackgroundAlphaFlow: Flow<Int> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
+        .map { preferences ->
+            sanitizePositionBackgroundAlpha(preferences[Keys.PositionBackgroundAlpha])
+        }
+
+    suspend fun setPositionBackgroundAlpha(alpha: Int) {
+        dataStore.edit { preferences ->
+            preferences[Keys.PositionBackgroundAlpha] = sanitizePositionBackgroundAlpha(alpha)
+        }
+    }
+
+    suspend fun setPositionBackgroundUri(uri: String?) {
+        dataStore.edit { preferences ->
+            if (uri.isNullOrBlank()) {
+                preferences.remove(Keys.PositionBackgroundUri)
+            } else {
+                preferences[Keys.PositionBackgroundUri] = uri
+            }
+        }
+    }
+
     private fun preferencesToSettings(preferences: Preferences): OverlaySettings {
         val defaults = NavDefaults.defaultOverlaySettings(displayMetrics)
         val selectedType = preferences[Keys.SelectedButtonType]
@@ -125,12 +157,20 @@ class SettingsRepository(
         else -> NavDefaults.DefaultPrecisionStepPx
     }
 
+    private fun sanitizePositionBackgroundAlpha(alpha: Int?): Int =
+        (alpha ?: DefaultPositionBackgroundAlpha).coerceIn(
+            MinPositionBackgroundAlpha,
+            MaxPositionBackgroundAlpha
+        )
+
     object Keys {
         val SelectedApps = stringPreferencesKey("selected_apps")
         val ShowSystemApps = booleanPreferencesKey("show_system_apps")
         val SelectedTab = intPreferencesKey("selected_tab")
         val SelectedButtonType = stringPreferencesKey("selected_button_type")
         val PrecisionStepPx = intPreferencesKey("precision_step_px")
+        val PositionBackgroundUri = stringPreferencesKey("position_background_uri")
+        val PositionBackgroundAlpha = intPreferencesKey("position_background_alpha")
 
         fun activeKey(type: NavButtonType) = booleanPreferencesKey("${type.name.lowercase()}_active")
         fun colorKey(type: NavButtonType) = longPreferencesKey("${type.name.lowercase()}_color")
@@ -146,6 +186,10 @@ class SettingsRepository(
     }
 
     companion object {
+        const val DefaultPositionBackgroundAlpha = 100
+        const val MinPositionBackgroundAlpha = 10
+        const val MaxPositionBackgroundAlpha = 100
+
         @Volatile
         private var instance: SettingsRepository? = null
 

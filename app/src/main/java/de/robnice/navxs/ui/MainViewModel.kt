@@ -2,7 +2,9 @@ package de.robnice.navxs.ui
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.robnice.navxs.R
@@ -16,11 +18,14 @@ import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ButtonSettingsUseCase
 import de.robnice.navxs.overlay.OverlayViewport
+import de.robnice.navxs.ui.settings.PositionBackgroundImageLoader
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -39,6 +44,9 @@ data class MainUiState(
     val showSystemApps: Boolean = false,
     val searchQuery: String = "",
     val precisionDialogOpen: Boolean = false,
+    val positionBackgroundDialogOpen: Boolean = false,
+    val positionBackgroundUri: String? = null,
+    val positionBackgroundAlpha: Int = SettingsRepository.DefaultPositionBackgroundAlpha,
     val message: String? = null
 )
 
@@ -51,6 +59,9 @@ private data class UiStateBaseInput(
     val showSystemApps: Boolean,
     val searchQuery: String,
     val precisionDialogOpen: Boolean,
+    val positionBackgroundDialogOpen: Boolean,
+    val positionBackgroundUri: String?,
+    val positionBackgroundAlpha: Int,
     val appsLoading: Boolean
 )
 
@@ -72,15 +83,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val installedAppsRepository = InstalledAppsRepository(application)
     private val detector = ForegroundAppDetector(application)
     private val buttonSettingsUseCase = ButtonSettingsUseCase()
+    private val positionBackgroundImageLoader = PositionBackgroundImageLoader(application.contentResolver)
     private val searchQuery = MutableStateFlow("")
     private val editMode = MutableStateFlow(false)
     private val precisionDialogOpen = MutableStateFlow(false)
+    private val positionBackgroundDialogOpen = MutableStateFlow(false)
     private val message = MutableStateFlow<String?>(null)
     private val accessibilityEnabled = MutableStateFlow(false)
     private val accessibilityCheckComplete = MutableStateFlow(false)
     private val appsLoading = MutableStateFlow(false)
     private val installedApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
     private val appsScanMutex = Mutex()
+    private val positionBackgroundMutex = Mutex()
     private var appsScanned = false
 
     init {
@@ -134,14 +148,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 showSystemApps = false,
                 searchQuery = "",
                 precisionDialogOpen = false,
+                positionBackgroundDialogOpen = false,
+                positionBackgroundUri = null,
+                positionBackgroundAlpha = SettingsRepository.DefaultPositionBackgroundAlpha,
                 appsLoading = false
             )
+        }.combine(settingsRepository.positionBackgroundUriFlow) { base, backgroundUri ->
+            base.copy(positionBackgroundUri = backgroundUri)
+        }.combine(settingsRepository.positionBackgroundAlphaFlow) { base, backgroundAlpha ->
+            base.copy(positionBackgroundAlpha = backgroundAlpha)
         }.combine(settingsRepository.showSystemAppsFlow) { base, showSystemApps ->
             base.copy(showSystemApps = showSystemApps)
         }.combine(searchQuery) { base, query ->
             base.copy(searchQuery = query)
         }.combine(precisionDialogOpen) { base, precisionOpen ->
             base.copy(precisionDialogOpen = precisionOpen)
+        }.combine(positionBackgroundDialogOpen) { base, backgroundDialogOpen ->
+            base.copy(positionBackgroundDialogOpen = backgroundDialogOpen)
         }.combine(appsLoading) { base, isAppsLoading ->
             base.copy(appsLoading = isAppsLoading)
         }.combine(message) { base, currentMessage ->
@@ -155,6 +178,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 showSystemApps = base.showSystemApps,
                 searchQuery = base.searchQuery,
                 precisionDialogOpen = base.precisionDialogOpen,
+                positionBackgroundDialogOpen = base.positionBackgroundDialogOpen,
+                positionBackgroundUri = base.positionBackgroundUri,
+                positionBackgroundAlpha = base.positionBackgroundAlpha,
                 message = currentMessage
             )
         }
@@ -263,6 +289,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun closeEditMode() {
         precisionDialogOpen.value = false
+        positionBackgroundDialogOpen.value = false
         setEditMode(false)
     }
 
@@ -318,6 +345,54 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         precisionDialogOpen.value = if (uiState.value.settings.editMode) open else false
     }
 
+    fun setPositionBackground(uri: Uri) {
+        viewModelScope.launch {
+            positionBackgroundMutex.withLock {
+                val resolver = getApplication<Application>().contentResolver
+                val uriString = uri.toString()
+                val previousUri = settingsRepository.positionBackgroundUriFlow.first()
+                val alreadyPersisted = hasPersistedReadPermission(uri)
+                var permissionAdded = false
+                try {
+                    if (!alreadyPersisted) {
+                        resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        permissionAdded = true
+                    }
+                    positionBackgroundImageLoader.validate(uri)
+                    settingsRepository.setPositionBackgroundUri(uriString)
+                    if (previousUri != null && previousUri != uriString) {
+                        releasePersistedReadPermission(Uri.parse(previousUri))
+                    }
+                } catch (exception: Exception) {
+                    if (exception is CancellationException) throw exception
+                    if (permissionAdded && previousUri != uriString) {
+                        releasePersistedReadPermission(uri)
+                    }
+                    Log.w(TAG, "Could not persist positioning background URI", exception)
+                    message.value = getApplication<Application>().getString(R.string.error_position_background_load)
+                }
+            }
+        }
+    }
+
+    fun setPositionBackgroundDialogOpen(open: Boolean) {
+        positionBackgroundDialogOpen.value = if (uiState.value.settings.editMode) open else false
+    }
+
+    fun setPositionBackgroundAlpha(alpha: Int) {
+        viewModelScope.launch {
+            settingsRepository.setPositionBackgroundAlpha(alpha)
+        }
+    }
+
+    fun clearPositionBackground() {
+        clearPositionBackground(expectedUri = null, showError = false)
+    }
+
+    fun handlePositionBackgroundLoadError(uri: String) {
+        clearPositionBackground(expectedUri = uri, showError = true)
+    }
+
     fun toggleApp(packageName: String, enabled: Boolean) {
         viewModelScope.launch {
             val next = uiState.value.selectedApps.toMutableSet()
@@ -332,6 +407,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun checkAccessibility(): Boolean {
         return detector.isAccessibilityServiceEnabled(NavigationAccessibilityService::class.java.name)
+    }
+
+    private fun clearPositionBackground(expectedUri: String?, showError: Boolean) {
+        viewModelScope.launch {
+            positionBackgroundMutex.withLock {
+                val currentUri = settingsRepository.positionBackgroundUriFlow.first()
+                if (expectedUri != null && currentUri != expectedUri) return@withLock
+                settingsRepository.setPositionBackgroundUri(null)
+                currentUri?.let { releasePersistedReadPermission(Uri.parse(it)) }
+                if (showError) {
+                    message.value = getApplication<Application>().getString(R.string.error_position_background_load)
+                }
+            }
+        }
+    }
+
+    private fun hasPersistedReadPermission(uri: Uri): Boolean = runCatching {
+        getApplication<Application>().contentResolver.persistedUriPermissions.any { permission ->
+            permission.uri == uri && permission.isReadPermission
+        }
+    }.getOrDefault(false)
+
+    private fun releasePersistedReadPermission(uri: Uri) {
+        if (!hasPersistedReadPermission(uri)) return
+        runCatching {
+            getApplication<Application>().contentResolver.releasePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }.onFailure { exception ->
+            Log.w(TAG, "Could not release positioning background URI", exception)
+        }
     }
 
     private suspend fun loadInstalledApps(force: Boolean = false) {
@@ -353,3 +460,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 }
+
+private const val TAG = "MainViewModel"

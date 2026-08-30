@@ -2,6 +2,7 @@ package de.robnice.navxs.ui.settings
 
 import android.app.Activity
 import android.content.ContextWrapper
+import android.net.Uri
 import android.util.Log
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.only
@@ -20,38 +22,52 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.OpenWith
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import de.robnice.navxs.R
 import de.robnice.navxs.data.NavDefaults
+import de.robnice.navxs.data.SettingsRepository
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.overlay.OverlayViewport
+import kotlinx.coroutines.CancellationException
 import kotlin.math.roundToInt
 
 @Composable
 fun SettingsPositionOverlay(
     settings: OverlaySettings,
     precisionOpen: Boolean,
+    positionBackgroundUri: String?,
+    positionBackgroundAlpha: Int,
+    positionBackgroundDialogOpen: Boolean,
     onSelectButton: (NavButtonType) -> Unit,
     onCommitMoveButtonPosition: (NavButtonType, Int, Int) -> Unit,
     onCloseEditMode: () -> Unit,
@@ -59,7 +75,12 @@ fun SettingsPositionOverlay(
     onClosePrecision: () -> Unit,
     onStepChange: (Int) -> Unit,
     onPrecisionMove: (NavButtonType, Int, Int) -> Unit,
-    onResetPosition: (Map<NavButtonType, Pair<Int, Int>>) -> Unit
+    onResetPosition: (Map<NavButtonType, Pair<Int, Int>>) -> Unit,
+    onRequestPositionBackground: () -> Unit,
+    onClearPositionBackground: () -> Unit,
+    onPositionBackgroundAlphaChange: (Int) -> Unit,
+    onPositionBackgroundDialogOpenChange: (Boolean) -> Unit,
+    onPositionBackgroundLoadError: (String) -> Unit
 ) {
     val density = LocalDensity.current
     val context = LocalContext.current
@@ -68,6 +89,41 @@ fun SettingsPositionOverlay(
     val viewportHeightPx = displayMetrics.heightPixels
     val rawNavBarBottomPx = WindowInsets.navigationBars.getBottom(density)
     val stableNavBarBottomPx = remember { rawNavBarBottomPx }
+    val backgroundImageLoader = remember(context) {
+        PositionBackgroundImageLoader(context.applicationContext.contentResolver)
+    }
+    val backgroundLoadState by produceState<PositionBackgroundLoadState>(
+        initialValue = PositionBackgroundLoadState.Empty,
+        key1 = positionBackgroundUri,
+        key2 = viewportWidthPx,
+        key3 = viewportHeightPx
+    ) {
+        value = if (positionBackgroundUri == null) {
+            PositionBackgroundLoadState.Empty
+        } else {
+            try {
+                PositionBackgroundLoadState.Loaded(
+                    backgroundImageLoader.load(
+                        uri = Uri.parse(positionBackgroundUri),
+                        maximumWidth = viewportWidthPx,
+                        maximumHeight = viewportHeightPx
+                    )
+                )
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                Log.w(TAG, "Could not load positioning background", exception)
+                PositionBackgroundLoadState.Failed(positionBackgroundUri)
+            }
+        }
+    }
+    LaunchedEffect(backgroundLoadState) {
+        (backgroundLoadState as? PositionBackgroundLoadState.Failed)?.let { failed ->
+            onPositionBackgroundLoadError(failed.uri)
+        }
+    }
+    val positionBackgroundImage =
+        (backgroundLoadState as? PositionBackgroundLoadState.Loaded)?.image
     val view = LocalView.current
     DisposableEffect(view) {
         var ctx: android.content.Context? = view.context
@@ -99,6 +155,9 @@ fun SettingsPositionOverlay(
         )
     }
     var isDragging by remember { mutableStateOf(false) }
+    var positionBackgroundAlphaPercent by remember(positionBackgroundAlpha) {
+        mutableStateOf(positionBackgroundAlpha.toFloat())
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LaunchedEffect(settings.buttons, viewportWidthPx, viewportHeightPx, isDragging, dragButtonType, precisionOpen) {
@@ -128,6 +187,8 @@ fun SettingsPositionOverlay(
                 modifier = Modifier.fillMaxSize(),
                 settings = settings,
                 showBackground = true,
+                positionBackgroundImage = positionBackgroundImage,
+                positionBackgroundAlpha = positionBackgroundAlphaPercent / 100f,
                 buttonPositions = localButtonPositions,
                 draggedButtonType = dragButtonType ?: settlingButtonType,
                 draggedButtonPosition = dragPreviewPosition ?: settlingPosition,
@@ -225,6 +286,18 @@ fun SettingsPositionOverlay(
                             )
                         }
                     }
+                    FilledTonalIconButton(
+                        onClick = {
+                            onClosePrecision()
+                            onPositionBackgroundDialogOpenChange(true)
+                        },
+                        modifier = Modifier.testTag("position_background_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Image,
+                            contentDescription = stringResource(R.string.settings_position_background_manage)
+                        )
+                    }
                 }
             }
             if (precisionOpen) {
@@ -264,6 +337,84 @@ fun SettingsPositionOverlay(
             }
         }
     }
+
+    if (positionBackgroundDialogOpen) {
+        PositionBackgroundDialog(
+            alphaPercent = positionBackgroundAlphaPercent,
+            onAlphaPercentChange = { positionBackgroundAlphaPercent = it },
+            onAlphaPercentCommit = { onPositionBackgroundAlphaChange(it.roundToInt()) },
+            hasBackground = positionBackgroundUri != null,
+            onDismiss = { onPositionBackgroundDialogOpenChange(false) },
+            onReset = {
+                onPositionBackgroundDialogOpenChange(false)
+                onClearPositionBackground()
+            },
+            onSelect = onRequestPositionBackground
+        )
+    }
+}
+
+@Composable
+internal fun PositionBackgroundDialog(
+    hasBackground: Boolean,
+    alphaPercent: Float,
+    onAlphaPercentChange: (Float) -> Unit,
+    onAlphaPercentCommit: (Float) -> Unit,
+    onDismiss: () -> Unit,
+    onReset: () -> Unit,
+    onSelect: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.testTag("position_background_dialog"),
+        title = { Text(stringResource(R.string.settings_position_background_title)) },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilledTonalButton(
+                    onClick = onReset,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("position_background_reset")
+                ) {
+                    Text(stringResource(R.string.settings_position_background_reset))
+                }
+                Button(
+                    onClick = onSelect,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("position_background_select")
+                ) {
+                    Text(stringResource(R.string.settings_position_background_select))
+                }
+                if (hasBackground) {
+                    Text(
+                        text = stringResource(
+                            R.string.settings_position_background_opacity,
+                            alphaPercent.roundToInt()
+                        ),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                    Slider(
+                        value = alphaPercent,
+                        onValueChange = onAlphaPercentChange,
+                        onValueChangeFinished = { onAlphaPercentCommit(alphaPercent) },
+                        valueRange = SettingsRepository.MinPositionBackgroundAlpha.toFloat()..
+                            SettingsRepository.MaxPositionBackgroundAlpha.toFloat(),
+                        modifier = Modifier.testTag("position_background_opacity_slider")
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.dialog_ok))
+            }
+        }
+    )
 }
 
 private fun navBarResetPositions(
@@ -288,3 +439,9 @@ private fun navBarResetPositions(
 }
 
 private const val TAG = "PositionOverlay"
+
+private sealed interface PositionBackgroundLoadState {
+    data object Empty : PositionBackgroundLoadState
+    data class Loaded(val image: ImageBitmap) : PositionBackgroundLoadState
+    data class Failed(val uri: String) : PositionBackgroundLoadState
+}

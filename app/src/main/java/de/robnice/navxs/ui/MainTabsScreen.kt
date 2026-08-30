@@ -61,7 +61,8 @@ import java.nio.charset.StandardCharsets
 fun MainTabsScreen(
     modifier: Modifier = Modifier,
     state: MainUiState,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onRequestPositionBackground: () -> Unit
 ) {
     val selectedTabIndex = state.selectedTabIndex
     var helpOpen by remember { mutableStateOf(false) }
@@ -215,6 +216,10 @@ fun MainTabsScreen(
             SettingsPositionOverlay(
                 settings = state.settings,
                 precisionOpen = state.precisionDialogOpen,
+                positionBackgroundUri = state.positionBackgroundUri,
+                positionBackgroundAlpha = state.positionBackgroundAlpha,
+                positionBackgroundDialogOpen = state.positionBackgroundDialogOpen,
+                onPositionBackgroundDialogOpenChange = viewModel::setPositionBackgroundDialogOpen,
                 onSelectButton = viewModel::setSelectedButton,
                 onCommitMoveButtonPosition = viewModel::setButtonPosition,
                 onCloseEditMode = viewModel::closeEditMode,
@@ -222,7 +227,11 @@ fun MainTabsScreen(
                 onClosePrecision = { viewModel.setPrecisionDialogOpen(false) },
                 onStepChange = viewModel::setPrecisionStep,
                 onPrecisionMove = { type, x, y -> viewModel.setButtonPosition(type, x, y) },
-                onResetPosition = viewModel::setButtonPositions
+                onResetPosition = viewModel::setButtonPositions,
+                onRequestPositionBackground = onRequestPositionBackground,
+                onClearPositionBackground = viewModel::clearPositionBackground,
+                onPositionBackgroundAlphaChange = viewModel::setPositionBackgroundAlpha,
+                onPositionBackgroundLoadError = viewModel::handlePositionBackgroundLoadError
             )
         }
     }

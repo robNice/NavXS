@@ -27,6 +27,8 @@
     <string name="help_body_apps">Die Liste zeigt alle installierten Apps auf deinem Gerät. Aktiviere eine App, damit das NavXS-Overlay erscheint, sobald sie im Vordergrund ist. Nutze die Suchleiste, um Apps nach Namen zu filtern, oder aktiviere System-Apps anzeigen, um Systemapps einzublenden.</string>
     <string name="help_body_position">Öffnet einen Vollbild-Editor. Ziehe einen aktiven Button an die genaue Position, an der er im Live-Overlay erscheinen soll. Tippe ihn an, um ihn auszuwählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln.</string>
     <string name="help_body_select">Tippe auf Zurück, Home oder Letzte Apps, um einen Button auszuwählen. Alle folgenden Einstellungen betreffen nur den ausgewählten Button.</string>
+    <string name="help_sub_position_background">Positionierungs-Hintergrund</string>
+    <string name="help_body_position_background">Nutze einen Screenshot als Hintergrund, um die Buttons genau dort zu platzieren, wo du sie später brauchst.\n\nWähle über das Bildsymbol einen Screenshot deiner App aus und verschiebe die Buttons an die gewünschten Stellen. Mit dem Regler kannst du den Hintergrund abdunkeln, damit die Buttons besser sichtbar sind.\n\n„Hintergrund zurücksetzen“ entfernt den Screenshot wieder. Deine Button-Positionen bleiben dabei erhalten.\n\nDer Screenshot dient nur als Hilfe beim Einrichten und wird im normalen Overlay nicht angezeigt.</string>
     <string name="help_body_active">Schaltet den ausgewählten Button im Overlay ein oder aus. Mindestens ein Button muss jederzeit aktiv bleiben.</string>
     <string name="help_desc_theme">Legt den Icon-Stil fest.</string>
     <string name="help_desc_colour">Setzt die Farbe des Icons.</string>
@@ -83,6 +85,11 @@
     <string name="settings_position_y">Position Y</string>
     <string name="settings_reset_position">Position zurücksetzen</string>
     <string name="settings_open_precision">Präzisionssteuerung öffnen</string>
+    <string name="settings_position_background_manage">Hintergrundbild verwalten</string>
+    <string name="settings_position_background_title">Hintergrundbild</string>
+    <string name="settings_position_background_reset">Hintergrund zurücksetzen</string>
+    <string name="settings_position_background_select">Hintergrund auswählen</string>
+    <string name="settings_position_background_opacity">Deckkraft des Hintergrunds %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Farbton %1$d°</string>
     <string name="settings_color_brightness">Helligkeit %1$d%%</string>
@@ -97,6 +104,7 @@
     <string name="button_recents">Letzte Apps</string>
     <string name="error_last_active_button">Mindestens ein Button muss aktiv bleiben.</string>
     <string name="error_action_failed">Aktion konnte nicht ausgeführt werden.</string>
+    <string name="error_position_background_load">Das Hintergrundbild konnte nicht geladen werden.</string>
     <string name="accessibility_service_label">NavXS Overlay-Navigation</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_ok">OK</string>

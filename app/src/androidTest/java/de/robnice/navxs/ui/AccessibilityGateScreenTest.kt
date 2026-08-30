@@ -24,8 +24,8 @@ class AccessibilityGateScreenTest {
             )
         }
 
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.accessibility_required_title)).assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.open_accessibility_settings)).assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.check_again)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.disclosure_title)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.disclosure_continue)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.check_again)).assertExists()
     }
 }

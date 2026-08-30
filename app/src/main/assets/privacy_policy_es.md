@@ -1,6 +1,6 @@
 # Política de privacidad de NavXS
 
-Última actualización: 16 de mayo de 2026
+Última actualización: 30 de agosto de 2026
 
 ## 1. Información general
 
@@ -18,6 +18,7 @@ Esto incluye en particular:
 - la selección de aplicaciones para las que debe activarse el overlay
 - los ajustes de overlay definidos por el usuario, como posiciones, colores, tamaños, transparencia y temas
 - el estado de si el servicio de accesibilidad está activado
+- el URI de una imagen que el usuario selecciona opcionalmente como fondo del editor de posicionamiento, junto con la opacidad elegida para ella
 
 ## 3. Finalidad del procesamiento
 
@@ -51,6 +52,8 @@ El procesamiento tiene lugar localmente en el dispositivo.
 Los ajustes y selecciones de aplicaciones almacenados por NavXS se guardan localmente en el dispositivo.
 
 Estos datos permanecen en el dispositivo hasta que el usuario los modifica, se eliminan borrando los datos de la aplicación, o se borran al desinstalar la aplicación.
+
+Si el usuario selecciona una captura de pantalla como fondo del editor de posicionamiento, NavXS guarda únicamente el URI de esa imagen junto con el permiso de lectura concedido por el sistema. El archivo de imagen en sí no se copia, no se guarda en un directorio de la app, no se transfiere al servicio de accesibilidad y no se transmite. Al restablecer el fondo se elimina el URI guardado y se libera de nuevo el permiso de lectura.
 
 ## 7. Permisos
 

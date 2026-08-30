@@ -1,6 +1,6 @@
 # Polityka prywatności NavXS
 
-Ostatnia aktualizacja: 16 maja 2026
+Ostatnia aktualizacja: 30 sierpnia 2026
 
 ## 1. Informacje ogólne
 
@@ -18,6 +18,7 @@ Obejmuje to w szczególności:
 - wybór aplikacji, dla których nakładka powinna być włączona
 - ustawienia nakładki zdefiniowane przez użytkownika, takie jak pozycje, kolory, rozmiary, przezroczystość i motywy
 - status włączenia usługi ułatwień dostępu
+- URI obrazu, który użytkownik opcjonalnie wybiera jako tło edytora pozycjonowania, wraz z ustawionym dla niego kryciem
 
 ## 3. Cel przetwarzania
 
@@ -51,6 +52,8 @@ Przetwarzanie odbywa się lokalnie na urządzeniu.
 Ustawienia i wybory aplikacji przechowywane przez NavXS są zapisywane lokalnie na urządzeniu.
 
 Dane te pozostają na urządzeniu do momentu zmiany przez użytkownika, usunięcia przez wyczyszczenie danych aplikacji lub skasowania przez odinstalowanie aplikacji.
+
+Jeśli użytkownik wybierze zrzut ekranu jako tło edytora pozycjonowania, NavXS zapisuje wyłącznie URI tego obrazu wraz z przyznanym przez system prawem odczytu. Sam plik obrazu nie jest kopiowany, nie jest zapisywany w katalogu aplikacji, nie jest przekazywany usłudze ułatwień dostępu ani przesyłany. Zresetowanie tła usuwa zapisany URI i ponownie zwalnia prawo odczytu.
 
 ## 7. Uprawnienia
 

@@ -80,7 +80,7 @@ All settings apply to the currently selected button only. The three buttons — 
 
 ### 3.1 Position buttons
 
-Opens a full-screen editor where you drag buttons to the exact position they should occupy in the live overlay. Tap a button to select it without moving it. The reset icon (↺) restores all default positions. The precision panel moves the selected button by an exact pixel step size.
+Opens a full-screen editor where you drag buttons to the exact position they should occupy in the live overlay. Tap a button to select it without moving it. The reset icon (↺) restores all default positions. The precision panel moves the selected button by an exact pixel step size. The image icon opens the positioning background dialog: pick any screenshot from your gallery as the editor backdrop to align the buttons with a real app screen, or reset it back to the dotted default. Once an image is set, a slider appears in the same dialog and fades the screenshot so the buttons stay easy to see while you drag them. The dialog stays open while you pick an image, so you can adjust the slider right away. Only the image URI is stored locally, never a copy of the file, and the screenshot is never shown in the live overlay.
 
 <p>
   <img src="docs/button_positioning_light.png" width="270" alt="Position mode – light mode">

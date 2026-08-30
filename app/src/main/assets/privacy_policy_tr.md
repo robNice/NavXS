@@ -1,6 +1,6 @@
 # NavXS Gizlilik Politikası
 
-Son güncelleme: 16 Mayıs 2026
+Son güncelleme: 30 Ağustos 2026
 
 ## 1. Genel Bilgiler
 
@@ -18,6 +18,7 @@ Bu özellikle şunları içerir:
 - katmanın etkinleştirilmesi gereken uygulama seçimi
 - kullanıcı tarafından belirlenen katman ayarları (konumlar, renkler, boyutlar, şeffaflık ve temalar)
 - erişilebilirlik hizmetinin etkin olup olmadığının durumu
+- kullanıcının isteğe bağlı olarak konumlandırma düzenleyicisinin arka planı olarak seçtiği bir görüntünün URI'si ve bunun için seçilen opaklık
 
 ## 3. İşlemenin Amacı
 
@@ -51,6 +52,8 @@ Bu hizmet reklam, takip veya analitik amaçlı kullanılmaz.
 NavXS tarafından depolanan ayarlar ve uygulama seçimleri cihazda yerel olarak kaydedilir.
 
 Bu veriler, kullanıcı tarafından değiştirilene, uygulama verileri temizlenerek kaldırılana veya uygulama kaldırılarak silinene kadar cihazda kalır.
+
+Kullanıcı konumlandırma düzenleyicisinin arka planı olarak bir ekran görüntüsü seçerse, NavXS yalnızca bu görüntünün URI'sini ve sistemin verdiği okuma iznini saklar. Görüntü dosyasının kendisi kopyalanmaz, bir uygulama dizinine kaydedilmez, erişilebilirlik hizmetine aktarılmaz ve iletilmez. Arka plan sıfırlandığında kayıtlı URI silinir ve okuma izni yeniden serbest bırakılır.
 
 ## 7. İzinler
 

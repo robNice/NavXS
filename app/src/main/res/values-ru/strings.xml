@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Включите службу специальных возможностей, чтобы приложение могло определять активное приложение на переднем плане и отображать навигационный оверлей для выбранных приложений.</string>
     <string name="open_accessibility_settings">Открыть настройки специальных возможностей</string>
     <string name="check_again">Проверить снова</string>
+    <string name="disclosure_title">Служба специальных возможностей</string>
+    <string name="disclosure_item_1">NavXS использует службу специальных возможностей Android.</string>
+    <string name="disclosure_item_2">Служба необходима для показа плавающих кнопок навигации поверх выбранных приложений.</string>
+    <string name="disclosure_item_3">NavXS может определять, какое приложение сейчас на переднем плане.</string>
+    <string name="disclosure_item_4">NavXS использует действия специальных возможностей: «Назад», «Домой» и «Недавние приложения».</string>
+    <string name="disclosure_item_5">NavXS не читает вводимый текст, пароли и содержимое сообщений.</string>
+    <string name="disclosure_item_6">NavXS не продаёт и не передаёт эти данные.</string>
+    <string name="disclosure_item_7">Обработка выполняется исключительно для работы навигационного оверлея.</string>
+    <string name="disclosure_checkbox">Я понимаю, зачем NavXS нужна служба специальных возможностей.</string>
+    <string name="disclosure_continue">Я согласен — Открыть настройки специальных возможностей</string>
     <string name="app_loading">Проверка разрешения специальных возможностей…</string>
     <string name="header_help">Открыть справку</string>
     <string name="help_dialog_title">Справка</string>
@@ -16,6 +26,8 @@
     <string name="help_body_apps">Список отображает все установленные приложения на устройстве. Включите приложение, чтобы оверлей NavXS появлялся, когда оно находится на переднем плане. Используйте строку поиска для фильтрации по имени или включите отображение системных приложений.</string>
     <string name="help_body_position">Открывает полноэкранный редактор. Перетащите активную кнопку туда, где она должна находиться в оверлее. Нажмите на кнопку, чтобы выбрать её без перемещения. Значок сброса восстанавливает все позиции по умолчанию. Панель точности перемещает выбранную кнопку на точный шаг в пикселях.</string>
     <string name="help_body_select">Нажмите «Назад», «Домой» или «Последние», чтобы выбрать кнопку. Все настройки ниже применяются только к выбранной кнопке.</string>
+    <string name="help_sub_position_background">Фон для позиционирования</string>
+    <string name="help_body_position_background">Используйте снимок экрана как фон, чтобы разместить кнопки именно там, где они понадобятся.\n\nВыберите снимок экрана своего приложения по значку изображения и перетащите кнопки в нужные места. Ползунок затемняет фон, чтобы кнопки было лучше видно.\n\n«Сбросить фон» снова удаляет снимок экрана. Позиции кнопок при этом сохраняются.\n\nСнимок экрана — только вспомогательное средство при настройке и никогда не показывается в обычном оверлее.</string>
     <string name="help_body_active">Включает или отключает выбранную кнопку в оверлее. Хотя бы одна кнопка должна оставаться активной в любое время.</string>
     <string name="help_desc_theme">Выбирает стиль значка.</string>
     <string name="help_desc_colour">Устанавливает цвет значка.</string>
@@ -27,12 +39,18 @@
     <string name="help_desc_bg_size">Диаметр круга относительно значка.</string>
     <string name="help_desc_bg_softness">0 = чёткий край; 100 = полностью размытый край.</string>
     <string name="help_body_preview">Небольшая вкладка в правом верхнем углу экрана настроек открывает панель с выбранной кнопкой на белом, сером и чёрном фонах — оцените видимость на любом приложении, не выходя из настроек.</string>
+    <string name="help_section_support">Поддержка</string>
+    <string name="help_body_support">При проблемах с приложением обратитесь за поддержкой через issue tracker.</string>
+    <string name="help_support_email_intro">Или по электронной почте:</string>
     <string name="footer_privacy">Конфиденциальность</string>
     <string name="footer_version">Версия: %1$s</string>
     <string name="privacy_dialog_title">Конфиденциальность</string>
     <string name="privacy_dialog_message">NavXS обрабатывает имя пакета активного приложения локально на вашем устройстве, чтобы решить, показывать ли оверлей. Никакие данные не передаются внешним службам.</string>
     <string name="apps_search_hint">Поиск приложений</string>
     <string name="apps_show_system_apps">Показать системные приложения</string>
+    <string name="apps_rescan">Пересканировать приложения</string>
+    <string name="apps_scanning">Сканирование приложений…</string>
+    <string name="apps_scanning_detail">Подождите немного.</string>
     <string name="apps_enabled_section">Включённые приложения</string>
     <string name="apps_installed_section">Установленные приложения</string>
     <string name="apps_empty">Ни одно приложение не соответствует текущему фильтру.</string>
@@ -66,6 +84,11 @@
     <string name="settings_position_y">Позиция Y</string>
     <string name="settings_reset_position">Сбросить позицию</string>
     <string name="settings_open_precision">Открыть управление точностью</string>
+    <string name="settings_position_background_manage">Управление фоном позиционирования</string>
+    <string name="settings_position_background_title">Фон позиционирования</string>
+    <string name="settings_position_background_reset">Сбросить фон</string>
+    <string name="settings_position_background_select">Выбрать фон</string>
+    <string name="settings_position_background_opacity">Непрозрачность фона %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Оттенок %1$d°</string>
     <string name="settings_color_brightness">Яркость %1$d%%</string>
@@ -80,6 +103,7 @@
     <string name="button_recents">Последние</string>
     <string name="error_last_active_button">Хотя бы одна кнопка должна оставаться активной.</string>
     <string name="error_action_failed">Не удалось выполнить действие.</string>
+    <string name="error_position_background_load">Не удалось загрузить фоновое изображение.</string>
     <string name="accessibility_service_label">Навигационный оверлей NavXS</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="dialog_ok">OK</string>

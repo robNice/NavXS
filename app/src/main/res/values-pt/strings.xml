@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Ative o serviço de acessibilidade para que o app detecte o app em primeiro plano e exiba o overlay de navegação nos apps selecionados.</string>
     <string name="open_accessibility_settings">Abrir configurações de acessibilidade</string>
     <string name="check_again">Verificar novamente</string>
+    <string name="disclosure_title">Serviço de acessibilidade</string>
+    <string name="disclosure_item_1">O NavXS usa o serviço de acessibilidade do Android.</string>
+    <string name="disclosure_item_2">O serviço é necessário para mostrar botões de navegação flutuantes sobre os apps selecionados.</string>
+    <string name="disclosure_item_3">O NavXS pode detectar qual app está em primeiro plano.</string>
+    <string name="disclosure_item_4">O NavXS usa ações de acessibilidade: Voltar, Início e Apps recentes.</string>
+    <string name="disclosure_item_5">O NavXS não lê textos digitados, senhas nem o conteúdo de mensagens.</string>
+    <string name="disclosure_item_6">O NavXS não vende nem compartilha esses dados.</string>
+    <string name="disclosure_item_7">O processamento ocorre apenas para fornecer o recurso de sobreposição de navegação.</string>
+    <string name="disclosure_checkbox">Entendo por que o NavXS precisa do serviço de acessibilidade.</string>
+    <string name="disclosure_continue">Concordo — Abrir configurações de acessibilidade</string>
     <string name="app_loading">A verificar permissão de acessibilidade…</string>
     <string name="header_help">Abrir ajuda</string>
     <string name="help_dialog_title">Ajuda</string>
@@ -16,6 +26,8 @@
     <string name="help_body_apps">A lista mostra todos os apps instalados no seu dispositivo. Ative um app para que o overlay NavXS apareça quando estiver em primeiro plano. Use a barra de pesquisa para filtrar por nome, ou ative Mostrar apps do sistema.</string>
     <string name="help_body_position">Abre um editor em ecrã inteiro. Arraste qualquer botão ativo para exatamente onde deve aparecer no overlay. Toque num botão para selecioná-lo sem movê-lo. O ícone de repor restaura todas as posições predefinidas. O painel de precisão move o botão selecionado um passo exato em pixéis.</string>
     <string name="help_body_select">Toque em Voltar, Início ou Recentes para selecionar um botão. Todas as configurações abaixo aplicam-se apenas ao botão selecionado.</string>
+    <string name="help_sub_position_background">Fundo de posicionamento</string>
+    <string name="help_body_position_background">Use uma captura de ecrã como fundo para colocar os botões exatamente onde vai precisar deles.\n\nEscolha uma captura da sua app com o ícone de imagem e arraste os botões para os sítios pretendidos. O cursor escurece o fundo para que os botões fiquem mais visíveis.\n\n«Repor fundo» remove a captura novamente. As posições dos seus botões são mantidas.\n\nA captura serve apenas de ajuda na configuração e nunca é mostrada no overlay normal.</string>
     <string name="help_body_active">Ativa ou desativa o botão selecionado no overlay. Pelo menos um botão deve permanecer ativo em todos os momentos.</string>
     <string name="help_desc_theme">Escolhe o estilo do ícone.</string>
     <string name="help_desc_colour">Define a cor do ícone.</string>
@@ -27,12 +39,18 @@
     <string name="help_desc_bg_size">Diâmetro do círculo relativo ao ícone.</string>
     <string name="help_desc_bg_softness">0 = borda nítida; 100 = borda totalmente desbotada.</string>
     <string name="help_body_preview">A pequena aba no canto superior direito do ecrã de configurações abre um painel com o botão selecionado sobre fundos branco, cinzento e preto — avalie a visibilidade em qualquer app sem sair das configurações.</string>
+    <string name="help_section_support">Suporte</string>
+    <string name="help_body_support">Em caso de problemas com este app, obtenha suporte pelo rastreador de problemas.</string>
+    <string name="help_support_email_intro">Ou por e-mail:</string>
     <string name="footer_privacy">Privacidade</string>
     <string name="footer_version">Versão: %1$s</string>
     <string name="privacy_dialog_title">Privacidade</string>
     <string name="privacy_dialog_message">O NavXS processa o nome do pacote do app em primeiro plano localmente no seu dispositivo para decidir se deve mostrar o overlay. Nenhum dado é enviado a serviços externos.</string>
     <string name="apps_search_hint">Pesquisar apps</string>
     <string name="apps_show_system_apps">Mostrar apps do sistema</string>
+    <string name="apps_rescan">Reescanear apps</string>
+    <string name="apps_scanning">Escaneando apps…</string>
+    <string name="apps_scanning_detail">Aguarde um momento.</string>
     <string name="apps_enabled_section">Apps ativados</string>
     <string name="apps_installed_section">Apps instalados</string>
     <string name="apps_empty">Nenhum app corresponde ao filtro atual.</string>
@@ -66,6 +84,11 @@
     <string name="settings_position_y">Posição Y</string>
     <string name="settings_reset_position">Repor posição</string>
     <string name="settings_open_precision">Abrir controlos de precisão</string>
+    <string name="settings_position_background_manage">Gerir fundo de posicionamento</string>
+    <string name="settings_position_background_title">Fundo de posicionamento</string>
+    <string name="settings_position_background_reset">Repor fundo</string>
+    <string name="settings_position_background_select">Selecionar fundo</string>
+    <string name="settings_position_background_opacity">Opacidade do fundo %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Matiz %1$d°</string>
     <string name="settings_color_brightness">Brilho %1$d%%</string>
@@ -80,6 +103,7 @@
     <string name="button_recents">Recentes</string>
     <string name="error_last_active_button">Pelo menos um botão deve permanecer ativo.</string>
     <string name="error_action_failed">Não foi possível executar a ação.</string>
+    <string name="error_position_background_load">Não foi possível carregar a imagem de fundo.</string>
     <string name="accessibility_service_label">Navegação overlay NavXS</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">OK</string>

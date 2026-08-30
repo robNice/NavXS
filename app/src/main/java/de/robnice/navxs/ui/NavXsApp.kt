@@ -1,5 +1,8 @@
 package de.robnice.navxs.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +16,11 @@ fun NavXsApp(
     viewModel: MainViewModel,
     snackbarHost: @Composable () -> Unit
 ) {
+    val positionBackgroundPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let(viewModel::setPositionBackground)
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -30,7 +38,12 @@ fun NavXsApp(
             MainTabsScreen(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
-                viewModel = viewModel
+                viewModel = viewModel,
+                onRequestPositionBackground = {
+                    positionBackgroundPicker.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
             )
         }
     }

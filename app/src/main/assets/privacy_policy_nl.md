@@ -1,6 +1,6 @@
 # Privacybeleid van NavXS
 
-Laatste update: 16 mei 2026
+Laatste update: 30 augustus 2026
 
 ## 1. Algemene informatie
 
@@ -18,6 +18,7 @@ Dit omvat in het bijzonder:
 - de selectie van apps waarvoor de overlay moet worden ingeschakeld
 - de door de gebruiker ingestelde overlay-instellingen, zoals posities, kleuren, formaten, transparantie en thema's
 - de status of de toegankelijkheidsservice is ingeschakeld
+- de URI van een afbeelding die de gebruiker optioneel als achtergrond van de positioneringseditor kiest, samen met de daarvoor gekozen dekking
 
 ## 3. Doel van de verwerking
 
@@ -51,6 +52,8 @@ De verwerking vindt lokaal op het apparaat plaats.
 De instellingen en app-selecties die door NavXS worden opgeslagen, worden lokaal op het apparaat bewaard.
 
 Deze gegevens blijven op het apparaat totdat ze door de gebruiker worden gewijzigd, worden verwijderd door de app-gegevens te wissen, of worden gewist bij het verwijderen van de app.
+
+Als de gebruiker een schermafbeelding als achtergrond van de positioneringseditor kiest, slaat NavXS alleen de URI van die afbeelding op, samen met het door het systeem verleende leesrecht. Het afbeeldingsbestand zelf wordt niet gekopieerd, niet in een app-map opgeslagen, niet aan de toegankelijkheidsservice doorgegeven en niet verzonden. Bij het herstellen van de achtergrond wordt de opgeslagen URI verwijderd en het leesrecht weer vrijgegeven.
 
 ## 7. Machtigingen
 

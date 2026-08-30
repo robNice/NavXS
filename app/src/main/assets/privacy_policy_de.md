@@ -1,6 +1,6 @@
 # Datenschutzbestimmung für NavXS
 
-Stand: 16. Mai 2026
+Stand: 30. August 2026
 
 ## 1. Allgemeines
 
@@ -18,6 +18,7 @@ Dazu gehören insbesondere:
 - die Auswahl der Apps, für die das Overlay aktiviert werden soll
 - die vom Nutzer festgelegten Overlay-Einstellungen, zum Beispiel Positionen, Farben, Größen, Transparenz und Themes
 - der Status, ob der Bedienungshilfe-Dienst aktiviert ist
+- die URI eines Bildes, das der Nutzer optional als Hintergrund des Positionierungs-Editors auswählt, samt der dafür gewählten Deckkraft
 
 ## 3. Zweck der Verarbeitung
 
@@ -51,6 +52,8 @@ Die Verarbeitung erfolgt lokal auf dem Gerät.
 Die von NavXS gespeicherten Einstellungen und App-Auswahlen werden lokal auf dem Gerät gespeichert.
 
 Diese Daten verbleiben auf dem Gerät, bis sie durch den Nutzer geändert, durch das Löschen der App-Daten entfernt oder durch Deinstallation der App gelöscht werden.
+
+Wählt der Nutzer einen Screenshot als Hintergrund des Positionierungs-Editors, speichert NavXS ausschließlich die URI dieses Bildes zusammen mit dem vom System erteilten Leserecht. Die Bilddatei selbst wird nicht kopiert, nicht in einem App-Verzeichnis abgelegt, nicht an den Bedienungshilfe-Dienst übergeben und nicht übertragen. Beim Zurücksetzen des Hintergrunds werden die gespeicherte URI gelöscht und das Leserecht wieder freigegeben.
 
 ## 7. Berechtigungen
 

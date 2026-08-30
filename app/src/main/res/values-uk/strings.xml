@@ -6,6 +6,16 @@
     <string name="accessibility_required_description">Увімкніть службу спеціальних можливостей, щоб застосунок міг визначати активний застосунок на передньому плані та відображати навігаційний оверлей для вибраних застосунків.</string>
     <string name="open_accessibility_settings">Відкрити налаштування спеціальних можливостей</string>
     <string name="check_again">Перевірити знову</string>
+    <string name="disclosure_title">Служба спеціальних можливостей</string>
+    <string name="disclosure_item_1">NavXS використовує службу спеціальних можливостей Android.</string>
+    <string name="disclosure_item_2">Служба потрібна, щоб показувати плаваючі кнопки навігації поверх вибраних додатків.</string>
+    <string name="disclosure_item_3">NavXS може визначати, який додаток зараз на передньому плані.</string>
+    <string name="disclosure_item_4">NavXS використовує дії спеціальних можливостей: «Назад», «Головний екран» і «Останні додатки».</string>
+    <string name="disclosure_item_5">NavXS не читає введений текст, паролі та вміст повідомлень.</string>
+    <string name="disclosure_item_6">NavXS не продає та не передає ці дані.</string>
+    <string name="disclosure_item_7">Обробка виконується виключно для роботи навігаційного оверлея.</string>
+    <string name="disclosure_checkbox">Я розумію, навіщо NavXS потрібна служба спеціальних можливостей.</string>
+    <string name="disclosure_continue">Я погоджуюся — Відкрити налаштування спеціальних можливостей</string>
     <string name="app_loading">Перевірка дозволу спеціальних можливостей…</string>
     <string name="header_help">Відкрити довідку</string>
     <string name="help_dialog_title">Довідка</string>
@@ -16,6 +26,8 @@
     <string name="help_body_apps">Список відображає всі встановлені застосунки на пристрої. Увімкніть застосунок, щоб оверлей NavXS з\'являвся, коли він на передньому плані. Використовуйте рядок пошуку для фільтрації за назвою або увімкніть відображення системних застосунків.</string>
     <string name="help_body_position">Відкриває повноекранний редактор. Перетягніть активну кнопку точно туди, де вона має з\'явитися в оверлеї. Натисніть на кнопку, щоб вибрати її без переміщення. Значок скидання відновлює всі позиції за замовчуванням. Панель точності переміщує вибрану кнопку на точний крок у пікселях.</string>
     <string name="help_body_select">Натисніть «Назад», «Додому» або «Останні», щоб вибрати кнопку. Усі наведені нижче налаштування застосовуються лише до вибраної кнопки.</string>
+    <string name="help_sub_position_background">Фон для позиціонування</string>
+    <string name="help_body_position_background">Використовуйте знімок екрана як фон, щоб розмістити кнопки саме там, де вони знадобляться.\n\nВиберіть знімок екрана свого додатка за значком зображення й перетягніть кнопки в потрібні місця. Повзунок затемнює фон, щоб кнопки було краще видно.\n\n«Скинути фон» знову видаляє знімок екрана. Позиції кнопок при цьому зберігаються.\n\nЗнімок екрана — лише допоміжний засіб під час налаштування і ніколи не показується у звичайному оверлеї.</string>
     <string name="help_body_active">Вмикає або вимикає вибрану кнопку в оверлеї. Принаймні одна кнопка повинна залишатися активною весь час.</string>
     <string name="help_desc_theme">Вибирає стиль значка.</string>
     <string name="help_desc_colour">Встановлює колір значка.</string>
@@ -27,12 +39,18 @@
     <string name="help_desc_bg_size">Діаметр кола відносно значка.</string>
     <string name="help_desc_bg_softness">0 = чіткий край; 100 = повністю розмитий край.</string>
     <string name="help_body_preview">Маленька вкладка у правому верхньому куті екрана налаштувань відкриває панель із вибраною кнопкою на білому, сірому та чорному тлі — оцініть видимість у будь-якому застосунку, не виходячи з налаштувань.</string>
+    <string name="help_section_support">Підтримка</string>
+    <string name="help_body_support">У разі проблем із додатком зверніться по підтримку через issue tracker.</string>
+    <string name="help_support_email_intro">Або електронною поштою:</string>
     <string name="footer_privacy">Конфіденційність</string>
     <string name="footer_version">Версія: %1$s</string>
     <string name="privacy_dialog_title">Конфіденційність</string>
     <string name="privacy_dialog_message">NavXS обробляє назву пакету активного застосунку локально на вашому пристрої, щоб вирішити, чи показувати оверлей. Жодні дані не передаються зовнішнім службам.</string>
     <string name="apps_search_hint">Пошук застосунків</string>
     <string name="apps_show_system_apps">Показати системні застосунки</string>
+    <string name="apps_rescan">Пересканувати додатки</string>
+    <string name="apps_scanning">Сканування додатків…</string>
+    <string name="apps_scanning_detail">Зачекайте хвилинку.</string>
     <string name="apps_enabled_section">Увімкнені застосунки</string>
     <string name="apps_installed_section">Встановлені застосунки</string>
     <string name="apps_empty">Жоден застосунок не відповідає поточному фільтру.</string>
@@ -66,6 +84,11 @@
     <string name="settings_position_y">Позиція Y</string>
     <string name="settings_reset_position">Скинути позицію</string>
     <string name="settings_open_precision">Відкрити точні елементи керування</string>
+    <string name="settings_position_background_manage">Керувати фоном позиціонування</string>
+    <string name="settings_position_background_title">Фон позиціонування</string>
+    <string name="settings_position_background_reset">Скинути фон</string>
+    <string name="settings_position_background_select">Вибрати фон</string>
+    <string name="settings_position_background_opacity">Непрозорість фону %1$d%%</string>
     <string name="settings_color_hex">HEX: %1$s</string>
     <string name="settings_color_hue">Відтінок %1$d°</string>
     <string name="settings_color_brightness">Яскравість %1$d%%</string>
@@ -80,6 +103,7 @@
     <string name="button_recents">Останні</string>
     <string name="error_last_active_button">Принаймні одна кнопка повинна залишатися активною.</string>
     <string name="error_action_failed">Не вдалося виконати дію.</string>
+    <string name="error_position_background_load">Не вдалося завантажити фонове зображення.</string>
     <string name="accessibility_service_label">Навігаційний оверлей NavXS</string>
     <string name="dialog_cancel">Скасувати</string>
     <string name="dialog_ok">OK</string>

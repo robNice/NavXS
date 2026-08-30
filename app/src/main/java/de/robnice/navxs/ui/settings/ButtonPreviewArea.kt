@@ -33,8 +33,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -56,6 +58,8 @@ fun ButtonPreviewArea(
     modifier: Modifier = Modifier,
     settings: OverlaySettings,
     showBackground: Boolean,
+    positionBackgroundImage: ImageBitmap? = null,
+    positionBackgroundAlpha: Float = 1f,
     buttonPositions: Map<NavButtonType, Offset> = emptyMap(),
     draggedButtonType: NavButtonType? = null,
     draggedButtonPosition: Offset? = null,
@@ -195,7 +199,17 @@ fun ButtonPreviewArea(
             }
             .testTag("button_preview_area")
     ) {
-        if (showBackground) {
+        if (positionBackgroundImage != null) {
+            Image(
+                bitmap = positionBackgroundImage,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("position_background_image"),
+                alpha = positionBackgroundAlpha.coerceIn(0f, 1f),
+                contentScale = ContentScale.FillBounds
+            )
+        } else if (showBackground) {
             DottedBackdrop()
         }
         settings.buttons.values.filter { it.active }.forEach { button ->
@@ -297,7 +311,11 @@ private fun ButtonBackground(
 @Composable
 private fun DottedBackdrop() {
     val dotColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("position_background_dots")
+    ) {
         val spacing = 28.dp.toPx()
         val radius = 1.1.dp.toPx()
         var y = spacing / 2

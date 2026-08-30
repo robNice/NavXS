@@ -117,6 +117,20 @@ fun HelpDialog(onDismiss: () -> Unit) {
                     HelpBody(stringResource(R.string.help_body_position))
                     Spacer(Modifier.height(14.dp))
 
+                    HelpSubsubsectionTitle(
+                        number = "2.1.1",
+                        text = stringResource(R.string.help_sub_position_background),
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .anchor("pos_bg")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpBody(
+                        text = stringResource(R.string.help_body_position_background),
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                    Spacer(Modifier.height(14.dp))
+
                     HelpSubsectionTitle(
                         number = "2.2",
                         text = stringResource(R.string.help_sub_select),
@@ -228,6 +242,7 @@ private fun HelpTableOfContents(onScrollTo: (String) -> Unit) {
         TocPrimary("1", stringResource(R.string.tab_apps)) { onScrollTo("apps") }
         TocPrimary("2", stringResource(R.string.tab_settings)) { onScrollTo("settings") }
         TocSecondary("2.1", stringResource(R.string.settings_position_button)) { onScrollTo("pos") }
+        TocTertiary("2.1.1", stringResource(R.string.help_sub_position_background)) { onScrollTo("pos_bg") }
         TocSecondary("2.2", stringResource(R.string.help_sub_select)) { onScrollTo("select") }
         TocSecondary("2.3", stringResource(R.string.settings_active)) { onScrollTo("active") }
         TocSecondary("2.4", stringResource(R.string.settings_button_section)) { onScrollTo("button") }
@@ -295,6 +310,28 @@ private fun TocPrimary(number: String, title: String, onClick: () -> Unit) {
 }
 
 @Composable
+private fun TocTertiary(number: String, title: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(start = 36.dp, top = 2.dp, bottom = 2.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = number,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
 private fun TocSecondary(number: String, title: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
@@ -335,6 +372,22 @@ private fun HelpSectionTitle(number: String, text: String, modifier: Modifier = 
 }
 
 @Composable
+private fun HelpSubsubsectionTitle(number: String, text: String, modifier: Modifier = Modifier) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = number,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
 private fun HelpSubsectionTitle(number: String, text: String, modifier: Modifier = Modifier) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
@@ -351,8 +404,9 @@ private fun HelpSubsectionTitle(number: String, text: String, modifier: Modifier
 }
 
 @Composable
-private fun HelpBody(text: String) {
+private fun HelpBody(text: String, modifier: Modifier = Modifier) {
     Text(
+        modifier = modifier,
         text = text,
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
