@@ -1,6 +1,10 @@
 package de.robnice.navxs.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Rect
 import android.os.SystemClock
 import android.util.Log
@@ -8,7 +12,9 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityWindowInfo
 import de.robnice.navxs.R
 import de.robnice.navxs.data.SettingsRepository
+import de.robnice.navxs.data.models.AppOverlayConfiguration
 import de.robnice.navxs.data.models.NavButtonType
+import de.robnice.navxs.domain.OverlayConfigurationResolver
 import de.robnice.navxs.overlay.OverlayController
 import de.robnice.navxs.overlay.OverlayViewport
 import de.robnice.navxs.ui.AppForegroundState
@@ -21,6 +27,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+private data class ServiceInputs(
+    val settings: de.robnice.navxs.data.models.OverlaySettings,
+    val selectedApps: Set<String>,
+    val appConfigurations: Map<String, AppOverlayConfiguration>,
+    val burnInProtectionEnabled: Boolean,
+    val appUiInForeground: Boolean
+)
+
 class NavigationAccessibilityService : AccessibilityService() {
     private var scope = createServiceScope()
     private lateinit var settingsRepository: SettingsRepository
@@ -31,6 +45,8 @@ class NavigationAccessibilityService : AccessibilityService() {
     private var currentForegroundPackage: String? = null
     private var latestSettings = de.robnice.navxs.data.NavDefaults.defaultOverlaySettings()
     private var selectedApps: Set<String> = emptySet()
+    private var appConfigurations: Map<String, AppOverlayConfiguration> = emptyMap()
+    private var burnInProtectionEnabled: Boolean = false
     private var appUiInForeground: Boolean = false
     private var pendingVisibilityJob: Job? = null
     private var lastPressId: Long? = null
@@ -41,6 +57,7 @@ class NavigationAccessibilityService : AccessibilityService() {
     private var lastEventPackage: String? = null
     private var lastEventTimestampMs: Long = 0L
     private var serviceConnected = false
+    private var screenStateReceiver: BroadcastReceiver? = null
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -50,17 +67,23 @@ class NavigationAccessibilityService : AccessibilityService() {
         settingsRepository = SettingsRepository.create(this)
         overlayController = OverlayController(this, ::performAction)
         foregroundResolver = ForegroundPackageResolver(packageName, IgnoredForegroundPackages)
+        registerScreenStateReceiver()
         scope.launch {
             combine(
                 settingsRepository.settingsFlow,
                 settingsRepository.selectedAppsFlow,
+                settingsRepository.appConfigurationsFlow,
+                settingsRepository.burnInProtectionEnabledFlow,
                 AppForegroundState.isInForeground
-            ) { settings, apps, isInForeground ->
-                Triple(settings, apps, isInForeground)
-            }.collect { (settings, apps, isInForeground) ->
-                latestSettings = settings
-                selectedApps = apps
-                appUiInForeground = isInForeground
+            ) { settings, apps, configurations, burnInEnabled, isInForeground ->
+                ServiceInputs(settings, apps, configurations, burnInEnabled, isInForeground)
+            }.collect { inputs ->
+                latestSettings = inputs.settings
+                selectedApps = inputs.selectedApps
+                appConfigurations = inputs.appConfigurations
+                burnInProtectionEnabled = inputs.burnInProtectionEnabled
+                appUiInForeground = inputs.appUiInForeground
+                overlayController.setBurnInProtectionEnabled(inputs.burnInProtectionEnabled)
                 updateOverlay()
             }
         }
@@ -118,8 +141,32 @@ class NavigationAccessibilityService : AccessibilityService() {
         super.onDestroy()
     }
 
+    private fun registerScreenStateReceiver() {
+        if (screenStateReceiver != null) return
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                when (intent?.action) {
+                    Intent.ACTION_SCREEN_ON -> overlayController.setScreenInteractive(true)
+                    Intent.ACTION_SCREEN_OFF -> overlayController.setScreenInteractive(false)
+                }
+            }
+        }
+        registerReceiver(
+            receiver,
+            IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_SCREEN_OFF)
+            }
+        )
+        screenStateReceiver = receiver
+    }
+
     private fun disconnectService() {
         serviceConnected = false
+        screenStateReceiver?.let { receiver ->
+            runCatching { unregisterReceiver(receiver) }
+        }
+        screenStateReceiver = null
         pendingVisibilityJob?.cancel()
         pendingVisibilityJob = null
         scope.cancel()
@@ -168,7 +215,13 @@ class NavigationAccessibilityService : AccessibilityService() {
         logRecentsTraceWindows("updateOverlay")
 
         if (shouldShow) {
-            overlayController.show(latestSettings)
+            overlayController.show(
+                OverlayConfigurationResolver.resolve(
+                    defaultSettings = latestSettings,
+                    packageName = trackedPackage,
+                    appConfigurations = appConfigurations
+                )
+            )
         } else {
             overlayController.hide()
         }

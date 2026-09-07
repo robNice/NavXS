@@ -98,59 +98,102 @@ fun HelpDialog(onDismiss: () -> Unit) {
                     )
                     Spacer(Modifier.height(6.dp))
                     HelpBody(stringResource(R.string.help_body_apps))
+                    HelpFigureAppRow()
+                    Spacer(Modifier.height(6.dp))
+                    HelpBody(stringResource(R.string.help_body_apps_configuration))
 
                     HelpSectionDivider()
 
                     HelpSectionTitle(
                         number = "2",
-                        text = stringResource(R.string.tab_settings),
+                        text = stringResource(R.string.tab_design_layout),
                         modifier = Modifier.anchor("settings")
                     )
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsectionTitle(
                         number = "2.1",
+                        text = stringResource(R.string.help_sub_configuration),
+                        modifier = Modifier.anchor("config")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpFigureConfigPicker()
+                    HelpBody(stringResource(R.string.help_body_configuration_for))
+                    Spacer(Modifier.height(14.dp))
+
+                    HelpSubsectionTitle(
+                        number = "2.2",
+                        text = stringResource(R.string.settings_individual_design_layout),
+                        modifier = Modifier.anchor("individual")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpFigureIndividual()
+                    HelpBody(stringResource(R.string.help_body_individual))
+                    Spacer(Modifier.height(14.dp))
+
+                    HelpSubsectionTitle(
+                        number = "2.3",
+                        text = stringResource(R.string.settings_copy_from),
+                        modifier = Modifier.anchor("copy")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpFigureCopyButton()
+                    HelpBody(stringResource(R.string.help_body_copy_from))
+                    Spacer(Modifier.height(14.dp))
+
+                    HelpSubsectionTitle(
+                        number = "2.4",
                         text = stringResource(R.string.settings_position_button),
                         modifier = Modifier.anchor("pos")
                     )
                     Spacer(Modifier.height(4.dp))
+                    HelpFigurePositionButton()
                     HelpBody(stringResource(R.string.help_body_position))
+                    HelpFigureEditorToolbar()
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsubsectionTitle(
-                        number = "2.1.1",
+                        number = "2.4.1",
                         text = stringResource(R.string.help_sub_position_background),
                         modifier = Modifier
                             .padding(start = 12.dp)
                             .anchor("pos_bg")
                     )
                     Spacer(Modifier.height(4.dp))
+                    HelpFigureBackgroundButton()
                     HelpBody(
                         text = stringResource(R.string.help_body_position_background),
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    HelpBody(
+                        text = stringResource(R.string.help_body_position_background_per_config),
                         modifier = Modifier.padding(start = 12.dp)
                     )
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsectionTitle(
-                        number = "2.2",
+                        number = "2.5",
                         text = stringResource(R.string.help_sub_select),
                         modifier = Modifier.anchor("select")
                     )
                     Spacer(Modifier.height(4.dp))
+                    HelpFigureButtonSelector()
                     HelpBody(stringResource(R.string.help_body_select))
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsectionTitle(
-                        number = "2.3",
+                        number = "2.6",
                         text = stringResource(R.string.settings_active),
                         modifier = Modifier.anchor("active")
                     )
                     Spacer(Modifier.height(4.dp))
+                    HelpFigureActiveSwitch()
                     HelpBody(stringResource(R.string.help_body_active))
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsectionTitle(
-                        number = "2.4",
+                        number = "2.7",
                         text = stringResource(R.string.settings_button_section),
                         modifier = Modifier.anchor("button")
                     )
@@ -162,7 +205,7 @@ fun HelpDialog(onDismiss: () -> Unit) {
                     Spacer(Modifier.height(14.dp))
 
                     HelpSubsectionTitle(
-                        number = "2.5",
+                        number = "2.8",
                         text = stringResource(R.string.settings_button_background_section),
                         modifier = Modifier.anchor("button_bg")
                     )
@@ -182,12 +225,41 @@ fun HelpDialog(onDismiss: () -> Unit) {
                         modifier = Modifier.anchor("preview")
                     )
                     Spacer(Modifier.height(6.dp))
+                    HelpFigurePreviewTab()
                     HelpBody(stringResource(R.string.help_body_preview))
 
                     HelpSectionDivider()
 
                     HelpSectionTitle(
                         number = "4",
+                        text = stringResource(R.string.tab_settings),
+                        modifier = Modifier.anchor("general")
+                    )
+                    Spacer(Modifier.height(14.dp))
+
+                    HelpSubsectionTitle(
+                        number = "4.1",
+                        text = stringResource(R.string.general_burn_in_section),
+                        modifier = Modifier.anchor("burn_in")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpFigureBurnIn()
+                    HelpBody(stringResource(R.string.help_body_burn_in))
+                    Spacer(Modifier.height(14.dp))
+
+                    HelpSubsectionTitle(
+                        number = "4.2",
+                        text = stringResource(R.string.general_color_scheme),
+                        modifier = Modifier.anchor("scheme")
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    HelpFigureColorScheme()
+                    HelpBody(stringResource(R.string.help_body_color_scheme))
+
+                    HelpSectionDivider()
+
+                    HelpSectionTitle(
+                        number = "5",
                         text = stringResource(R.string.help_section_support),
                         modifier = Modifier.anchor("support")
                     )
@@ -240,15 +312,21 @@ private fun HelpTableOfContents(onScrollTo: (String) -> Unit) {
         )
         Spacer(Modifier.height(6.dp))
         TocPrimary("1", stringResource(R.string.tab_apps)) { onScrollTo("apps") }
-        TocPrimary("2", stringResource(R.string.tab_settings)) { onScrollTo("settings") }
-        TocSecondary("2.1", stringResource(R.string.settings_position_button)) { onScrollTo("pos") }
-        TocTertiary("2.1.1", stringResource(R.string.help_sub_position_background)) { onScrollTo("pos_bg") }
-        TocSecondary("2.2", stringResource(R.string.help_sub_select)) { onScrollTo("select") }
-        TocSecondary("2.3", stringResource(R.string.settings_active)) { onScrollTo("active") }
-        TocSecondary("2.4", stringResource(R.string.settings_button_section)) { onScrollTo("button") }
-        TocSecondary("2.5", stringResource(R.string.settings_button_background_section)) { onScrollTo("button_bg") }
+        TocPrimary("2", stringResource(R.string.tab_design_layout)) { onScrollTo("settings") }
+        TocSecondary("2.1", stringResource(R.string.help_sub_configuration)) { onScrollTo("config") }
+        TocSecondary("2.2", stringResource(R.string.settings_individual_design_layout)) { onScrollTo("individual") }
+        TocSecondary("2.3", stringResource(R.string.settings_copy_from)) { onScrollTo("copy") }
+        TocSecondary("2.4", stringResource(R.string.settings_position_button)) { onScrollTo("pos") }
+        TocTertiary("2.4.1", stringResource(R.string.help_sub_position_background)) { onScrollTo("pos_bg") }
+        TocSecondary("2.5", stringResource(R.string.help_sub_select)) { onScrollTo("select") }
+        TocSecondary("2.6", stringResource(R.string.settings_active)) { onScrollTo("active") }
+        TocSecondary("2.7", stringResource(R.string.settings_button_section)) { onScrollTo("button") }
+        TocSecondary("2.8", stringResource(R.string.settings_button_background_section)) { onScrollTo("button_bg") }
         TocPrimary("3", stringResource(R.string.help_section_preview)) { onScrollTo("preview") }
-        TocPrimary("4", stringResource(R.string.help_section_support)) { onScrollTo("support") }
+        TocPrimary("4", stringResource(R.string.tab_settings)) { onScrollTo("general") }
+        TocSecondary("4.1", stringResource(R.string.general_burn_in_section)) { onScrollTo("burn_in") }
+        TocSecondary("4.2", stringResource(R.string.general_color_scheme)) { onScrollTo("scheme") }
+        TocPrimary("5", stringResource(R.string.help_section_support)) { onScrollTo("support") }
     }
 }
 

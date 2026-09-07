@@ -22,7 +22,7 @@
     <!-- Help dialog content -->
     <string name="help_toc_title">Contents</string>
     <string name="settings_preview_title">Preview</string>
-    <string name="help_section_preview">Preview flag</string>
+    <string name="help_section_preview">Button preview</string>
     <string name="help_sub_select">Select a button</string>
     <string name="help_body_apps">The list shows all installed apps on your device. Enable an app to make the NavXS overlay appear whenever it is in the foreground. Use the search bar to filter by name, or toggle Show system apps to include system apps.</string>
     <string name="help_body_position">Opens a full-screen editor. Drag any active button to exactly where it should sit in the live overlay. Tap a button to select it without moving it. The reset icon restores all default positions. The precision panel moves the selected button by an exact pixel step size.</string>
@@ -39,7 +39,7 @@
     <string name="help_desc_bg_opacity">Transparency of the background circle.</string>
     <string name="help_desc_bg_size">Diameter of the circle relative to the icon.</string>
     <string name="help_desc_bg_softness">0 = hard edge; 100 = fully faded gradient edge.</string>
-    <string name="help_body_preview">The small flag at the top-right of the settings screen slides open a panel showing the selected button on white, grey, and black backgrounds — judge visibility on any app without leaving settings.</string>
+    <string name="help_body_preview">The tab with the eye icon at the top right of the Design &amp; layout screen slides open a panel showing the selected button on white, grey, and black backgrounds — judge visibility on any app without leaving the screen.</string>
     <string name="help_section_support">Support</string>
     <string name="help_body_support">For problems with this app, get support through the issue tracker.</string>
     <string name="help_support_email_intro">Or by email:</string>
@@ -110,4 +110,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Design &amp; layout</string>
+    <string name="settings_default_layout">Default layout</string>
+    <string name="settings_configuration_for">Configuration for</string>
+    <string name="settings_individual_design_layout">Individual design &amp; layout</string>
+    <string name="settings_individual_design_layout_description">Give this app its own buttons, positions and colours. When switched off the default layout is used.</string>
+    <string name="settings_copy_from">Copy from …</string>
+    <string name="settings_copy_dialog_title">Copy design &amp; layout</string>
+    <string name="settings_copy_dialog_warning">The current values of the target configuration are replaced.</string>
+    <string name="settings_copy_dialog_empty">There is no app with its own design and layout yet.</string>
+    <string name="settings_position_target">Editing: %1$s</string>
+    <string name="general_burn_in_section">Burn-in protection</string>
+    <string name="general_burn_in_title">Reduce burn-in risk</string>
+    <string name="general_burn_in_description">After about 45 seconds without input the button background is hidden and the icon is shown more faintly. A touch immediately restores the configured appearance. This reduces the risk of burn-in but cannot prevent it completely.</string>
+    <string name="general_appearance_section">Appearance</string>
+    <string name="general_color_scheme">Colour scheme</string>
+    <string name="general_color_scheme_description">Applies to the NavXS user interface only, not to the configured overlay colours.</string>
+    <string name="general_theme_system">System</string>
+    <string name="general_theme_light">Light</string>
+    <string name="general_theme_dark">Dark</string>
+    <string name="help_body_apps_configuration">Every app you enable here also appears in the configuration picker of the Design &amp; layout tab, so you can give it its own buttons later. Disabling an app removes it from that picker again; values you already set for it are kept.</string>
+    <string name="help_body_configuration_for">The picker at the top decides which configuration you are editing. Default layout applies to every enabled app that has no configuration of its own. Below it you find all currently enabled apps, sorted by name. After a restart NavXS always starts with Default layout.</string>
+    <string name="help_body_individual">This switch appears only when an app is selected. Switched off, the app follows the Default layout and all controls below are shown greyed out with the values that are actually in effect. Switched on, the app gets its own complete design and layout, and only that app is affected by your changes. The first time you switch it on the current Default layout is copied, so nothing changes visually. Switching it off keeps your individual values for later.</string>
+    <string name="help_body_copy_from">Copies a complete design and layout from another configuration into the one you are editing. This is a one-time copy: later changes to the source are not passed on. The current values of the target are replaced, so you are asked to confirm with OK before anything is copied.</string>
+    <string name="help_body_burn_in">Reduces the risk of screen burn-in on OLED displays. After about 45 seconds without input the button background is hidden completely and the icon is shown more faintly, never brighter than the opacity you configured. The first touch immediately restores the configured appearance and still performs the tap. The timer only runs while the real overlay is visible and the screen is on; the preview and the positioning editor are never affected. Your stored button settings are left untouched.</string>
+    <string name="help_body_color_scheme">Sets the colour scheme of the NavXS interface itself: System follows the device setting and reacts to changes while the app is running, Light and Dark force one of the two. This never affects the colours you configured for the real overlay buttons.</string>
+    <string name="help_sub_configuration">Choosing the configuration</string>
+    <string name="help_body_position_background_per_config">The background belongs to the configuration you are editing: the default layout and every app with its own design and layout keep their own screenshot and their own opacity.</string>
 </resources>

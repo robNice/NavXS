@@ -21,7 +21,7 @@
     <string name="help_dialog_title">도움말</string>
     <string name="help_toc_title">목차</string>
     <string name="settings_preview_title">미리보기</string>
-    <string name="help_section_preview">미리보기</string>
+    <string name="help_section_preview">버튼 미리보기</string>
     <string name="help_sub_select">버튼 선택</string>
     <string name="help_body_apps">목록에는 기기에 설치된 모든 앱이 표시됩니다. 앱을 활성화하면 해당 앱이 포그라운드에 있을 때 NavXS 오버레이가 나타납니다. 검색창으로 이름을 필터링하거나 시스템 앱 표시를 켜세요.</string>
     <string name="help_body_position">전체 화면 편집기를 엽니다. 활성 버튼을 라이브 오버레이에서 위치해야 할 곳으로 드래그하세요. 움직이지 않고 선택하려면 버튼을 탭하세요. 초기화 아이콘은 모든 기본 위치를 복원합니다. 정밀 패널은 선택한 버튼을 정확한 픽셀 단계로 이동합니다.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">배경 원의 투명도.</string>
     <string name="help_desc_bg_size">아이콘 대비 원의 지름.</string>
     <string name="help_desc_bg_softness">0 = 선명한 가장자리; 100 = 완전히 흐린 가장자리.</string>
-    <string name="help_body_preview">설정 화면 오른쪽 상단의 작은 탭을 열면 선택한 버튼을 흰색, 회색, 검은색 배경으로 보여주는 패널이 표시됩니다. 설정을 벗어나지 않고 어떤 앱에서도 가시성을 확인하세요.</string>
+    <string name="help_body_preview">‘디자인 및 레이아웃’ 화면 오른쪽 위의 눈 모양 아이콘 탭을 열면 선택한 버튼이 흰색, 회색, 검은색 배경 위에 표시됩니다. 화면을 벗어나지 않고도 어떤 앱에서든 잘 보이는지 확인할 수 있습니다.</string>
     <string name="help_section_support">지원</string>
     <string name="help_body_support">이 앱에 문제가 있으면 이슈 트래커를 통해 지원을 받으세요.</string>
     <string name="help_support_email_intro">또는 이메일로:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">확인</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">디자인 및 레이아웃</string>
+    <string name="settings_default_layout">기본 레이아웃</string>
+    <string name="settings_configuration_for">구성 대상</string>
+    <string name="settings_individual_design_layout">개별 디자인 및 레이아웃</string>
+    <string name="settings_individual_design_layout_description">이 앱에 고유한 버튼, 위치, 색상을 지정합니다. 꺼져 있으면 기본 레이아웃이 사용됩니다.</string>
+    <string name="settings_copy_from">복사 …</string>
+    <string name="settings_copy_dialog_title">디자인 및 레이아웃 복사</string>
+    <string name="settings_copy_dialog_warning">대상 구성의 현재 값이 대체됩니다.</string>
+    <string name="settings_copy_dialog_empty">아직 고유한 디자인과 레이아웃을 가진 앱이 없습니다.</string>
+    <string name="settings_position_target">편집 중: %1$s</string>
+    <string name="general_burn_in_section">번인 방지</string>
+    <string name="general_burn_in_title">번인 위험 줄이기</string>
+    <string name="general_burn_in_description">약 45초 동안 조작이 없으면 버튼 배경이 숨겨지고 아이콘이 흐리게 표시됩니다. 화면을 터치하면 설정한 모양이 즉시 복원됩니다. 위험을 줄여 주지만 번인을 완전히 막지는 못합니다.</string>
+    <string name="general_appearance_section">모양</string>
+    <string name="general_color_scheme">색 구성표</string>
+    <string name="general_color_scheme_description">NavXS 인터페이스에만 적용되며 설정한 오버레이 색상에는 적용되지 않습니다.</string>
+    <string name="general_theme_system">시스템</string>
+    <string name="general_theme_light">밝게</string>
+    <string name="general_theme_dark">어둡게</string>
+    <string name="help_body_apps_configuration">여기서 켠 앱은 \'디자인 및 레이아웃\' 탭의 구성 대상 목록에도 나타나며, 거기서 고유한 버튼을 지정할 수 있습니다. 앱을 끄면 목록에서 사라지지만 이미 설정한 값은 그대로 저장됩니다.</string>
+    <string name="help_body_configuration_for">맨 위 목록에서 어떤 구성을 편집할지 정합니다. 기본 레이아웃은 고유 구성이 없는 모든 사용 설정된 앱에 적용됩니다. 그 아래에는 현재 사용 설정된 앱이 이름순으로 표시됩니다. 재시작 후 NavXS는 항상 기본 레이아웃으로 시작합니다.</string>
+    <string name="help_body_individual">이 스위치는 앱을 선택했을 때만 나타납니다. 꺼져 있으면 앱은 기본 레이아웃을 따르고 아래의 모든 설정은 실제로 적용 중인 값과 함께 흐리게 표시됩니다. 켜면 앱이 완전히 고유한 디자인과 레이아웃을 갖게 되며 변경은 그 앱에만 적용됩니다. 처음 켤 때는 현재 기본 레이아웃이 복사되므로 겉보기에는 아무것도 바뀌지 않습니다. 다시 끄더라도 개별 값은 보존됩니다.</string>
+    <string name="help_body_copy_from">다른 구성에서 전체 디자인과 레이아웃을 지금 편집 중인 구성으로 복사합니다. 한 번만 복사되며, 이후 원본이 바뀌어도 반영되지 않습니다. 대상의 현재 값이 대체되므로 확인을 눌러야 실행됩니다.</string>
+    <string name="help_body_burn_in">OLED 화면의 번인 위험을 줄입니다. 약 45초 동안 조작이 없으면 버튼 배경이 완전히 숨겨지고 아이콘은 설정한 불투명도를 넘지 않는 범위에서 더 흐리게 표시됩니다. 처음 터치하면 설정한 모양이 즉시 복원되고 그 탭도 정상적으로 실행됩니다. 타이머는 실제 오버레이가 보이고 화면이 켜져 있는 동안에만 동작하며, 미리보기와 위치 편집 화면에는 적용되지 않습니다. 저장된 버튼 설정은 그대로 유지됩니다.</string>
+    <string name="help_body_color_scheme">NavXS 화면 자체의 색 구성표를 정합니다. 시스템은 기기 설정을 따르며 앱 실행 중의 변경에도 반응하고, 밝게와 어둡게는 둘 중 하나를 고정합니다. 실제 오버레이 버튼에 설정한 색상은 영향을 받지 않습니다.</string>
+    <string name="help_sub_configuration">구성 선택</string>
+    <string name="help_body_position_background_per_config">배경은 편집 중인 구성에 속합니다. 기본 레이아웃과 고유한 디자인을 가진 각 앱은 저마다의 스크린샷과 불투명도를 유지합니다.</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -42,6 +43,7 @@ class SettingsPositionOverlayTest {
                     onCommitMoveButtonPosition = { _, _, _ -> },
                     onCloseEditMode = {},
                     onOpenPrecision = {},
+                    targetLabel = "Default Layout",
                     onClosePrecision = {},
                     onStepChange = {},
                     onPrecisionMove = { _, _, _ -> },
@@ -91,6 +93,7 @@ class SettingsPositionOverlayTest {
                     onCommitMoveButtonPosition = { _, _, _ -> },
                     onCloseEditMode = {},
                     onOpenPrecision = {},
+                    targetLabel = "Default Layout",
                     onClosePrecision = {},
                     onStepChange = {},
                     onPrecisionMove = { _, _, _ -> },
@@ -134,5 +137,68 @@ class SettingsPositionOverlayTest {
 
         composeRule.onNodeWithTag("position_background_image").assertIsDisplayed()
         composeRule.onNodeWithTag("position_background_dots").assertDoesNotExist()
+    }
+
+    @Test
+    fun precisionButtonStaysVisibleAndDisabledWhilePrecisionIsOpen() {
+        composeRule.setContent {
+            MaterialTheme {
+                SettingsPositionOverlay(
+                    settings = NavDefaults.defaultOverlaySettings().copy(editMode = true),
+                    targetLabel = "Default Layout",
+                    precisionOpen = true,
+                    positionBackgroundUri = null,
+                    positionBackgroundAlpha = 100,
+                    positionBackgroundDialogOpen = false,
+                    onSelectButton = {},
+                    onCommitMoveButtonPosition = { _, _, _ -> },
+                    onCloseEditMode = {},
+                    onOpenPrecision = {},
+                    onClosePrecision = {},
+                    onStepChange = {},
+                    onPrecisionMove = { _, _, _ -> },
+                    onResetPosition = {},
+                    onRequestPositionBackground = {},
+                    onClearPositionBackground = {},
+                    onPositionBackgroundAlphaChange = {},
+                    onPositionBackgroundLoadError = {},
+                    onPositionBackgroundDialogOpenChange = {}
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag("precision_button").assertIsDisplayed().assertIsNotEnabled()
+    }
+
+    @Test
+    fun dragHintAndTargetLabelAreDisplayed() {
+        composeRule.setContent {
+            MaterialTheme {
+                SettingsPositionOverlay(
+                    settings = NavDefaults.defaultOverlaySettings().copy(editMode = true),
+                    targetLabel = "Default Layout",
+                    precisionOpen = false,
+                    positionBackgroundUri = null,
+                    positionBackgroundAlpha = 100,
+                    positionBackgroundDialogOpen = false,
+                    onSelectButton = {},
+                    onCommitMoveButtonPosition = { _, _, _ -> },
+                    onCloseEditMode = {},
+                    onOpenPrecision = {},
+                    onClosePrecision = {},
+                    onStepChange = {},
+                    onPrecisionMove = { _, _, _ -> },
+                    onResetPosition = {},
+                    onRequestPositionBackground = {},
+                    onClearPositionBackground = {},
+                    onPositionBackgroundAlphaChange = {},
+                    onPositionBackgroundLoadError = {},
+                    onPositionBackgroundDialogOpenChange = {}
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag("position_drag_hint").assertIsDisplayed()
+        composeRule.onNodeWithTag("position_target_label").assertIsDisplayed()
     }
 }

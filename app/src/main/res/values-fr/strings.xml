@@ -88,7 +88,7 @@
     <string name="position_value">%1$d px</string>
     <string name="help_toc_title">Sommaire</string>
     <string name="settings_preview_title">Aperçu</string>
-    <string name="help_section_preview">Aperçu</string>
+    <string name="help_section_preview">Aperçu du bouton</string>
     <string name="help_sub_select">Sélectionner un bouton</string>
     <string name="help_body_apps">La liste affiche toutes les apps installées sur votre appareil. Activez une app pour que l\'overlay NavXS apparaisse dès qu\'elle est au premier plan. Utilisez la barre de recherche pour filtrer par nom, ou activez Afficher les apps système.</string>
     <string name="help_body_position">Ouvre un éditeur plein écran. Faites glisser un bouton actif vers l\'endroit exact où il doit apparaître dans l\'overlay. Touchez un bouton pour le sélectionner sans le déplacer. L\'icône de réinitialisation restaure toutes les positions par défaut. Le panneau de précision déplace le bouton sélectionné d\'un pas exact en pixels.</string>
@@ -105,8 +105,35 @@
     <string name="help_desc_bg_opacity">Transparence du cercle d\'arrière-plan.</string>
     <string name="help_desc_bg_size">Diamètre du cercle par rapport à l\'icône.</string>
     <string name="help_desc_bg_softness">0 = bord net ; 100 = bord entièrement estompé.</string>
-    <string name="help_body_preview">Le petit onglet en haut à droite de l\'écran des paramètres ouvre un panneau latéral affichant le bouton sélectionné sur fond blanc, gris et noir — évaluez la visibilité sur n\'importe quelle app sans quitter les paramètres.</string>
+    <string name="help_body_preview">L\'onglet avec l\'icône en forme d\'œil, en haut à droite de l\'écran Design et disposition, ouvre un panneau montrant le bouton sélectionné sur fond blanc, gris et noir — vous jugez ainsi sa visibilité sur n\'importe quelle application sans quitter l\'écran.</string>
     <string name="help_section_support">Assistance</string>
     <string name="help_body_support">En cas de problème avec cette application, obtenez de l\'aide via le gestionnaire de tickets.</string>
     <string name="help_support_email_intro">Ou par e-mail :</string>
+    <string name="tab_design_layout">Design et disposition</string>
+    <string name="settings_default_layout">Disposition par défaut</string>
+    <string name="settings_configuration_for">Configuration pour</string>
+    <string name="settings_individual_design_layout">Design et disposition individuels</string>
+    <string name="settings_individual_design_layout_description">Donne à cette application ses propres boutons, positions et couleurs. Si l\'option est désactivée, la disposition par défaut est utilisée.</string>
+    <string name="settings_copy_from">Copier depuis …</string>
+    <string name="settings_copy_dialog_title">Copier le design et la disposition</string>
+    <string name="settings_copy_dialog_warning">Les valeurs actuelles de la configuration cible sont remplacées.</string>
+    <string name="settings_copy_dialog_empty">Aucune application ne possède encore son propre design et sa propre disposition.</string>
+    <string name="settings_position_target">Modification : %1$s</string>
+    <string name="general_burn_in_section">Protection contre le marquage</string>
+    <string name="general_burn_in_title">Réduire le risque de marquage</string>
+    <string name="general_burn_in_description">Après environ 45 secondes sans utilisation, l\'arrière-plan du bouton est masqué et l\'icône devient plus discrète. Un appui rétablit immédiatement l\'apparence configurée. Cela réduit le risque sans empêcher totalement le marquage.</string>
+    <string name="general_appearance_section">Apparence</string>
+    <string name="general_color_scheme">Thème de couleurs</string>
+    <string name="general_color_scheme_description">S\'applique uniquement à l\'interface de NavXS, pas aux couleurs configurées de la surcouche.</string>
+    <string name="general_theme_system">Système</string>
+    <string name="general_theme_light">Clair</string>
+    <string name="general_theme_dark">Sombre</string>
+    <string name="help_body_apps_configuration">Chaque application activée ici apparaît aussi dans le sélecteur de configuration de l\'onglet Design et disposition et peut y recevoir ses propres boutons. Si vous la désactivez, elle disparaît de ce sélecteur ; les valeurs déjà définies sont conservées.</string>
+    <string name="help_body_configuration_for">Le sélecteur en haut détermine la configuration que vous modifiez. La disposition par défaut s\'applique à toutes les applications activées sans configuration propre. En dessous figurent toutes les applications actuellement activées, triées par nom. Après un redémarrage, NavXS commence toujours par la disposition par défaut.</string>
+    <string name="help_body_individual">Cet interrupteur n\'apparaît que lorsqu\'une application est sélectionnée. Désactivé, l\'application suit la disposition par défaut et tous les réglages en dessous sont grisés avec les valeurs réellement appliquées. Activé, l\'application reçoit un design et une disposition entièrement propres et vos modifications ne concernent qu\'elle. Au premier activation, la disposition par défaut actuelle est copiée, donc rien ne change visuellement. En le désactivant, vos valeurs individuelles sont conservées.</string>
+    <string name="help_body_copy_from">Copie un design et une disposition complets depuis une autre configuration vers celle que vous modifiez. C\'est une copie unique : les modifications ultérieures de la source ne sont pas transmises. Les valeurs actuelles de la cible sont remplacées, une confirmation par OK est donc demandée.</string>
+    <string name="help_body_burn_in">Réduit le risque de marquage sur les écrans OLED. Après environ 45 secondes sans utilisation, l\'arrière-plan du bouton est entièrement masqué et l\'icône devient plus discrète, jamais plus lumineuse que l\'opacité configurée. Le premier appui rétablit immédiatement l\'apparence configurée et exécute normalement le même appui. Le minuteur ne tourne que tant que la surcouche réelle est visible et l\'écran allumé ; l\'aperçu et l\'éditeur de position ne sont jamais concernés. Vos réglages enregistrés restent intacts.</string>
+    <string name="help_body_color_scheme">Définit le thème de couleurs de l\'interface NavXS elle-même : Système suit le réglage de l\'appareil et réagit aux changements en cours d\'utilisation, Clair et Sombre en imposent un. Les couleurs que vous avez définies pour les vrais boutons de la surcouche ne sont jamais affectées.</string>
+    <string name="help_sub_configuration">Choisir la configuration</string>
+    <string name="help_body_position_background_per_config">L\'arrière-plan appartient à la configuration que vous modifiez : la disposition par défaut et chaque application ayant son propre design conservent leur propre capture d\'écran et leur propre opacité.</string>
 </resources>

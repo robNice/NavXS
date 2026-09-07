@@ -21,7 +21,7 @@
     <string name="help_dialog_title">ヘルプ</string>
     <string name="help_toc_title">目次</string>
     <string name="settings_preview_title">プレビュー</string>
-    <string name="help_section_preview">プレビュー</string>
+    <string name="help_section_preview">ボタンのプレビュー</string>
     <string name="help_sub_select">ボタンを選択</string>
     <string name="help_body_apps">リストにはデバイスにインストールされているすべてのアプリが表示されます。アプリを有効にすると、そのアプリがフォアグラウンドのときにNavXSオーバーレイが表示されます。検索バーで名前フィルタリングするか、システムアプリを表示をオンにしてください。</string>
     <string name="help_body_position">全画面エディターを開きます。アクティブなボタンをオーバーレイ内の正確な位置にドラッグします。移動せずに選択するにはボタンをタップしてください。リセットアイコンですべてのデフォルト位置に戻せます。精度パネルでは選択したボタンを正確なピクセル単位で移動できます。</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">背景円の透明度。</string>
     <string name="help_desc_bg_size">アイコンに対する円の直径。</string>
     <string name="help_desc_bg_softness">0 = くっきりしたエッジ；100 = 完全にぼかしたエッジ。</string>
-    <string name="help_body_preview">設定画面の右上にある小さなタブを開くと、選択したボタンを白・グレー・黒の背景で確認できるパネルが表示されます。設定を離れずにあらゆるアプリでの視認性を確認できます。</string>
+    <string name="help_body_preview">「デザインとレイアウト」画面の右上にある目のアイコンのタブを開くと、選択中のボタンが白・灰・黒の背景に表示されます。画面を離れずに、どのアプリでも見やすいかを確認できます。</string>
     <string name="help_section_support">サポート</string>
     <string name="help_body_support">このアプリに問題がある場合は、イシュートラッカーからサポートを受けられます。</string>
     <string name="help_support_email_intro">またはメールで:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">デザインとレイアウト</string>
+    <string name="settings_default_layout">デフォルトレイアウト</string>
+    <string name="settings_configuration_for">設定対象</string>
+    <string name="settings_individual_design_layout">個別のデザインとレイアウト</string>
+    <string name="settings_individual_design_layout_description">このアプリ専用のボタン、位置、色を設定します。オフの場合はデフォルトレイアウトが使われます。</string>
+    <string name="settings_copy_from">コピー元 …</string>
+    <string name="settings_copy_dialog_title">デザインとレイアウトをコピー</string>
+    <string name="settings_copy_dialog_warning">コピー先の現在の値は置き換えられます。</string>
+    <string name="settings_copy_dialog_empty">独自のデザインとレイアウトを持つアプリはまだありません。</string>
+    <string name="settings_position_target">編集中: %1$s</string>
+    <string name="general_burn_in_section">焼き付き防止</string>
+    <string name="general_burn_in_title">焼き付きのリスクを減らす</string>
+    <string name="general_burn_in_description">約45秒間操作がないとボタンの背景が非表示になり、アイコンが薄く表示されます。タッチするとすぐに設定した表示に戻ります。リスクは下がりますが、焼き付きを完全に防ぐことはできません。</string>
+    <string name="general_appearance_section">外観</string>
+    <string name="general_color_scheme">カラーテーマ</string>
+    <string name="general_color_scheme_description">NavXS の画面にのみ適用され、設定したオーバーレイの色には影響しません。</string>
+    <string name="general_theme_system">システム</string>
+    <string name="general_theme_light">ライト</string>
+    <string name="general_theme_dark">ダーク</string>
+    <string name="help_body_apps_configuration">ここで有効にしたアプリは「デザインとレイアウト」タブの設定対象の一覧にも表示され、そこで独自のボタンを設定できます。無効にすると一覧から消えますが、設定済みの値は保存されたままです。</string>
+    <string name="help_body_configuration_for">上部の一覧で、どの設定を編集するかを選びます。デフォルトレイアウトは、独自の設定を持たないすべての有効なアプリに適用されます。その下には現在有効なアプリが名前順に並びます。再起動後、NavXS は常にデフォルトレイアウトから始まります。</string>
+    <string name="help_body_individual">このスイッチはアプリを選んでいるときだけ表示されます。オフのときはアプリがデフォルトレイアウトに従い、下の項目はすべて実際に有効な値のままグレー表示になります。オンにするとアプリが完全に独自のデザインとレイアウトを持ち、変更はそのアプリだけに反映されます。初めてオンにしたときは現在のデフォルトレイアウトがコピーされるため、見た目は変わりません。オフにしても個別の値は保存されたままです。</string>
+    <string name="help_body_copy_from">別の設定から完全なデザインとレイアウトを、編集中の設定にコピーします。これは一度きりのコピーで、後からコピー元を変更しても反映されません。コピー先の現在の値は置き換えられるため、OK で確認してから実行されます。</string>
+    <string name="help_body_burn_in">OLED ディスプレイの焼き付きリスクを下げます。約45秒間操作がないとボタンの背景が完全に非表示になり、アイコンは設定した不透明度を超えない範囲で薄く表示されます。最初のタッチで設定どおりの表示がすぐに戻り、そのタップも通常どおり実行されます。タイマーは実際のオーバーレイが表示され画面が点いている間だけ動作し、プレビューと位置調整画面には影響しません。保存したボタン設定が書き換わることはありません。</string>
+    <string name="help_body_color_scheme">NavXS の画面自体のカラーテーマを設定します。システムは端末の設定に従い、アプリの起動中の変更にも追従します。ライトとダークはどちらかを固定します。実際のオーバーレイボタン用に設定した色は影響を受けません。</string>
+    <string name="help_sub_configuration">設定対象の選択</string>
+    <string name="help_body_position_background_per_config">背景は編集中の設定ごとに保存されます。デフォルトレイアウトと、独自のデザインを持つ各アプリは、それぞれ専用のスクリーンショットと不透明度を保持します。</string>
 </resources>

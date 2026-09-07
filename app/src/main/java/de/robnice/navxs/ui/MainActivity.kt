@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NavXsTheme {
-                val state = viewModel.uiState.collectAsStateWithLifecycle()
+            val state = viewModel.uiState.collectAsStateWithLifecycle()
+            NavXsTheme(appThemeMode = state.value.appThemeMode) {
                 val snackbarHostState = remember { SnackbarHostState() }
                 LaunchedEffect(state.value.message) {
                     state.value.message?.let {

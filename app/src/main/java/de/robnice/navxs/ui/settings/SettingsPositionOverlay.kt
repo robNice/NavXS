@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -27,6 +29,9 @@ import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Slider
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -49,6 +54,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -64,6 +70,7 @@ import kotlin.math.roundToInt
 @Composable
 fun SettingsPositionOverlay(
     settings: OverlaySettings,
+    targetLabel: String,
     precisionOpen: Boolean,
     positionBackgroundUri: String?,
     positionBackgroundAlpha: Int,
@@ -165,9 +172,10 @@ fun SettingsPositionOverlay(
                 Offset(button.positionXPx.toFloat(), button.positionYPx.toFloat())
             }
             if (
-                settlingButtonType != null &&
-                settlingPosition != null &&
-                persistedPositions[settlingButtonType] == settlingPosition
+                matchesPersistedPosition(
+                    persisted = settlingButtonType?.let(persistedPositions::get),
+                    settling = settlingPosition
+                )
             ) {
                 settlingButtonType = null
                 settlingPosition = null
@@ -223,12 +231,17 @@ fun SettingsPositionOverlay(
                         TAG,
                         "commitDrag type=$commitType target=$localPosition"
                     )
-                    localButtonPositions = localButtonPositions + (commitType to localPosition)
+                    val committedPosition = roundToPixel(localPosition)
+                    localButtonPositions = localButtonPositions + (commitType to committedPosition)
                     settlingButtonType = commitType
-                    settlingPosition = localPosition
+                    settlingPosition = committedPosition
                     dragPreviewPosition = null
-                    if (localPosition.x.roundToInt() != persistedButton.positionXPx || localPosition.y.roundToInt() != persistedButton.positionYPx) {
-                        onCommitMoveButtonPosition(commitType, localPosition.x.roundToInt(), localPosition.y.roundToInt())
+                    if (committedPosition.x.roundToInt() != persistedButton.positionXPx || committedPosition.y.roundToInt() != persistedButton.positionYPx) {
+                        onCommitMoveButtonPosition(
+                            commitType,
+                            committedPosition.x.roundToInt(),
+                            committedPosition.y.roundToInt()
+                        )
                     }
                     isDragging = false
                 }
@@ -243,12 +256,46 @@ fun SettingsPositionOverlay(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.settings_drag_hint),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.88f),
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tonalElevation = 3.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .widthIn(max = 420.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text(
+                            text = targetLabel,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.testTag("position_target_label")
+                        )
+                        Text(
+                            text = stringResource(R.string.settings_drag_hint),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.testTag("position_drag_hint")
+                        )
+                    }
+                }
+                Card(
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.88f)
+                    )
+                ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
+                ) {
                     FilledTonalIconButton(onClick = onCloseEditMode) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
@@ -278,13 +325,15 @@ fun SettingsPositionOverlay(
                             contentDescription = stringResource(R.string.settings_reset_position)
                         )
                     }
-                    if (!precisionOpen) {
-                        FilledTonalIconButton(onClick = onOpenPrecision) {
-                            Icon(
-                                imageVector = Icons.Outlined.OpenWith,
-                                contentDescription = stringResource(R.string.settings_open_precision)
-                            )
-                        }
+                    FilledTonalIconButton(
+                        onClick = onOpenPrecision,
+                        enabled = !precisionOpen,
+                        modifier = Modifier.testTag("precision_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.OpenWith,
+                            contentDescription = stringResource(R.string.settings_open_precision)
+                        )
                     }
                     FilledTonalIconButton(
                         onClick = {
@@ -298,6 +347,7 @@ fun SettingsPositionOverlay(
                             contentDescription = stringResource(R.string.settings_position_background_manage)
                         )
                     }
+                }
                 }
             }
             if (precisionOpen) {
@@ -314,6 +364,8 @@ fun SettingsPositionOverlay(
                             val currentPos = localButtonPositions[type] ?: return@PrecisionControls
                             val newPos = Offset(currentPos.x + dx, currentPos.y + dy)
                             localButtonPositions = localButtonPositions + (type to newPos)
+                            settlingButtonType = null
+                            settlingPosition = null
                             onPrecisionMove(type, newPos.x.roundToInt(), newPos.y.roundToInt())
                         },
                         onResetPosition = {
@@ -445,3 +497,19 @@ private sealed interface PositionBackgroundLoadState {
     data class Loaded(val image: ImageBitmap) : PositionBackgroundLoadState
     data class Failed(val uri: String) : PositionBackgroundLoadState
 }
+
+
+/**
+ * A drag ends on fractional pixels while the repository stores whole pixels. Comparing the raw
+ * values would never match, the settling state would never be released, and the preview would keep
+ * drawing the button at the frozen settling position - which is why precision steps looked as if
+ * they did nothing until the editor was reopened.
+ */
+internal fun matchesPersistedPosition(persisted: Offset?, settling: Offset?): Boolean {
+    if (persisted == null || settling == null) return false
+    return roundToPixel(persisted) == roundToPixel(settling)
+}
+
+/** Snaps a position to whole pixels, the resolution the repository actually stores. */
+internal fun roundToPixel(position: Offset): Offset =
+    Offset(position.x.roundToInt().toFloat(), position.y.roundToInt().toFloat())

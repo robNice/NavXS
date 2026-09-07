@@ -13,10 +13,13 @@ import de.robnice.navxs.accessibility.NavigationAccessibilityService
 import de.robnice.navxs.data.InstalledAppsRepository
 import de.robnice.navxs.data.NavDefaults
 import de.robnice.navxs.data.SettingsRepository
+import de.robnice.navxs.data.models.AppOverlayConfiguration
+import de.robnice.navxs.data.models.AppThemeMode
 import de.robnice.navxs.data.models.InstalledAppInfo
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
 import de.robnice.navxs.domain.ButtonSettingsUseCase
+import de.robnice.navxs.domain.OverlayConfigurationResolver
 import de.robnice.navxs.overlay.OverlayViewport
 import de.robnice.navxs.ui.settings.PositionBackgroundImageLoader
 import kotlinx.coroutines.CancellationException
@@ -24,7 +27,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -38,6 +43,9 @@ data class MainUiState(
     val accessibilityEnabled: Boolean = false,
     val appsLoading: Boolean = false,
     val settings: OverlaySettings = NavDefaults.defaultOverlaySettings(),
+    val defaultSettings: OverlaySettings = NavDefaults.defaultOverlaySettings(),
+    val appConfigurations: Map<String, AppOverlayConfiguration> = emptyMap(),
+    val selectedConfigurationPackage: String? = null,
     val selectedApps: Set<String> = emptySet(),
     val installedApps: List<InstalledAppInfo> = emptyList(),
     val selectedTabIndex: Int = 0,
@@ -47,6 +55,8 @@ data class MainUiState(
     val positionBackgroundDialogOpen: Boolean = false,
     val positionBackgroundUri: String? = null,
     val positionBackgroundAlpha: Int = SettingsRepository.DefaultPositionBackgroundAlpha,
+    val appThemeMode: AppThemeMode = AppThemeMode.SYSTEM,
+    val burnInProtectionEnabled: Boolean = false,
     val message: String? = null
 )
 
@@ -78,6 +88,18 @@ private data class AccessibilitySelectionState(
     val selectedApps: Set<String>
 )
 
+private data class DesignConfigurationState(
+    val configurations: Map<String, AppOverlayConfiguration>,
+    val selectedPackage: String?,
+    val positionBackgroundUri: String?,
+    val positionBackgroundAlpha: Int
+)
+
+private data class GeneralPreferencesState(
+    val appThemeMode: AppThemeMode,
+    val burnInProtectionEnabled: Boolean
+)
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val settingsRepository = SettingsRepository.create(application)
     private val installedAppsRepository = InstalledAppsRepository(application)
@@ -93,6 +115,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val accessibilityCheckComplete = MutableStateFlow(false)
     private val appsLoading = MutableStateFlow(false)
     private val installedApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
+    private val selectedConfigurationPackage = MutableStateFlow<String?>(null)
     private val appsScanMutex = Mutex()
     private val positionBackgroundMutex = Mutex()
     private var appsScanned = false
@@ -107,21 +130,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
     private val installedAppsFlow: Flow<List<InstalledAppInfo>> = combine(
-        combine(installedApps, settingsRepository.selectedAppsFlow) { apps, selectedApps ->
-            apps to selectedApps
-        },
-        settingsRepository.showSystemAppsFlow,
-        searchQuery
-    ) { (apps, selectedApps), showSystemApps, query ->
+        installedApps,
+        settingsRepository.selectedAppsFlow
+    ) { apps, selectedApps ->
         apps
             .map { app -> app.copy(enabled = app.packageName in selectedApps) }
-            .filter { showSystemApps || !it.systemApp }
-            .filter {
-                query.isBlank() ||
-                    it.appName.contains(query, ignoreCase = true) ||
-                    it.packageName.contains(query, ignoreCase = true)
-            }
             .sortedWith(compareByDescending<InstalledAppInfo> { it.enabled }.thenBy { it.appName.lowercase() })
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val designConfigurationFlow: Flow<DesignConfigurationState> =
+        selectedConfigurationPackage.flatMapLatest { selectedPackage ->
+            combine(
+                settingsRepository.appConfigurationsFlow,
+                settingsRepository.positionBackgroundUriFlow(selectedPackage),
+                settingsRepository.positionBackgroundAlphaFlow(selectedPackage)
+            ) { configurations, backgroundUri, backgroundAlpha ->
+                DesignConfigurationState(
+                    configurations = configurations,
+                    selectedPackage = selectedPackage,
+                    positionBackgroundUri = backgroundUri,
+                    positionBackgroundAlpha = backgroundAlpha
+                )
+            }
+        }
+
+    private val generalPreferencesFlow: Flow<GeneralPreferencesState> = combine(
+        settingsRepository.appThemeModeFlow,
+        settingsRepository.burnInProtectionEnabledFlow
+    ) { appThemeMode, burnInProtectionEnabled ->
+        GeneralPreferencesState(appThemeMode, burnInProtectionEnabled)
     }
 
     private val uiStateBaseFlow: Flow<MainUiState> =
@@ -153,10 +191,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 positionBackgroundAlpha = SettingsRepository.DefaultPositionBackgroundAlpha,
                 appsLoading = false
             )
-        }.combine(settingsRepository.positionBackgroundUriFlow) { base, backgroundUri ->
-            base.copy(positionBackgroundUri = backgroundUri)
-        }.combine(settingsRepository.positionBackgroundAlphaFlow) { base, backgroundAlpha ->
-            base.copy(positionBackgroundAlpha = backgroundAlpha)
         }.combine(settingsRepository.showSystemAppsFlow) { base, showSystemApps ->
             base.copy(showSystemApps = showSystemApps)
         }.combine(searchQuery) { base, query ->
@@ -185,9 +219,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
 
-    val uiState: StateFlow<MainUiState> = combine(uiStateBaseFlow, installedAppsFlow) { state, apps ->
-        state.copy(installedApps = apps)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MainUiState(accessibilityCheckComplete = false))
+    val uiState: StateFlow<MainUiState> = combine(
+        uiStateBaseFlow,
+        installedAppsFlow,
+        designConfigurationFlow,
+        generalPreferencesFlow
+    ) { state, apps, designConfiguration, generalPreferences ->
+        val validSelectedPackage = designConfiguration.selectedPackage
+            ?.takeIf { it in state.selectedApps }
+        val effectiveSettings = OverlayConfigurationResolver.resolve(
+            defaultSettings = state.settings,
+            packageName = validSelectedPackage,
+            appConfigurations = designConfiguration.configurations
+        )
+        state.copy(
+            settings = effectiveSettings,
+            defaultSettings = state.settings,
+            appConfigurations = designConfiguration.configurations,
+            selectedConfigurationPackage = validSelectedPackage,
+            positionBackgroundUri = designConfiguration.positionBackgroundUri,
+            positionBackgroundAlpha = designConfiguration.positionBackgroundAlpha,
+            installedApps = apps,
+            appThemeMode = generalPreferences.appThemeMode,
+            burnInProtectionEnabled = generalPreferences.burnInProtectionEnabled
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        MainUiState(accessibilityCheckComplete = false)
+    )
 
     fun refreshAccessibilityStatus() {
         viewModelScope.launch {
@@ -236,26 +296,60 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun selectDesignConfiguration(packageName: String?) {
+        selectedConfigurationPackage.value = packageName?.takeIf { it in uiState.value.selectedApps }
+    }
+
+    fun setIndividualDesignLayoutEnabled(enabled: Boolean) {
+        val packageName = uiState.value.selectedConfigurationPackage ?: return
+        viewModelScope.launch {
+            settingsRepository.setIndividualAppConfigurationEnabled(packageName, enabled)
+        }
+    }
+
+    fun copyDesignConfigurationFrom(sourcePackageName: String?) {
+        val state = uiState.value
+        val targetPackageName = state.selectedConfigurationPackage
+        val sourceSettings = if (sourcePackageName == null) {
+            state.defaultSettings
+        } else {
+            val sourceConfiguration = state.appConfigurations[sourcePackageName]
+                ?.takeIf { it.individualEnabled }
+                ?: return
+            state.defaultSettings.copy(buttons = sourceConfiguration.buttons)
+        }
+        val copiedButtons = OverlayConfigurationResolver.copyButtons(sourceSettings)
+        viewModelScope.launch {
+            if (targetPackageName == null) {
+                settingsRepository.saveSettings(state.defaultSettings.copy(buttons = copiedButtons, editMode = false))
+            } else if (state.appConfigurations[targetPackageName]?.individualEnabled == true) {
+                settingsRepository.saveAppConfiguration(targetPackageName, copiedButtons)
+            }
+        }
+    }
+
     fun setSelectedButton(type: NavButtonType) {
-        persist(buttonSettingsUseCase.selectButton(uiState.value.settings, type))
+        viewModelScope.launch {
+            settingsRepository.setSelectedButtonType(type)
+        }
     }
 
     fun setActive(type: NavButtonType, active: Boolean) {
         val result = buttonSettingsUseCase.setActive(uiState.value.settings, type, active)
-        result.onSuccess(::persist)
+        result.onSuccess(::persistCurrentConfiguration)
         result.onFailure {
             message.value = getApplication<Application>().getString(R.string.error_last_active_button)
         }
     }
 
     fun setColor(type: NavButtonType, colorArgb: Long) =
-        persist(buttonSettingsUseCase.setColor(uiState.value.settings, type, colorArgb))
+        persistCurrentConfiguration(buttonSettingsUseCase.setColor(uiState.value.settings, type, colorArgb))
 
     fun setOpacity(type: NavButtonType, opacity: Float) =
-        persist(buttonSettingsUseCase.setOpacity(uiState.value.settings, type, opacity))
+        persistCurrentConfiguration(buttonSettingsUseCase.setOpacity(uiState.value.settings, type, opacity))
 
     fun setSize(type: NavButtonType, sizePercent: Int) =
-        persist(
+        persistCurrentConfiguration(
             buttonSettingsUseCase.setSizePercent(
                 uiState.value.settings,
                 type,
@@ -265,19 +359,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
 
     fun setBackgroundColor(type: NavButtonType, colorArgb: Long) =
-        persist(buttonSettingsUseCase.setBackgroundColor(uiState.value.settings, type, colorArgb))
+        persistCurrentConfiguration(buttonSettingsUseCase.setBackgroundColor(uiState.value.settings, type, colorArgb))
 
     fun setBackgroundOpacity(type: NavButtonType, opacity: Float) =
-        persist(buttonSettingsUseCase.setBackgroundOpacity(uiState.value.settings, type, opacity))
+        persistCurrentConfiguration(buttonSettingsUseCase.setBackgroundOpacity(uiState.value.settings, type, opacity))
 
     fun setBackgroundSize(type: NavButtonType, sizePercent: Int) =
-        persist(buttonSettingsUseCase.setBackgroundSizePercent(uiState.value.settings, type, sizePercent))
+        persistCurrentConfiguration(buttonSettingsUseCase.setBackgroundSizePercent(uiState.value.settings, type, sizePercent))
 
     fun setBackgroundSoftness(type: NavButtonType, softnessPercent: Int) =
-        persist(buttonSettingsUseCase.setBackgroundSoftnessPercent(uiState.value.settings, type, softnessPercent))
+        persistCurrentConfiguration(buttonSettingsUseCase.setBackgroundSoftnessPercent(uiState.value.settings, type, softnessPercent))
 
     fun setTheme(type: NavButtonType, themeId: String) =
-        persist(buttonSettingsUseCase.setTheme(uiState.value.settings, type, themeId))
+        persistCurrentConfiguration(buttonSettingsUseCase.setTheme(uiState.value.settings, type, themeId))
 
     fun setEditMode(editMode: Boolean) {
         this.editMode.value = editMode
@@ -293,11 +387,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         setEditMode(false)
     }
 
-    fun setPrecisionStep(stepPx: Int) =
-        persist(buttonSettingsUseCase.setPrecisionStep(uiState.value.settings, stepPx))
+    fun setPrecisionStep(stepPx: Int) {
+        val sanitized = buttonSettingsUseCase.setPrecisionStep(uiState.value.settings, stepPx).precisionStepPx
+        viewModelScope.launch {
+            settingsRepository.setPrecisionStep(sanitized)
+        }
+    }
 
     fun moveSelectedButton(deltaX: Float, deltaY: Float) {
-        persist(
+        persistCurrentConfiguration(
             buttonSettingsUseCase.moveBy(
                 uiState.value.settings,
                 uiState.value.settings.selectedButtonType,
@@ -312,7 +410,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setButtonPosition(type: NavButtonType, x: Int, y: Int) {
-        persist(
+        persistCurrentConfiguration(
             buttonSettingsUseCase.setPosition(
                 uiState.value.settings,
                 type,
@@ -323,7 +421,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun resetSelectedButtonPosition() {
-        persist(
+        persistCurrentConfiguration(
             buttonSettingsUseCase.resetPosition(
                 uiState.value.settings,
                 uiState.value.settings.selectedButtonType,
@@ -333,7 +431,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setButtonPositions(positions: Map<NavButtonType, Pair<Int, Int>>) {
-        persist(
+        persistCurrentConfiguration(
             buttonSettingsUseCase.setPositions(
                 uiState.value.settings,
                 positions
@@ -350,7 +448,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             positionBackgroundMutex.withLock {
                 val resolver = getApplication<Application>().contentResolver
                 val uriString = uri.toString()
-                val previousUri = settingsRepository.positionBackgroundUriFlow.first()
+                val targetPackage = uiState.value.selectedConfigurationPackage
+                val previousUri = settingsRepository.positionBackgroundUriFlow(targetPackage).first()
                 val alreadyPersisted = hasPersistedReadPermission(uri)
                 var permissionAdded = false
                 try {
@@ -359,9 +458,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         permissionAdded = true
                     }
                     positionBackgroundImageLoader.validate(uri)
-                    settingsRepository.setPositionBackgroundUri(uriString)
+                    settingsRepository.setPositionBackgroundUri(uriString, targetPackage)
                     if (previousUri != null && previousUri != uriString) {
-                        releasePersistedReadPermission(Uri.parse(previousUri))
+                        releaseUnusedReadPermission(previousUri)
                     }
                 } catch (exception: Exception) {
                     if (exception is CancellationException) throw exception
@@ -381,7 +480,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setPositionBackgroundAlpha(alpha: Int) {
         viewModelScope.launch {
-            settingsRepository.setPositionBackgroundAlpha(alpha)
+            settingsRepository.setPositionBackgroundAlpha(
+                alpha = alpha,
+                packageName = uiState.value.selectedConfigurationPackage
+            )
+        }
+    }
+
+    fun setAppThemeMode(mode: AppThemeMode) {
+        viewModelScope.launch {
+            settingsRepository.setAppThemeMode(mode)
+        }
+    }
+
+    fun setBurnInProtectionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setBurnInProtectionEnabled(enabled)
         }
     }
 
@@ -394,6 +508,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun toggleApp(packageName: String, enabled: Boolean) {
+        if (!enabled && selectedConfigurationPackage.value == packageName) {
+            selectedConfigurationPackage.value = null
+        }
         viewModelScope.launch {
             val next = uiState.value.selectedApps.toMutableSet()
             if (enabled) next += packageName else next -= packageName
@@ -412,15 +529,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun clearPositionBackground(expectedUri: String?, showError: Boolean) {
         viewModelScope.launch {
             positionBackgroundMutex.withLock {
-                val currentUri = settingsRepository.positionBackgroundUriFlow.first()
+                val targetPackage = uiState.value.selectedConfigurationPackage
+                val currentUri = settingsRepository.positionBackgroundUriFlow(targetPackage).first()
                 if (expectedUri != null && currentUri != expectedUri) return@withLock
-                settingsRepository.setPositionBackgroundUri(null)
-                currentUri?.let { releasePersistedReadPermission(Uri.parse(it)) }
+                settingsRepository.setPositionBackgroundUri(null, targetPackage)
+                currentUri?.let { releaseUnusedReadPermission(it) }
                 if (showError) {
                     message.value = getApplication<Application>().getString(R.string.error_position_background_load)
                 }
             }
         }
+    }
+
+    /**
+     * Releases the read permission of a background image only when no other configuration still
+     * refers to it - the same image may be shared between the default layout and several apps.
+     */
+    private suspend fun releaseUnusedReadPermission(uriString: String) {
+        if (settingsRepository.positionBackgroundUrisInUse().contains(uriString)) return
+        releasePersistedReadPermission(Uri.parse(uriString))
     }
 
     private fun hasPersistedReadPermission(uri: Uri): Boolean = runCatching {
@@ -454,9 +581,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun persist(settings: OverlaySettings) {
+    private fun persistCurrentConfiguration(settings: OverlaySettings) {
+        val state = uiState.value
+        val targetPackageName = state.selectedConfigurationPackage
         viewModelScope.launch {
-            settingsRepository.saveSettings(settings.copy(editMode = false))
+            if (targetPackageName == null) {
+                settingsRepository.saveSettings(settings.copy(editMode = false))
+            } else if (state.appConfigurations[targetPackageName]?.individualEnabled == true) {
+                settingsRepository.saveAppConfiguration(targetPackageName, settings.buttons)
+            }
         }
     }
 }

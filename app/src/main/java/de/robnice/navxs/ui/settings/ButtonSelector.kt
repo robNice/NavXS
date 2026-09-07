@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -27,9 +28,11 @@ import de.robnice.navxs.domain.ThemeRegistry
 @Composable
 fun ButtonSelector(
     selectedType: NavButtonType,
+    enabled: Boolean = true,
     onSelected: (NavButtonType) -> Unit
 ) {
     Surface(
+        modifier = Modifier.alpha(if (enabled) 1f else 0.45f),
         shape = MaterialTheme.shapes.medium,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         color = MaterialTheme.colorScheme.surface
@@ -45,7 +48,7 @@ fun ButtonSelector(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clickable { onSelected(type) }
+                        .clickable(enabled = enabled) { onSelected(type) }
                 ) {
                     Surface(
                         modifier = Modifier

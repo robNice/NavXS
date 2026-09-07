@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -53,6 +54,7 @@ fun ColorPicker(
     Box(
         modifier = Modifier
             .size(40.dp)
+            .alpha(if (enabled) 1f else 0.45f)
             .background(Color(selectedColor), CircleShape)
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
             .clickable(enabled = enabled) { dialogOpen = true },

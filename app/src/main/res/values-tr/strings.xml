@@ -21,7 +21,7 @@
     <string name="help_dialog_title">Yardım</string>
     <string name="help_toc_title">İçindekiler</string>
     <string name="settings_preview_title">Önizleme</string>
-    <string name="help_section_preview">Önizleme</string>
+    <string name="help_section_preview">Düğme önizlemesi</string>
     <string name="help_sub_select">Düğme seç</string>
     <string name="help_body_apps">Liste, cihazınızda yüklü tüm uygulamaları gösterir. Bir uygulamayı etkinleştirerek NavXS katmanının o uygulama ön plandayken görünmesini sağlayın. Ada göre filtrelemek için arama çubuğunu kullanın veya Sistem uygulamalarını göster seçeneğini açın.</string>
     <string name="help_body_position">Tam ekran bir düzenleyici açar. Aktif düğmeleri canlı katmandaki konumlarına sürükleyin. Hareket ettirmeden seçmek için bir düğmeye dokunun. Sıfırlama simgesi tüm varsayılan konumları geri yükler. Hassas panel, seçilen düğmeyi tam piksel adımıyla hareket ettirir.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">Arka plan dairesinin saydamlığı.</string>
     <string name="help_desc_bg_size">Dairenin simgeye göre çapı.</string>
     <string name="help_desc_bg_softness">0 = sert kenar; 100 = tamamen yumuşatılmış kenar.</string>
-    <string name="help_body_preview">Ayarlar ekranının sağ üst köşesindeki küçük sekme, seçili düğmeyi beyaz, gri ve siyah arka planlarda gösteren bir panel açar — ayarlardan çıkmadan herhangi bir uygulamada görünürlüğü değerlendirin.</string>
+    <string name="help_body_preview">Tasarım ve düzen ekranının sağ üst köşesindeki göz simgeli sekme, seçili düğmeyi beyaz, gri ve siyah zeminde gösteren bir panel açar; böylece ekrandan çıkmadan görünürlüğü her uygulama için değerlendirebilirsiniz.</string>
     <string name="help_section_support">Destek</string>
     <string name="help_body_support">Bu uygulamayla ilgili sorunlarda issue tracker üzerinden destek alabilirsiniz.</string>
     <string name="help_support_email_intro">Veya e-posta ile:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">Tamam</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Tasarım ve düzen</string>
+    <string name="settings_default_layout">Varsayılan düzen</string>
+    <string name="settings_configuration_for">Şunun için yapılandırma</string>
+    <string name="settings_individual_design_layout">Bireysel tasarım ve düzen</string>
+    <string name="settings_individual_design_layout_description">Bu uygulamaya kendi düğmelerini, konumlarını ve renklerini verir. Kapalıyken varsayılan düzen kullanılır.</string>
+    <string name="settings_copy_from">Şuradan kopyala …</string>
+    <string name="settings_copy_dialog_title">Tasarım ve düzeni kopyala</string>
+    <string name="settings_copy_dialog_warning">Hedef yapılandırmanın mevcut değerleri değiştirilir.</string>
+    <string name="settings_copy_dialog_empty">Henüz kendi tasarımı ve düzeni olan bir uygulama yok.</string>
+    <string name="settings_position_target">Düzenleniyor: %1$s</string>
+    <string name="general_burn_in_section">Ekran yanması koruması</string>
+    <string name="general_burn_in_title">Ekran yanması riskini azalt</string>
+    <string name="general_burn_in_description">Yaklaşık 45 saniye kullanılmadığında düğme arka planı gizlenir ve simge daha soluk gösterilir. Dokunulduğunda ayarlanan görünüm hemen geri gelir. Bu, riski azaltır ancak ekran yanmasını tamamen önleyemez.</string>
+    <string name="general_appearance_section">Görünüm</string>
+    <string name="general_color_scheme">Renk şeması</string>
+    <string name="general_color_scheme_description">Yalnızca NavXS arayüzü için geçerlidir, ayarlanan yer paylaşımı renkleri için değil.</string>
+    <string name="general_theme_system">Sistem</string>
+    <string name="general_theme_light">Açık</string>
+    <string name="general_theme_dark">Koyu</string>
+    <string name="help_body_apps_configuration">Burada etkinleştirdiğiniz her uygulama, Tasarım ve düzen sekmesindeki yapılandırma seçicisinde de görünür ve orada kendi düğmelerini alabilir. Devre dışı bırakırsanız o listeden kaybolur; daha önce ayarladığınız değerler saklı kalır.</string>
+    <string name="help_body_configuration_for">Üstteki seçici, hangi yapılandırmayı düzenlediğinizi belirler. Varsayılan düzen, kendi yapılandırması olmayan tüm etkin uygulamalar için geçerlidir. Altında, ada göre sıralanmış olarak o an etkin olan tüm uygulamalar bulunur. Yeniden başlatmadan sonra NavXS her zaman varsayılan düzenle başlar.</string>
+    <string name="help_body_individual">Bu anahtar yalnızca bir uygulama seçiliyken görünür. Kapalıyken uygulama varsayılan düzeni izler ve aşağıdaki tüm denetimler, gerçekten geçerli olan değerlerle soluk gösterilir. Açıkken uygulama tümüyle kendine ait bir tasarım ve düzen alır ve değişiklikleriniz yalnızca o uygulamayı etkiler. İlk açtığınızda mevcut varsayılan düzen kopyalanır, bu yüzden görünüşte hiçbir şey değişmez. Kapattığınızda kendi değerleriniz saklanır.</string>
+    <string name="help_body_copy_from">Başka bir yapılandırmadan eksiksiz bir tasarım ve düzeni, düzenlediğiniz yapılandırmaya kopyalar. Bu tek seferlik bir kopyadır: kaynakta sonradan yapılan değişiklikler aktarılmaz. Hedefin mevcut değerleri değiştirileceği için OK ile onay istenir.</string>
+    <string name="help_body_burn_in">OLED ekranlarda yanma riskini azaltır. Yaklaşık 45 saniye kullanılmadığında düğme arka planı tamamen gizlenir ve simge daha soluk gösterilir; hiçbir zaman ayarladığınız saydamlıktan daha parlak olmaz. İlk dokunuş, ayarlanan görünümü hemen geri getirir ve aynı dokunuşu normal şekilde uygular. Sayaç yalnızca gerçek yer paylaşımı görünürken ve ekran açıkken çalışır; önizleme ile konumlandırma düzenleyicisi hiçbir zaman etkilenmez. Kayıtlı düğme ayarlarınız değişmeden kalır.</string>
+    <string name="help_body_color_scheme">NavXS arayüzünün renk şemasını belirler: Sistem, cihaz ayarını izler ve uygulama çalışırken yapılan değişikliklere de tepki verir; Açık ve Koyu bunlardan birini zorunlu kılar. Gerçek yer paylaşımı düğmeleri için ayarladığınız renkler bundan hiç etkilenmez.</string>
+    <string name="help_sub_configuration">Yapılandırmayı seçme</string>
+    <string name="help_body_position_background_per_config">Arka plan, düzenlediğiniz yapılandırmaya aittir: varsayılan düzen ve kendi tasarımı olan her uygulama kendi ekran görüntüsünü ve kendi saydamlığını korur.</string>
 </resources>

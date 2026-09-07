@@ -9,6 +9,8 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -36,12 +38,37 @@ class OverlayController(
     private var lastRenderedSettings: OverlaySettings? = null
     private var showing = false
     private var nextPressId = 1L
+    private val idleHandler = Handler(Looper.getMainLooper())
+    private val idleRunnable = Runnable { enterIdleMode() }
+    private var burnInProtectionEnabled = false
+    private var screenInteractive = true
+    private var idle = false
+
+    /** Enables or disables the global burn-in protection at runtime. */
+    fun setBurnInProtectionEnabled(enabled: Boolean) {
+        if (burnInProtectionEnabled == enabled) return
+        burnInProtectionEnabled = enabled
+        if (enabled) {
+            restartIdleTimer()
+        } else {
+            cancelIdleTimer()
+            leaveIdleMode()
+        }
+    }
+
+    /** Keeps the protection timer from running while the screen is off. */
+    fun setScreenInteractive(interactive: Boolean) {
+        if (screenInteractive == interactive) return
+        screenInteractive = interactive
+        if (interactive) restartIdleTimer() else cancelIdleTimer()
+    }
 
     fun show(settings: OverlaySettings) {
         Log.d(TAG, "show active=${settings.buttons.values.count { it.active }} showing=$showing")
         if (render(settings)) {
             lastRenderedSettings = settings
             showing = true
+            if (idle) applyIdleAppearance() else restartIdleTimer()
         } else {
             hide()
         }
@@ -56,6 +83,68 @@ class OverlayController(
         buttonViews.clear()
         lastRenderedSettings = null
         showing = false
+        cancelIdleTimer()
+        idle = false
+    }
+
+    private fun restartIdleTimer() {
+        cancelIdleTimer()
+        if (!burnInProtectionEnabled || !screenInteractive || !showing) return
+        idleHandler.postDelayed(idleRunnable, IDLE_DELAY_MS)
+    }
+
+    private fun cancelIdleTimer() {
+        idleHandler.removeCallbacks(idleRunnable)
+    }
+
+    private fun enterIdleMode() {
+        if (!burnInProtectionEnabled || !showing) return
+        idle = true
+        applyIdleAppearance()
+    }
+
+    private fun leaveIdleMode() {
+        if (!idle) return
+        idle = false
+        lastRenderedSettings?.let { settings ->
+            settings.buttons.values.filter { it.active }.forEach { button ->
+                buttonViews[button.type]?.let { view -> applyAppearance(view, button, idle = false) }
+            }
+        }
+    }
+
+    private fun applyIdleAppearance() {
+        val settings = lastRenderedSettings ?: return
+        settings.buttons.values.filter { it.active }.forEach { button ->
+            buttonViews[button.type]?.let { view -> applyAppearance(view, button, idle = true) }
+        }
+    }
+
+    /**
+     * Applies the runtime-only appearance. In idle mode the button background is hidden completely
+     * and the icon keeps at most the configured opacity, reduced by [IDLE_OPACITY_FACTOR].
+     */
+    private fun applyAppearance(view: FrameLayout, button: OverlayButtonConfig, idle: Boolean) {
+        val backgroundView = view.findViewById<FrameLayout>(VIEW_ID_BACKGROUND)
+        val imageView = view.findViewById<ImageView>(VIEW_ID_ICON)
+        val textView = view.findViewById<TextView>(VIEW_ID_TEXT)
+        val effectiveOpacity = if (idle) idleOpacity(button.opacity) else button.opacity
+        backgroundView.visibility = when {
+            idle -> FrameLayout.GONE
+            button.backgroundOpacity > 0f -> FrameLayout.VISIBLE
+            else -> FrameLayout.GONE
+        }
+        if (imageView.visibility == ImageView.VISIBLE) {
+            imageView.alpha = effectiveOpacity
+        }
+        if (textView.visibility == TextView.VISIBLE) {
+            textView.setTextColor(applyAlpha(button.colorArgb.toInt(), effectiveOpacity))
+        }
+    }
+
+    private fun onUserInteraction() {
+        if (idle) leaveIdleMode()
+        restartIdleTimer()
     }
 
     private fun render(settings: OverlaySettings): Boolean {
@@ -230,6 +319,7 @@ class OverlayController(
                 event.y <= touchedView.height
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    onUserInteraction()
                     activePressId = nextPressId++
                     downUptimeMs = event.eventTime
                     Log.d(
@@ -298,6 +388,15 @@ class OverlayController(
         const val VIEW_ID_TEXT = 1002
     }
 }
+
+/**
+ * Effective icon opacity while the burn-in protection rests. Never higher than the configured value.
+ */
+internal fun idleOpacity(opacity: Float): Float =
+    (opacity.coerceIn(0f, 1f) * IDLE_OPACITY_FACTOR).coerceAtMost(opacity.coerceIn(0f, 1f))
+
+internal const val IDLE_OPACITY_FACTOR = 0.35f
+internal const val IDLE_DELAY_MS = 45_000L
 
 internal fun iconSizePx(sizePercent: Int, density: Float): Int =
     max(((32 * sizePercent) / 100f * density).toInt(), (16 * density).toInt())

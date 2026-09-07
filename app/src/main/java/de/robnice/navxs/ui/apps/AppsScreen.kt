@@ -53,8 +53,15 @@ fun AppsScreen(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val enabledApps = state.installedApps.filter { it.enabled }
-    val disabledApps = state.installedApps.filterNot { it.enabled }
+    val displayedApps = state.installedApps
+        .filter { state.showSystemApps || !it.systemApp }
+        .filter { app ->
+            state.searchQuery.isBlank() ||
+                app.appName.contains(state.searchQuery, ignoreCase = true) ||
+                app.packageName.contains(state.searchQuery, ignoreCase = true)
+        }
+    val enabledApps = displayedApps.filter { it.enabled }
+    val disabledApps = displayedApps.filterNot { it.enabled }
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)

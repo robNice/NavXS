@@ -34,7 +34,10 @@ class SettingsScreenTest {
                 onBackgroundSizeChange = { _, _ -> },
                 onBackgroundSoftnessChange = { _, _ -> },
                 onThemeChange = { _, _ -> },
-                onOpenEditMode = {}
+                onOpenEditMode = {},
+                onSelectConfiguration = {},
+                onIndividualConfigurationChange = {},
+                onCopyConfiguration = {}
             )
         }
 

@@ -21,7 +21,7 @@
     <string name="help_dialog_title">Ayuda</string>
     <string name="help_toc_title">Contenido</string>
     <string name="settings_preview_title">Vista previa</string>
-    <string name="help_section_preview">Vista previa</string>
+    <string name="help_section_preview">Vista previa del botón</string>
     <string name="help_sub_select">Seleccionar botón</string>
     <string name="help_body_apps">La lista muestra todas las apps instaladas en tu dispositivo. Activa una app para que el overlay de NavXS aparezca cuando esté en primer plano. Usa la barra de búsqueda para filtrar por nombre, o activa Mostrar apps del sistema.</string>
     <string name="help_body_position">Abre un editor a pantalla completa. Arrastra cualquier botón activo exactamente donde debe aparecer en el overlay. Toca un botón para seleccionarlo sin moverlo. El icono de reinicio restaura todas las posiciones predeterminadas. El panel de precisión mueve el botón seleccionado un paso exacto en píxeles.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">Transparencia del círculo de fondo.</string>
     <string name="help_desc_bg_size">Diámetro del círculo relativo al icono.</string>
     <string name="help_desc_bg_softness">0 = borde nítido; 100 = borde completamente difuminado.</string>
-    <string name="help_body_preview">La pequeña pestaña en la parte superior derecha de la pantalla de ajustes abre un panel con el botón seleccionado sobre fondos blanco, gris y negro — evalúa la visibilidad en cualquier app sin salir de los ajustes.</string>
+    <string name="help_body_preview">La pestaña con el icono de ojo, arriba a la derecha de la pantalla Diseño y disposición, despliega un panel con el botón seleccionado sobre fondos blanco, gris y negro: así valoras su visibilidad en cualquier aplicación sin salir de la pantalla.</string>
     <string name="help_section_support">Soporte</string>
     <string name="help_body_support">Si tienes problemas con esta app, obtén ayuda a través del rastreador de incidencias.</string>
     <string name="help_support_email_intro">O por correo electrónico:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Diseño y disposición</string>
+    <string name="settings_default_layout">Disposición predeterminada</string>
+    <string name="settings_configuration_for">Configuración para</string>
+    <string name="settings_individual_design_layout">Diseño y disposición individuales</string>
+    <string name="settings_individual_design_layout_description">Da a esta aplicación sus propios botones, posiciones y colores. Si está desactivado se usa la disposición predeterminada.</string>
+    <string name="settings_copy_from">Copiar de …</string>
+    <string name="settings_copy_dialog_title">Copiar diseño y disposición</string>
+    <string name="settings_copy_dialog_warning">Se sustituirán los valores actuales de la configuración de destino.</string>
+    <string name="settings_copy_dialog_empty">Todavía no hay ninguna aplicación con diseño y disposición propios.</string>
+    <string name="settings_position_target">Editando: %1$s</string>
+    <string name="general_burn_in_section">Protección contra quemado</string>
+    <string name="general_burn_in_title">Reducir el riesgo de quemado</string>
+    <string name="general_burn_in_description">Tras unos 45 segundos sin uso, el fondo del botón se oculta y el icono se muestra más tenue. Un toque restaura de inmediato el aspecto configurado. Esto reduce el riesgo, pero no evita el quemado por completo.</string>
+    <string name="general_appearance_section">Apariencia</string>
+    <string name="general_color_scheme">Esquema de color</string>
+    <string name="general_color_scheme_description">Solo se aplica a la interfaz de NavXS, no a los colores configurados de la superposición.</string>
+    <string name="general_theme_system">Sistema</string>
+    <string name="general_theme_light">Claro</string>
+    <string name="general_theme_dark">Oscuro</string>
+    <string name="help_body_apps_configuration">Cada aplicación que actives aquí aparece también en el selector de configuración de la pestaña Diseño y disposición, donde después puede recibir sus propios botones. Si la desactivas, desaparece de ese selector; los valores ya definidos se conservan.</string>
+    <string name="help_body_configuration_for">El selector de arriba determina qué configuración estás editando. La disposición predeterminada se aplica a todas las aplicaciones activadas que no tienen una configuración propia. Debajo aparecen todas las aplicaciones activadas, ordenadas por nombre. Tras reiniciar, NavXS siempre empieza con la disposición predeterminada.</string>
+    <string name="help_body_individual">Este interruptor solo aparece cuando hay una aplicación seleccionada. Desactivado, la aplicación sigue la disposición predeterminada y todos los controles inferiores se muestran atenuados con los valores realmente en vigor. Activado, la aplicación recibe un diseño y una disposición totalmente propios y tus cambios solo la afectan a ella. La primera vez que lo activas se copia la disposición predeterminada actual, así que nada cambia visualmente. Al desactivarlo, tus valores individuales se conservan.</string>
+    <string name="help_body_copy_from">Copia un diseño y una disposición completos desde otra configuración a la que estás editando. Es una copia única: los cambios posteriores en el origen no se transmiten. Los valores actuales del destino se sustituyen, por eso se pide confirmación con OK.</string>
+    <string name="help_body_burn_in">Reduce el riesgo de quemado en pantallas OLED. Tras unos 45 segundos sin uso, el fondo del botón se oculta por completo y el icono se muestra más tenue, nunca más brillante que la opacidad configurada. El primer toque restaura de inmediato el aspecto configurado y ejecuta ese mismo toque con normalidad. El temporizador solo corre mientras la superposición real está visible y la pantalla encendida; la vista previa y el editor de posición nunca se ven afectados. Tus ajustes guardados no se modifican.</string>
+    <string name="help_body_color_scheme">Define el esquema de color de la interfaz de NavXS: Sistema sigue el ajuste del dispositivo y reacciona a los cambios con la aplicación en marcha, Claro y Oscuro fuerzan uno de los dos. Los colores que configuraste para los botones reales de la superposición nunca se ven afectados.</string>
+    <string name="help_sub_configuration">Elegir la configuración</string>
+    <string name="help_body_position_background_per_config">El fondo pertenece a la configuración que estás editando: la disposición predeterminada y cada aplicación con diseño propio conservan su propia captura y su propia opacidad.</string>
 </resources>

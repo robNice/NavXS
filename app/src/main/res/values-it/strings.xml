@@ -21,7 +21,7 @@
     <string name="help_dialog_title">Guida</string>
     <string name="help_toc_title">Indice</string>
     <string name="settings_preview_title">Anteprima</string>
-    <string name="help_section_preview">Anteprima</string>
+    <string name="help_section_preview">Anteprima del pulsante</string>
     <string name="help_sub_select">Seleziona un pulsante</string>
     <string name="help_body_apps">L\'elenco mostra tutte le app installate sul dispositivo. Attiva un\'app per far apparire l\'overlay NavXS quando è in primo piano. Usa la barra di ricerca per filtrare per nome, o attiva Mostra app di sistema.</string>
     <string name="help_body_position">Apre un editor a schermo intero. Trascina un pulsante attivo esattamente dove deve apparire nell\'overlay. Tocca un pulsante per selezionarlo senza spostarlo. L\'icona di ripristino restaura tutte le posizioni predefinite. Il pannello di precisione sposta il pulsante selezionato di un passo esatto in pixel.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">Trasparenza del cerchio di sfondo.</string>
     <string name="help_desc_bg_size">Diametro del cerchio relativo all\'icona.</string>
     <string name="help_desc_bg_softness">0 = bordo netto; 100 = bordo completamente sfumato.</string>
-    <string name="help_body_preview">La piccola linguetta in alto a destra della schermata impostazioni apre un pannello con il pulsante selezionato su sfondi bianco, grigio e nero — valuta la visibilità su qualsiasi app senza uscire dalle impostazioni.</string>
+    <string name="help_body_preview">La linguetta con l\'icona a forma di occhio, in alto a destra nella schermata Design e layout, apre un pannello che mostra il pulsante selezionato su sfondo bianco, grigio e nero: così valuti la visibilità su qualsiasi app senza uscire dalla schermata.</string>
     <string name="help_section_support">Supporto</string>
     <string name="help_body_support">In caso di problemi con questa app, ricevi supporto tramite l\'issue tracker.</string>
     <string name="help_support_email_intro">Oppure via e-mail:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Design e layout</string>
+    <string name="settings_default_layout">Layout predefinito</string>
+    <string name="settings_configuration_for">Configurazione per</string>
+    <string name="settings_individual_design_layout">Design e layout individuali</string>
+    <string name="settings_individual_design_layout_description">Assegna a questa app pulsanti, posizioni e colori propri. Se disattivato viene usato il layout predefinito.</string>
+    <string name="settings_copy_from">Copia da …</string>
+    <string name="settings_copy_dialog_title">Copia design e layout</string>
+    <string name="settings_copy_dialog_warning">I valori attuali della configurazione di destinazione vengono sostituiti.</string>
+    <string name="settings_copy_dialog_empty">Non esiste ancora nessuna app con design e layout propri.</string>
+    <string name="settings_position_target">Modifica: %1$s</string>
+    <string name="general_burn_in_section">Protezione dal burn-in</string>
+    <string name="general_burn_in_title">Riduci il rischio di burn-in</string>
+    <string name="general_burn_in_description">Dopo circa 45 secondi di inattività lo sfondo del pulsante viene nascosto e l\'icona appare più tenue. Un tocco ripristina subito l\'aspetto configurato. Questo riduce il rischio, ma non impedisce completamente il burn-in.</string>
+    <string name="general_appearance_section">Aspetto</string>
+    <string name="general_color_scheme">Schema di colori</string>
+    <string name="general_color_scheme_description">Vale solo per l\'interfaccia di NavXS, non per i colori configurati dell\'overlay.</string>
+    <string name="general_theme_system">Sistema</string>
+    <string name="general_theme_light">Chiaro</string>
+    <string name="general_theme_dark">Scuro</string>
+    <string name="help_body_apps_configuration">Ogni app che attivi qui compare anche nel selettore di configurazione della scheda Design e layout, dove può ricevere pulsanti propri. Se la disattivi, sparisce da quel selettore; i valori già impostati restano salvati.</string>
+    <string name="help_body_configuration_for">Il selettore in alto stabilisce quale configurazione stai modificando. Il layout predefinito vale per ogni app attivata senza una configurazione propria. Sotto trovi tutte le app attualmente attivate, ordinate per nome. Dopo un riavvio NavXS parte sempre dal layout predefinito.</string>
+    <string name="help_body_individual">Questo interruttore compare solo quando è selezionata un\'app. Se è disattivato, l\'app segue il layout predefinito e tutti i controlli sottostanti appaiono in grigio con i valori realmente in vigore. Se è attivato, l\'app riceve un design e un layout completamente propri e le modifiche riguardano solo quell\'app. Alla prima attivazione viene copiato il layout predefinito attuale, quindi nulla cambia visivamente. Disattivandolo, i valori individuali restano conservati.</string>
+    <string name="help_body_copy_from">Copia un design e un layout completi da un\'altra configurazione in quella che stai modificando. È una copia una tantum: le modifiche successive all\'originale non vengono trasmesse. I valori attuali della destinazione vengono sostituiti, perciò viene chiesta conferma con OK.</string>
+    <string name="help_body_burn_in">Riduce il rischio di burn-in sugli schermi OLED. Dopo circa 45 secondi di inattività lo sfondo del pulsante viene nascosto del tutto e l\'icona appare più tenue, mai più luminosa dell\'opacità configurata. Il primo tocco ripristina subito l\'aspetto configurato ed esegue normalmente lo stesso tocco. Il timer va solo finché l\'overlay reale è visibile e lo schermo è acceso; l\'anteprima e l\'editor di posizione non sono mai coinvolti. Le impostazioni salvate restano invariate.</string>
+    <string name="help_body_color_scheme">Imposta lo schema di colori dell\'interfaccia di NavXS: Sistema segue l\'impostazione del dispositivo e reagisce ai cambi durante l\'uso, Chiaro e Scuro ne impongono uno. I colori impostati per i pulsanti reali dell\'overlay non vengono mai toccati.</string>
+    <string name="help_sub_configuration">Scegliere la configurazione</string>
+    <string name="help_body_position_background_per_config">Lo sfondo appartiene alla configurazione che stai modificando: il layout predefinito e ogni app con design proprio mantengono il proprio screenshot e la propria opacità.</string>
 </resources>

@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.robnice.navxs.R
 import de.robnice.navxs.ui.apps.AppsScreen
+import de.robnice.navxs.ui.settings.GeneralSettingsScreen
 import de.robnice.navxs.ui.settings.SettingsPositionOverlay
 import de.robnice.navxs.ui.settings.SettingsScreen
 import java.nio.charset.StandardCharsets
@@ -89,6 +90,7 @@ fun MainTabsScreen(
     val headerDivider = if (darkTheme) Color(0xFF1B2A3C) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
     val tabs = listOf(
         stringResource(R.string.tab_apps),
+        stringResource(R.string.tab_design_layout),
         stringResource(R.string.tab_settings)
     )
 
@@ -163,11 +165,14 @@ fun MainTabsScreen(
                         onRescanApps = viewModel::rescanInstalledApps,
                         onAppToggle = viewModel::toggleApp
                     )
-                    else -> SettingsScreen(
+                    1 -> SettingsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(start = 16.dp, top = 16.dp, end = 0.dp, bottom = 96.dp),
                         state = state,
+                        onSelectConfiguration = viewModel::selectDesignConfiguration,
+                        onIndividualConfigurationChange = viewModel::setIndividualDesignLayoutEnabled,
+                        onCopyConfiguration = viewModel::copyDesignConfigurationFrom,
                         onSelectButton = viewModel::setSelectedButton,
                         onActiveChange = viewModel::setActive,
                         onColorChange = viewModel::setColor,
@@ -179,6 +184,14 @@ fun MainTabsScreen(
                         onBackgroundSoftnessChange = viewModel::setBackgroundSoftness,
                         onThemeChange = viewModel::setTheme,
                         onOpenEditMode = viewModel::openEditMode
+                    )
+                    else -> GeneralSettingsScreen(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 96.dp),
+                        state = state,
+                        onBurnInProtectionChange = viewModel::setBurnInProtectionEnabled,
+                        onAppThemeModeChange = viewModel::setAppThemeMode
                     )
                 }
 
@@ -213,8 +226,12 @@ fun MainTabsScreen(
         }
 
         if (selectedTabIndex == 1 && (state.settings.editMode || state.precisionDialogOpen)) {
+            val targetName = state.selectedConfigurationPackage?.let { packageName ->
+                state.installedApps.firstOrNull { it.packageName == packageName }?.appName ?: packageName
+            } ?: stringResource(R.string.settings_default_layout)
             SettingsPositionOverlay(
                 settings = state.settings,
+                targetLabel = stringResource(R.string.settings_position_target, targetName),
                 precisionOpen = state.precisionDialogOpen,
                 positionBackgroundUri = state.positionBackgroundUri,
                 positionBackgroundAlpha = state.positionBackgroundAlpha,

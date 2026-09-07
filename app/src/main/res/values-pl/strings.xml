@@ -21,7 +21,7 @@
     <string name="help_dialog_title">Pomoc</string>
     <string name="help_toc_title">Spis treści</string>
     <string name="settings_preview_title">Podgląd</string>
-    <string name="help_section_preview">Podgląd</string>
+    <string name="help_section_preview">Podgląd przycisku</string>
     <string name="help_sub_select">Wybierz przycisk</string>
     <string name="help_body_apps">Lista pokazuje wszystkie zainstalowane aplikacje na urządzeniu. Włącz aplikację, aby nakładka NavXS pojawiała się, gdy jest na pierwszym planie. Użyj paska wyszukiwania, aby filtrować według nazwy, lub włącz Pokaż aplikacje systemowe.</string>
     <string name="help_body_position">Otwiera edytor pełnoekranowy. Przeciągnij aktywny przycisk dokładnie tam, gdzie ma się pojawić w nakładce. Dotknij przycisku, aby go wybrać bez przesuwania. Ikona resetowania przywraca wszystkie domyślne pozycje. Panel precyzji przesuwa wybrany przycisk o dokładny krok w pikselach.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">Przezroczystość kółka tła.</string>
     <string name="help_desc_bg_size">Średnica kółka względem ikony.</string>
     <string name="help_desc_bg_softness">0 = ostry brzeg; 100 = całkowicie rozmyty brzeg.</string>
-    <string name="help_body_preview">Mała zakładka w prawym górnym rogu ekranu ustawień otwiera panel z wybranym przyciskiem na białym, szarym i czarnym tle — oceń widoczność na dowolnej aplikacji bez opuszczania ustawień.</string>
+    <string name="help_body_preview">Zakładka z ikoną oka w prawym górnym rogu ekranu Wygląd i układ rozwija panel z wybranym przyciskiem na białym, szarym i czarnym tle — dzięki temu ocenisz widoczność w każdej aplikacji bez opuszczania ekranu.</string>
     <string name="help_section_support">Wsparcie</string>
     <string name="help_body_support">W razie problemów z tą aplikacją uzyskasz pomoc przez issue tracker.</string>
     <string name="help_support_email_intro">Lub e-mailem:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Wygląd i układ</string>
+    <string name="settings_default_layout">Układ domyślny</string>
+    <string name="settings_configuration_for">Konfiguracja dla</string>
+    <string name="settings_individual_design_layout">Indywidualny wygląd i układ</string>
+    <string name="settings_individual_design_layout_description">Nadaje tej aplikacji własne przyciski, pozycje i kolory. Gdy przełącznik jest wyłączony, używany jest układ domyślny.</string>
+    <string name="settings_copy_from">Kopiuj z …</string>
+    <string name="settings_copy_dialog_title">Skopiuj wygląd i układ</string>
+    <string name="settings_copy_dialog_warning">Bieżące wartości konfiguracji docelowej zostaną zastąpione.</string>
+    <string name="settings_copy_dialog_empty">Nie ma jeszcze aplikacji z własnym wyglądem i układem.</string>
+    <string name="settings_position_target">Edycja: %1$s</string>
+    <string name="general_burn_in_section">Ochrona przed wypaleniem</string>
+    <string name="general_burn_in_title">Zmniejsz ryzyko wypalenia</string>
+    <string name="general_burn_in_description">Po około 45 sekundach bez obsługi tło przycisku zostaje ukryte, a ikona jest wyświetlana słabiej. Dotknięcie natychmiast przywraca skonfigurowany wygląd. Zmniejsza to ryzyko, ale nie zapobiega wypaleniu całkowicie.</string>
+    <string name="general_appearance_section">Wygląd aplikacji</string>
+    <string name="general_color_scheme">Schemat kolorów</string>
+    <string name="general_color_scheme_description">Dotyczy tylko interfejsu NavXS, a nie skonfigurowanych kolorów nakładki.</string>
+    <string name="general_theme_system">Systemowy</string>
+    <string name="general_theme_light">Jasny</string>
+    <string name="general_theme_dark">Ciemny</string>
+    <string name="help_body_apps_configuration">Każda włączona tutaj aplikacja pojawia się też na liście konfiguracji w karcie Wygląd i układ i może tam otrzymać własne przyciski. Po wyłączeniu znika z tej listy; już ustawione wartości pozostają zapisane.</string>
+    <string name="help_body_configuration_for">Lista na górze decyduje, którą konfigurację edytujesz. Układ domyślny obowiązuje dla każdej włączonej aplikacji bez własnej konfiguracji. Poniżej znajdują się wszystkie obecnie włączone aplikacje, posortowane według nazwy. Po ponownym uruchomieniu NavXS zawsze zaczyna od układu domyślnego.</string>
+    <string name="help_body_individual">Ten przełącznik pojawia się tylko przy wybranej aplikacji. Gdy jest wyłączony, aplikacja korzysta z układu domyślnego, a wszystkie ustawienia poniżej są wyszarzone i pokazują faktycznie obowiązujące wartości. Gdy jest włączony, aplikacja otrzymuje w pełni własny wygląd i układ, a zmiany dotyczą tylko jej. Przy pierwszym włączeniu kopiowany jest bieżący układ domyślny, więc nic nie zmienia się wizualnie. Po wyłączeniu Twoje indywidualne wartości pozostają zachowane.</string>
+    <string name="help_body_copy_from">Kopiuje pełny wygląd i układ z innej konfiguracji do tej, którą edytujesz. To jednorazowa kopia: późniejsze zmiany w źródle nie są przenoszone. Bieżące wartości celu zostają zastąpione, dlatego trzeba potwierdzić przyciskiem OK.</string>
+    <string name="help_body_burn_in">Zmniejsza ryzyko wypalenia ekranów OLED. Po około 45 sekundach bez obsługi tło przycisku zostaje całkowicie ukryte, a ikona jest wyświetlana słabiej, nigdy jaśniej niż ustawiona krycie. Pierwsze dotknięcie natychmiast przywraca skonfigurowany wygląd i normalnie wykonuje to samo dotknięcie. Licznik działa tylko wtedy, gdy prawdziwa nakładka jest widoczna, a ekran włączony; podgląd i edytor pozycji nigdy nie są objęte. Zapisane ustawienia przycisków pozostają nienaruszone.</string>
+    <string name="help_body_color_scheme">Ustawia schemat kolorów samego interfejsu NavXS: Systemowy podąża za ustawieniem urządzenia i reaguje na zmiany podczas działania aplikacji, Jasny i Ciemny wymuszają jeden z nich. Kolory ustawione dla prawdziwych przycisków nakładki pozostają nietknięte.</string>
+    <string name="help_sub_configuration">Wybór konfiguracji</string>
+    <string name="help_body_position_background_per_config">Tło należy do edytowanej konfiguracji: układ domyślny i każda aplikacja z własnym wyglądem zachowują własny zrzut ekranu i własne krycie.</string>
 </resources>

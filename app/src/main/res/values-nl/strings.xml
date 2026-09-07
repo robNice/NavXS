@@ -21,7 +21,7 @@
     <string name="help_dialog_title">Help</string>
     <string name="help_toc_title">Inhoud</string>
     <string name="settings_preview_title">Voorbeeld</string>
-    <string name="help_section_preview">Voorbeeld</string>
+    <string name="help_section_preview">Knopvoorbeeld</string>
     <string name="help_sub_select">Knop selecteren</string>
     <string name="help_body_apps">De lijst toont alle geïnstalleerde apps op je apparaat. Activeer een app zodat de NavXS-overlay verschijnt wanneer die app op de voorgrond is. Gebruik de zoekbalk om op naam te filteren, of schakel Systeemapps tonen in.</string>
     <string name="help_body_position">Opent een schermvullende editor. Sleep een actieve knop naar precies de positie die hij in de live-overlay moet innemen. Tik op een knop om hem te selecteren zonder hem te verplaatsen. Het terugzetpictogram herstelt alle standaardposities. Het precisiepaneel verplaatst de geselecteerde knop met een exact pixelstapgrootte.</string>
@@ -38,7 +38,7 @@
     <string name="help_desc_bg_opacity">Transparantie van de achtergrondcirkel.</string>
     <string name="help_desc_bg_size">Diameter van de cirkel ten opzichte van het pictogram.</string>
     <string name="help_desc_bg_softness">0 = scherpe rand; 100 = volledig vervaagde rand.</string>
-    <string name="help_body_preview">Het kleine tabje rechtsboven in het instellingenscherm opent een paneel met de geselecteerde knop op witte, grijze en zwarte achtergronden — beoordeel de zichtbaarheid op elke app zonder de instellingen te verlaten.</string>
+    <string name="help_body_preview">Het tabje met het oogpictogram rechtsboven in het scherm Ontwerp en indeling opent een paneel met de gekozen knop op een witte, grijze en zwarte achtergrond — zo beoordeel je de zichtbaarheid op elke app zonder het scherm te verlaten.</string>
     <string name="help_section_support">Ondersteuning</string>
     <string name="help_body_support">Bij problemen met deze app krijg je ondersteuning via de issue tracker.</string>
     <string name="help_support_email_intro">Of per e-mail:</string>
@@ -109,4 +109,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Ontwerp en indeling</string>
+    <string name="settings_default_layout">Standaardindeling</string>
+    <string name="settings_configuration_for">Configuratie voor</string>
+    <string name="settings_individual_design_layout">Individueel ontwerp en indeling</string>
+    <string name="settings_individual_design_layout_description">Geeft deze app eigen knoppen, posities en kleuren. Staat de schakelaar uit, dan wordt de standaardindeling gebruikt.</string>
+    <string name="settings_copy_from">Kopiëren van …</string>
+    <string name="settings_copy_dialog_title">Ontwerp en indeling kopiëren</string>
+    <string name="settings_copy_dialog_warning">De huidige waarden van de doelconfiguratie worden vervangen.</string>
+    <string name="settings_copy_dialog_empty">Er is nog geen app met een eigen ontwerp en indeling.</string>
+    <string name="settings_position_target">Bewerken: %1$s</string>
+    <string name="general_burn_in_section">Inbrandbeveiliging</string>
+    <string name="general_burn_in_title">Inbrandrisico verkleinen</string>
+    <string name="general_burn_in_description">Na ongeveer 45 seconden zonder bediening wordt de knopachtergrond verborgen en wordt het pictogram zwakker weergegeven. Een aanraking herstelt direct de ingestelde weergave. Dit verkleint het risico, maar voorkomt inbranden niet volledig.</string>
+    <string name="general_appearance_section">Weergave</string>
+    <string name="general_color_scheme">Kleurenschema</string>
+    <string name="general_color_scheme_description">Geldt alleen voor de NavXS-interface, niet voor de ingestelde overlaykleuren.</string>
+    <string name="general_theme_system">Systeem</string>
+    <string name="general_theme_light">Licht</string>
+    <string name="general_theme_dark">Donker</string>
+    <string name="help_body_apps_configuration">Elke app die je hier inschakelt, verschijnt ook in de configuratiekiezer van het tabblad Ontwerp en indeling en kan daar eigen knoppen krijgen. Schakel je een app uit, dan verdwijnt die uit die keuzelijst; al ingestelde waarden blijven bewaard.</string>
+    <string name="help_body_configuration_for">De keuzelijst bovenaan bepaalt welke configuratie je bewerkt. De standaardindeling geldt voor elke ingeschakelde app zonder eigen configuratie. Daaronder staan alle momenteel ingeschakelde apps, op naam gesorteerd. Na een herstart begint NavXS altijd met de standaardindeling.</string>
+    <string name="help_body_individual">Deze schakelaar verschijnt alleen als er een app is gekozen. Staat hij uit, dan volgt de app de standaardindeling en worden alle onderliggende instellingen grijs weergegeven met de waarden die echt gelden. Staat hij aan, dan krijgt de app een volledig eigen ontwerp en indeling en gelden je wijzigingen alleen voor die app. Bij de eerste keer inschakelen wordt de huidige standaardindeling gekopieerd, zodat er visueel niets verandert. Bij uitschakelen blijven je eigen waarden bewaard.</string>
+    <string name="help_body_copy_from">Kopieert een volledig ontwerp en indeling uit een andere configuratie naar de configuratie die je bewerkt. Het is een eenmalige kopie: latere wijzigingen aan de bron worden niet doorgegeven. De huidige waarden van het doel worden vervangen, daarom wordt met OK bevestigd.</string>
+    <string name="help_body_burn_in">Verkleint het risico op inbranden bij OLED-schermen. Na ongeveer 45 seconden zonder bediening wordt de knopachtergrond volledig verborgen en wordt het pictogram zwakker getoond, nooit helderder dan de ingestelde dekking. De eerste aanraking herstelt direct de ingestelde weergave en voert diezelfde tik gewoon uit. De timer loopt alleen zolang de echte overlay zichtbaar is en het scherm aan staat; het voorbeeld en de positie-editor blijven altijd buiten schot. Je opgeslagen knopinstellingen blijven ongewijzigd.</string>
+    <string name="help_body_color_scheme">Bepaalt het kleurenschema van de NavXS-interface zelf: Systeem volgt de apparaatinstelling en reageert ook op wijzigingen tijdens gebruik, Licht en Donker forceren er een. De kleuren die je voor de echte overlayknoppen hebt ingesteld, blijven altijd ongemoeid.</string>
+    <string name="help_sub_configuration">De configuratie kiezen</string>
+    <string name="help_body_position_background_per_config">De achtergrond hoort bij de configuratie die je bewerkt: de standaardindeling en elke app met een eigen ontwerp behouden hun eigen schermafbeelding en hun eigen dekking.</string>
 </resources>

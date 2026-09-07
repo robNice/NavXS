@@ -22,7 +22,7 @@
     <!-- Hilfe-Dialog Inhalt -->
     <string name="help_toc_title">Inhalt</string>
     <string name="settings_preview_title">Vorschau</string>
-    <string name="help_section_preview">Vorschau-Fahne</string>
+    <string name="help_section_preview">Button-Vorschau</string>
     <string name="help_sub_select">Button auswählen</string>
     <string name="help_body_apps">Die Liste zeigt alle installierten Apps auf deinem Gerät. Aktiviere eine App, damit das NavXS-Overlay erscheint, sobald sie im Vordergrund ist. Nutze die Suchleiste, um Apps nach Namen zu filtern, oder aktiviere System-Apps anzeigen, um Systemapps einzublenden.</string>
     <string name="help_body_position">Öffnet einen Vollbild-Editor. Ziehe einen aktiven Button an die genaue Position, an der er im Live-Overlay erscheinen soll. Tippe ihn an, um ihn auszuwählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln.</string>
@@ -39,7 +39,7 @@
     <string name="help_desc_bg_opacity">Transparenz des Hintergrundkreises.</string>
     <string name="help_desc_bg_size">Durchmesser des Kreises relativ zum Icon.</string>
     <string name="help_desc_bg_softness">0 = harte Kante; 100 = vollständig ausgeblendete Kante.</string>
-    <string name="help_body_preview">Die kleine Fahne oben rechts öffnet ein Panel mit dem ausgewählten Button auf weißem, grauem und schwarzem Hintergrund — so beurteilst du die Sichtbarkeit auf jeder App, ohne die Einstellungen zu verlassen.</string>
+    <string name="help_body_preview">Die Lasche mit dem Augensymbol oben rechts im Reiter Design &amp; Layout öffnet ein Panel mit dem ausgewählten Button auf weißem, grauem und schwarzem Hintergrund — so beurteilst du die Sichtbarkeit auf jeder App, ohne den Reiter zu verlassen.</string>
     <string name="help_section_support">Support</string>
     <string name="help_body_support">Bei Problemen mit dieser App erhältst du Unterstützung über den Issue-Tracker.</string>
     <string name="help_support_email_intro">Oder per E-Mail:</string>
@@ -110,4 +110,31 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
+    <string name="tab_design_layout">Design &amp; Layout</string>
+    <string name="settings_default_layout">Default Layout</string>
+    <string name="settings_configuration_for">Konfiguration für</string>
+    <string name="settings_individual_design_layout">Individuelles Design &amp; Layout</string>
+    <string name="settings_individual_design_layout_description">Gibt dieser App eigene Buttons, Positionen und Farben. Ist der Schalter aus, gilt das Default Layout.</string>
+    <string name="settings_copy_from">Übernehmen von …</string>
+    <string name="settings_copy_dialog_title">Design &amp; Layout übernehmen</string>
+    <string name="settings_copy_dialog_warning">Die aktuellen Werte der Zielkonfiguration werden ersetzt.</string>
+    <string name="settings_copy_dialog_empty">Es gibt noch keine App mit eigenem Design und Layout.</string>
+    <string name="settings_position_target">Bearbeitung: %1$s</string>
+    <string name="general_burn_in_section">Einbrennschutz</string>
+    <string name="general_burn_in_title">Einbrennrisiko reduzieren</string>
+    <string name="general_burn_in_description">Nach etwa 45 Sekunden ohne Bedienung wird der Button-Hintergrund ausgeblendet und das Icon schwächer dargestellt. Eine Berührung stellt die konfigurierte Darstellung sofort wieder her. Das senkt das Risiko, kann Einbrennen aber nicht vollständig verhindern.</string>
+    <string name="general_appearance_section">Erscheinungsbild</string>
+    <string name="general_color_scheme">Farbschema</string>
+    <string name="general_color_scheme_description">Gilt nur für die NavXS-Oberfläche, nicht für die konfigurierten Overlay-Farben.</string>
+    <string name="general_theme_system">System</string>
+    <string name="general_theme_light">Hell</string>
+    <string name="general_theme_dark">Dunkel</string>
+    <string name="help_body_apps_configuration">Jede hier aktivierte App erscheint auch in der Konfigurationsauswahl des Reiters Design &amp; Layout und kann dort später ein eigenes Design bekommen. Wird eine App deaktiviert, verschwindet sie aus dieser Auswahl; bereits gesetzte Werte bleiben gespeichert.</string>
+    <string name="help_body_configuration_for">Die Auswahl ganz oben bestimmt, welche Konfiguration du gerade bearbeitest. Das Default Layout gilt für jede aktivierte App ohne eigene Konfiguration. Darunter stehen alle derzeit aktivierten Apps, nach Namen sortiert. Nach einem Neustart beginnt NavXS immer mit dem Default Layout.</string>
+    <string name="help_body_individual">Dieser Schalter erscheint nur bei einer ausgewählten App. Ist er aus, folgt die App dem Default Layout, und alle Regler darunter werden ausgegraut mit den tatsächlich wirksamen Werten angezeigt. Ist er an, bekommt die App ein vollständig eigenes Design und Layout, und deine Änderungen betreffen ausschließlich diese App. Beim ersten Einschalten wird das aktuelle Default Layout kopiert, sodass sich optisch nichts ändert. Beim Ausschalten bleiben deine individuellen Werte für später erhalten.</string>
+    <string name="help_body_copy_from">Kopiert ein vollständiges Design und Layout aus einer anderen Konfiguration in die gerade bearbeitete. Es ist eine einmalige Kopie: Spätere Änderungen an der Quelle werden nicht weitergegeben. Die aktuellen Werte des Ziels werden ersetzt, deshalb wird vor dem Kopieren mit OK bestätigt.</string>
+    <string name="help_body_burn_in">Senkt das Risiko, dass sich die Buttons auf OLED-Displays einbrennen. Nach etwa 45 Sekunden ohne Bedienung wird der Button-Hintergrund vollständig ausgeblendet und das Icon schwächer dargestellt, nie heller als die von dir eingestellte Deckkraft. Die erste Berührung stellt sofort die konfigurierte Darstellung wieder her und führt denselben Tap ganz normal aus. Der Timer läuft nur, solange das echte Overlay sichtbar und der Bildschirm an ist; Vorschau und Positionierungseditor sind nie betroffen. Deine gespeicherten Button-Einstellungen bleiben unverändert.</string>
+    <string name="help_body_color_scheme">Legt das Farbschema der NavXS-Oberfläche selbst fest: System folgt der Geräteeinstellung und reagiert auch auf Wechsel bei laufender App, Hell und Dunkel erzwingen eines von beiden. Die Farben, die du für die echten Overlay-Buttons eingestellt hast, bleiben davon immer unberührt.</string>
+    <string name="help_sub_configuration">Konfiguration auswählen</string>
+    <string name="help_body_position_background_per_config">Der Hintergrund gehört zur gerade bearbeiteten Konfiguration: Das Default Layout und jede App mit eigenem Design und Layout behalten ihren eigenen Screenshot und ihre eigene Deckkraft.</string>
 </resources>
