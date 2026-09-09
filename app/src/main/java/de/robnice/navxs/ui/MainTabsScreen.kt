@@ -50,6 +50,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.ui.unit.sp
 import de.robnice.navxs.R
 import de.robnice.navxs.ui.apps.AppsScreen
@@ -143,7 +145,22 @@ fun MainTabsScreen(
                             Tab(
                                 selected = selectedTabIndex == index,
                                 onClick = { viewModel.setSelectedTab(index) },
-                                text = { Text(title) }
+                                text = {
+                                    // Jeder Reiter bekommt ein Drittel der Breite. Statt
+                                    // umzubrechen, verkleinert sich der Titel so weit, bis er
+                                    // in eine Zeile passt (z. B. tr "Uygulamalar").
+                                    Text(
+                                        text = title,
+                                        maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Ellipsis,
+                                        autoSize = TextAutoSize.StepBased(
+                                            minFontSize = 10.sp,
+                                            maxFontSize = 14.sp,
+                                            stepSize = 0.5.sp
+                                        )
+                                    )
+                                }
                             )
                         }
                     }

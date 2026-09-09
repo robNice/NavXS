@@ -109,7 +109,7 @@
     <string name="dialog_ok">OK</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
-    <string name="tab_design_layout">デザインとレイアウト</string>
+    <string name="tab_design_layout">デザイン</string>
     <string name="settings_default_layout">デフォルトレイアウト</string>
     <string name="settings_configuration_for">設定対象</string>
     <string name="settings_individual_design_layout">個別のデザインとレイアウト</string>

@@ -109,7 +109,7 @@
     <string name="dialog_ok">Tamam</string>
     <string name="percent_format">%1$d%%</string>
     <string name="position_value">%1$d px</string>
-    <string name="tab_design_layout">Tasarım ve düzen</string>
+    <string name="tab_design_layout">Tasarım</string>
     <string name="settings_default_layout">Varsayılan düzen</string>
     <string name="settings_configuration_for">Şunun için yapılandırma</string>
     <string name="settings_individual_design_layout">Bireysel tasarım ve düzen</string>

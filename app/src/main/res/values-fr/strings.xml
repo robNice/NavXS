@@ -109,7 +109,7 @@
     <string name="help_section_support">Assistance</string>
     <string name="help_body_support">En cas de problème avec cette application, obtenez de l\'aide via le gestionnaire de tickets.</string>
     <string name="help_support_email_intro">Ou par e-mail :</string>
-    <string name="tab_design_layout">Design et disposition</string>
+    <string name="tab_design_layout">Design</string>
     <string name="settings_default_layout">Disposition par défaut</string>
     <string name="settings_configuration_for">Configuration pour</string>
     <string name="settings_individual_design_layout">Design et disposition individuels</string>

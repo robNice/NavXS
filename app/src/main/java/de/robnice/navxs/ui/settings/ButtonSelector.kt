@@ -4,11 +4,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.ui.unit.dp
 import de.robnice.navxs.R
@@ -66,15 +69,20 @@ fun ButtonSelector(
                             color = if (selected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.surface
                         )
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 14.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        // Symbol oben ueber die volle Breite, Beschriftung darunter einzeilig:
+                        // nebeneinander bricht sie in Sprachen wie tr ("Son Uygulamalar") um.
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 6.dp, vertical = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             resolveThemeIcon(ThemeRegistry().fallbackTheme(type))?.let { icon ->
                                 Icon(
                                     imageVector = icon,
                                     contentDescription = null,
+                                    modifier = Modifier.size(26.dp),
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
@@ -84,8 +92,10 @@ fun ButtonSelector(
                                     NavButtonType.HOME -> stringResource(R.string.button_home)
                                     NavButtonType.RECENTS -> stringResource(R.string.button_recents)
                                 },
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Start
+                                style = MaterialTheme.typography.labelMedium,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }

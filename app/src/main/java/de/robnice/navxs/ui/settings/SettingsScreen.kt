@@ -148,11 +148,29 @@ fun SettingsScreen(
         ) {
             item {
                 SettingsCard {
-                    ConfigurationSelector(
-                        selectedApp = selectedApp,
-                        activeApps = activeApps,
-                        onSelectConfiguration = onSelectConfiguration
-                    )
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        ConfigurationSelector(
+                            selectedApp = selectedApp,
+                            activeApps = activeApps,
+                            onSelectConfiguration = onSelectConfiguration
+                        )
+                        if (controlsEnabled) {
+                            OutlinedButton(
+                                onClick = { copyDialogOpen = true },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.ContentCopy,
+                                    contentDescription = null
+                                )
+                                Text(
+                                    text = stringResource(R.string.settings_copy_from),
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -168,22 +186,6 @@ fun SettingsScreen(
                                 onCheckedChange = onIndividualConfigurationChange
                             )
                         }
-                    }
-                }
-            }
-
-            if (controlsEnabled) {
-                item {
-                    OutlinedButton(
-                        onClick = { copyDialogOpen = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
-                    ) {
-                        Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = null)
-                        Text(
-                            text = stringResource(R.string.settings_copy_from),
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
                     }
                 }
             }
