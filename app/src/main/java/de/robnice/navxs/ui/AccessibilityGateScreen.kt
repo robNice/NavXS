@@ -1,7 +1,7 @@
 package de.robnice.navxs.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,17 +22,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -49,11 +44,9 @@ import de.robnice.navxs.R
 @Composable
 fun AccessibilityGateScreen(
     modifier: Modifier = Modifier,
-    onOpenSettings: () -> Unit,
-    onCheckAgain: () -> Unit
+    onAgree: () -> Unit,
+    onDecline: () -> Unit
 ) {
-    var disclosureChecked by remember { mutableStateOf(false) }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -108,69 +101,47 @@ fun AccessibilityGateScreen(
                         DisclosureItem(stringResource(R.string.disclosure_item_6))
                         DisclosureItem(stringResource(R.string.disclosure_item_7))
                     }
-                    HorizontalDivider(color = Color(0x334FD8FF))
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Checkbox(
-                            checked = disclosureChecked,
-                            onCheckedChange = { disclosureChecked = it },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFF39CFFF),
-                                uncheckedColor = Color(0xFF4FD8FF),
-                                checkmarkColor = Color(0xFF08131F)
-                            ),
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.disclosure_checkbox),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFD3E7F5),
-                            modifier = Modifier.padding(start = 12.dp, top = 1.dp)
-                        )
-                    }
-                    Button(
-                        onClick = onOpenSettings,
-                        enabled = disclosureChecked,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = if (disclosureChecked) Color(0xFF4FD8FF) else Color(0x334FD8FF),
-                                shape = RoundedCornerShape(18.dp)
-                            ),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF1A3554),
-                            contentColor = Color(0xFFEAF8FF),
-                            disabledContainerColor = Color(0xFF0E1E2F),
-                            disabledContentColor = Color(0xFF4A6B87)
-                        )
-                    ) {
-                        Text(stringResource(R.string.disclosure_continue))
-                    }
-                    Button(
-                        onClick = onCheckAgain,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = Color(0x804FD8FF),
-                                shape = RoundedCornerShape(18.dp)
-                            ),
-                        shape = RoundedCornerShape(18.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF11253D),
-                            contentColor = Color(0xFFEAF8FF)
-                        )
-                    ) {
-                        Text(stringResource(R.string.check_again))
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.disclosure_question),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color(0xFFEAF8FF),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onDecline,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(52.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    border = BorderStroke(1.dp, Color(0x804FD8FF)),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Color(0xFFEAF8FF)
+                    )
+                ) {
+                    Text(stringResource(R.string.disclosure_decline))
+                }
+                Button(
+                    onClick = onAgree,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(52.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF39CFFF),
+                        contentColor = Color(0xFF08131F)
+                    )
+                ) {
+                    Text(stringResource(R.string.disclosure_agree))
+                }
+            }
         }
     }
 }

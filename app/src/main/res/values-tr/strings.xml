@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS yazılan metinleri, parolaları veya mesaj içeriklerini okumaz.</string>
     <string name="disclosure_item_6">NavXS bu verileri satmaz veya paylaşmaz.</string>
     <string name="disclosure_item_7">İşleme yalnızca gezinme yer paylaşımı özelliğini sunmak için yapılır.</string>
-    <string name="disclosure_checkbox">NavXS\'in erişilebilirlik hizmetine neden ihtiyaç duyduğunu anlıyorum.</string>
-    <string name="disclosure_continue">Kabul ediyorum — Erişilebilirlik ayarlarını aç</string>
+    <string name="disclosure_question">NavXS\'in erişilebilirlik hizmetini kullanmasına izin veriyor musunuz?</string>
+    <string name="disclosure_decline">Reddet</string>
+    <string name="disclosure_agree">Kabul et</string>
     <string name="app_loading">Erişilebilirlik izni kontrol ediliyor…</string>
     <string name="header_help">Yardımı aç</string>
     <string name="help_dialog_title">Yardım</string>

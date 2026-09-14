@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS는 입력한 텍스트, 비밀번호, 메시지 내용을 읽지 않습니다.</string>
     <string name="disclosure_item_6">NavXS는 이 데이터를 판매하거나 공유하지 않습니다.</string>
     <string name="disclosure_item_7">처리는 오직 탐색 오버레이 기능을 제공하기 위해서만 이루어집니다.</string>
-    <string name="disclosure_checkbox">NavXS에 접근성 서비스가 필요한 이유를 이해했습니다.</string>
-    <string name="disclosure_continue">동의함 — 접근성 설정 열기</string>
+    <string name="disclosure_question">NavXS가 접근성 서비스를 사용하도록 허용하시겠습니까?</string>
+    <string name="disclosure_decline">거부</string>
+    <string name="disclosure_agree">동의</string>
     <string name="app_loading">접근성 권한 확인 중…</string>
     <string name="header_help">도움말 열기</string>
     <string name="help_dialog_title">도움말</string>

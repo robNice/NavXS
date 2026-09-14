@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS nie odczytuje wpisywanego tekstu, haseł ani treści wiadomości.</string>
     <string name="disclosure_item_6">NavXS nie sprzedaje ani nie udostępnia tych danych.</string>
     <string name="disclosure_item_7">Przetwarzanie służy wyłącznie do udostępnienia funkcji nakładki nawigacyjnej.</string>
-    <string name="disclosure_checkbox">Rozumiem, dlaczego NavXS potrzebuje usługi ułatwień dostępu.</string>
-    <string name="disclosure_continue">Zgadzam się — Otwórz ustawienia ułatwień dostępu</string>
+    <string name="disclosure_question">Czy zezwalasz NavXS na korzystanie z usługi ułatwień dostępu?</string>
+    <string name="disclosure_decline">Odrzuć</string>
+    <string name="disclosure_agree">Zgadzam się</string>
     <string name="app_loading">Sprawdzanie uprawnienia ułatwień dostępu…</string>
     <string name="header_help">Otwórz pomoc</string>
     <string name="help_dialog_title">Pomoc</string>

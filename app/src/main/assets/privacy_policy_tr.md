@@ -1,6 +1,6 @@
 # NavXS Gizlilik Politikası
 
-Son güncelleme: 30 Ağustos 2026
+Son güncelleme: 14 Eylül 2026
 
 ## 1. Genel Bilgiler
 
@@ -31,15 +31,26 @@ Bu bilgiler yalnızca şu amaçlarla işlenir:
 
 ## 4. Erişilebilirlik Hizmeti
 
-NavXS bir Android erişilebilirlik hizmeti kullanır.
+NavXS, Android Erişilebilirlik Hizmeti API'sini (AccessibilityService) kullanır. NavXS, engelli kişilere yönelik bir erişilebilirlik aracı değildir; hizmet, uygulamanın temel özelliği olan gezinme katmanı için gereklidir.
 
-Bu hizmet yalnızca şunlar için kullanılır:
+### 4.1 Onay
 
-- ön planda çalışan uygulamanın paket adını algılamak
-- katmanın gösterilmesi gerekip gerekmediğine karar vermek
-- amaçlanan navigasyon eylemlerini tetiklemek
+Erişilebilirlik hizmeti istenmeden önce NavXS, hizmetin nasıl kullanıldığını açıklayan bir bilgilendirme gösterir. Kullanıcı iki düğme arasında seçim yapar: "Reddet" ve "Kabul et". NavXS, Android erişilebilirlik ayarlarını yalnızca "Kabul et" düğmesine dokunulduktan sonra açar; kullanıcının hizmeti orada kendisi etkinleştirmesi gerekir. "Reddet" hiçbir şeyi etkinleştirmeden uygulamayı kapatır. Bilgilendirmeden başka bir şekilde ayrılmak onay olarak kabul edilmez. Hizmet, Android erişilebilirlik ayarlarından istediğiniz zaman devre dışı bırakılabilir.
 
-Bu hizmet reklam, takip veya analitik amaçlı kullanılmaz.
+### 4.2 Hizmetin kullanım amacı
+
+Hizmet yalnızca şu amaçlarla kullanılır:
+
+- şu anda ön planda çalışan uygulamanın paket adını algılamak
+- o uygulama için katmanın gösterilip gösterilmeyeceğine karar vermek
+- seçilen uygulamaların üzerinde kayan gezinme düğmelerini göstermek
+- kullanıcı ilgili düğmeye dokunduğunda Geri, Ana Ekran ve Son Uygulamalar gezinme işlemlerini gerçekleştirmek
+
+### 4.3 Hizmetin yapmadıkları
+
+Erişilebilirlik hizmetinin teknik olarak ön plandaki uygulamanın pencere bilgilerine erişimi vardır. NavXS bu erişimi yalnızca o uygulamanın paket adını belirlemek için kullanır. NavXS; yazılan metinleri, şifreleri, mesaj içeriklerini veya diğer ekran içeriklerini okumaz, saklamaz ya da iletmez. NavXS, yukarıda belirtilen gezinme işlemleri dışında kullanıcı adına herhangi bir işlem yapmaz ve bunları da yalnızca kullanıcı bir düğmeye dokunduğunda yapar.
+
+Bu hizmet reklam, izleme veya analiz amacıyla kullanılmaz ve veriler satılmaz ya da paylaşılmaz.
 
 ## 5. Harici Sunuculara Aktarım Yok
 

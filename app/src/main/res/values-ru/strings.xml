@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS не читает вводимый текст, пароли и содержимое сообщений.</string>
     <string name="disclosure_item_6">NavXS не продаёт и не передаёт эти данные.</string>
     <string name="disclosure_item_7">Обработка выполняется исключительно для работы навигационного оверлея.</string>
-    <string name="disclosure_checkbox">Я понимаю, зачем NavXS нужна служба специальных возможностей.</string>
-    <string name="disclosure_continue">Я согласен — Открыть настройки специальных возможностей</string>
+    <string name="disclosure_question">Разрешить NavXS использовать службу специальных возможностей?</string>
+    <string name="disclosure_decline">Отклонить</string>
+    <string name="disclosure_agree">Согласен</string>
     <string name="app_loading">Проверка разрешения специальных возможностей…</string>
     <string name="header_help">Открыть справку</string>
     <string name="help_dialog_title">Справка</string>

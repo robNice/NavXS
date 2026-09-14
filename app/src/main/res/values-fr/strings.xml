@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS ne lit ni les textes saisis, ni les mots de passe, ni le contenu des messages.</string>
     <string name="disclosure_item_6">NavXS ne vend ni ne partage ces données.</string>
     <string name="disclosure_item_7">Le traitement sert uniquement à fournir la fonction de superposition de navigation.</string>
-    <string name="disclosure_checkbox">Je comprends pourquoi NavXS a besoin du service d\'accessibilité.</string>
-    <string name="disclosure_continue">J\'accepte — Ouvrir les paramètres d\'accessibilité</string>
+    <string name="disclosure_question">Autorisez-vous NavXS à utiliser le service d\'accessibilité ?</string>
+    <string name="disclosure_decline">Refuser</string>
+    <string name="disclosure_agree">Accepter</string>
     <string name="app_loading">Vérification de l\'autorisation d\'accessibilité…</string>
     <string name="header_help">Ouvrir l\'aide</string>
     <string name="help_dialog_title">Aide</string>

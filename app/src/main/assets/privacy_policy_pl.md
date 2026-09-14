@@ -1,6 +1,6 @@
 # Polityka prywatności NavXS
 
-Ostatnia aktualizacja: 30 sierpnia 2026
+Ostatnia aktualizacja: 14 września 2026
 
 ## 1. Informacje ogólne
 
@@ -31,15 +31,26 @@ Informacje te są przetwarzane wyłącznie w celu:
 
 ## 4. Usługa ułatwień dostępu
 
-NavXS korzysta z usługi ułatwień dostępu systemu Android.
+NavXS korzysta z interfejsu API usługi ułatwień dostępu Androida (AccessibilityService). NavXS nie jest narzędziem ułatwień dostępu dla osób z niepełnosprawnościami; usługa jest wymagana do działania podstawowej funkcji aplikacji, czyli nakładki nawigacyjnej.
 
-Usługa ta jest używana wyłącznie do:
+### 4.1 Zgoda
 
-- wykrywania nazwy pakietu aplikacji aktualnie działającej na pierwszym planie
-- decydowania, czy nakładka powinna być wyświetlana
-- wyzwalania zamierzonych akcji nawigacji
+Przed poproszeniem o usługę ułatwień dostępu NavXS wyświetla informację wyjaśniającą, w jaki sposób usługa jest wykorzystywana. Użytkownik wybiera jeden z dwóch przycisków: „Odrzuć” lub „Zgadzam się”. Dopiero po dotknięciu „Zgadzam się” NavXS otwiera ustawienia ułatwień dostępu Androida, w których użytkownik musi samodzielnie włączyć usługę. „Odrzuć” zamyka aplikację bez włączania czegokolwiek. Opuszczenie informacji w inny sposób nie jest traktowane jako zgoda. Usługę można w każdej chwili wyłączyć w ustawieniach ułatwień dostępu Androida.
 
-Usługa ta nie jest wykorzystywana do celów reklamowych, śledzenia ani analitycznych.
+### 4.2 Do czego służy usługa
+
+Usługa jest wykorzystywana wyłącznie do:
+
+- rozpoznawania nazwy pakietu aplikacji działającej aktualnie na pierwszym planie
+- decydowania, czy nakładka ma być wyświetlana dla tej aplikacji
+- wyświetlania pływających przycisków nawigacyjnych nad wybranymi aplikacjami
+- wykonywania działań nawigacyjnych Wstecz, Ekran główny i Ostatnie aplikacje, gdy użytkownik dotknie odpowiedniego przycisku
+
+### 4.3 Czego usługa nie robi
+
+Usługa ułatwień dostępu ma technicznie dostęp do informacji o oknach aplikacji na pierwszym planie. NavXS wykorzystuje ten dostęp wyłącznie do ustalenia nazwy pakietu tej aplikacji. NavXS nie odczytuje, nie zapisuje ani nie przesyła wpisywanego tekstu, haseł, treści wiadomości ani żadnych innych treści wyświetlanych na ekranie. NavXS nie wykonuje żadnych działań w imieniu użytkownika poza wymienionymi działaniami nawigacyjnymi i tylko wtedy, gdy użytkownik dotknie przycisku.
+
+Usługa nie jest wykorzystywana do celów reklamowych, śledzenia ani analityki, a dane nie są sprzedawane ani udostępniane.
 
 ## 5. Brak przekazywania do zewnętrznych serwerów
 

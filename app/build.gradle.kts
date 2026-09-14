@@ -15,10 +15,14 @@ android {
         applicationId = "de.robnice.navxs"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10003000
-        versionName = "1.3.0"
+        versionCode = 10003001
+        versionName = "1.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    androidResources {
+        generateLocaleConfig = true
     }
 
     val keystorePath: String? = System.getenv("KEYSTORE_PATH")

@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS non legge testi digitati, password o contenuti dei messaggi.</string>
     <string name="disclosure_item_6">NavXS non vende né condivide questi dati.</string>
     <string name="disclosure_item_7">Il trattamento avviene solo per fornire la funzione di overlay di navigazione.</string>
-    <string name="disclosure_checkbox">Ho capito perché NavXS ha bisogno del servizio di accessibilità.</string>
-    <string name="disclosure_continue">Accetto — Apri le impostazioni di accessibilità</string>
+    <string name="disclosure_question">Consenti a NavXS di utilizzare il servizio di accessibilità?</string>
+    <string name="disclosure_decline">Rifiuta</string>
+    <string name="disclosure_agree">Accetta</string>
     <string name="app_loading">Verifica del permesso di accessibilità…</string>
     <string name="header_help">Apri guida</string>
     <string name="help_dialog_title">Guida</string>

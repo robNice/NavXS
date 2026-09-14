@@ -1,6 +1,6 @@
 # Privacy Policy for NavXS
 
-Last updated: August 30, 2026
+Last updated: September 14, 2026
 
 ## 1. General Information
 
@@ -31,15 +31,26 @@ This information is processed solely in order to:
 
 ## 4. Accessibility Service
 
-NavXS uses an Android accessibility service.
+NavXS uses the Android Accessibility Service API (AccessibilityService). NavXS is not an accessibility tool for people with disabilities; the service is required for the core feature of the app, the navigation overlay.
 
-This service is used exclusively to:
+### 4.1 Consent
+
+Before the accessibility service is requested, NavXS shows a disclosure explaining how the service is used. The user can choose between two buttons, "Decline" and "Agree". Only after tapping "Agree" does NavXS open the Android accessibility settings, where the user must enable the service manually. Tapping "Decline" closes the app without enabling anything. Leaving the disclosure in any other way is not treated as consent. The service can be disabled at any time in the Android accessibility settings.
+
+### 4.2 What the service is used for
+
+The service is used exclusively to:
 
 - detect the package name of the app currently running in the foreground
-- decide whether the overlay should be displayed
-- trigger the intended navigation actions
+- decide whether the overlay should be displayed for that app
+- display the floating navigation buttons over the selected apps
+- perform the navigation actions Back, Home and Recent Apps when the user taps the corresponding button
 
-This service is not used for advertising, tracking, or analytics purposes.
+### 4.3 What the service does not do
+
+The accessibility service technically has access to window information of the app in the foreground. NavXS uses this access only to determine the package name of that app. NavXS does not read, store, or transmit typed text, passwords, message content, or any other screen content. NavXS does not perform actions on behalf of the user other than the navigation actions mentioned above, and only when the user taps a button.
+
+This service is not used for advertising, tracking, or analytics purposes, and the data is neither sold nor shared.
 
 ## 5. No Transfer to External Servers
 

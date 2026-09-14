@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS leest geen ingevoerde tekst, wachtwoorden of berichtinhoud.</string>
     <string name="disclosure_item_6">NavXS verkoopt of deelt deze gegevens niet.</string>
     <string name="disclosure_item_7">De verwerking dient uitsluitend om de navigatie-overlay te leveren.</string>
-    <string name="disclosure_checkbox">Ik begrijp waarom NavXS de toegankelijkheidsservice nodig heeft.</string>
-    <string name="disclosure_continue">Ik ga akkoord — Toegankelijkheidsinstellingen openen</string>
+    <string name="disclosure_question">Sta je toe dat NavXS de toegankelijkheidsservice gebruikt?</string>
+    <string name="disclosure_decline">Weigeren</string>
+    <string name="disclosure_agree">Akkoord</string>
     <string name="app_loading">Toegankelijkheidstoestemming controleren…</string>
     <string name="header_help">Help openen</string>
     <string name="help_dialog_title">Help</string>

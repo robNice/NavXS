@@ -14,8 +14,9 @@
     <string name="disclosure_item_5">NavXS は入力したテキスト、パスワード、メッセージの内容を読み取りません。</string>
     <string name="disclosure_item_6">NavXS はこれらのデータを販売または共有しません。</string>
     <string name="disclosure_item_7">処理はナビゲーションオーバーレイ機能の提供のためだけに行われます。</string>
-    <string name="disclosure_checkbox">NavXS がユーザー補助サービスを必要とする理由を理解しました。</string>
-    <string name="disclosure_continue">同意する — ユーザー補助設定を開く</string>
+    <string name="disclosure_question">NavXS がユーザー補助サービスを使用することを許可しますか？</string>
+    <string name="disclosure_decline">拒否</string>
+    <string name="disclosure_agree">同意する</string>
     <string name="app_loading">ユーザー補助の権限を確認中…</string>
     <string name="header_help">ヘルプを開く</string>
     <string name="help_dialog_title">ヘルプ</string>

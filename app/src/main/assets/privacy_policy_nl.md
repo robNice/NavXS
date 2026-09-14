@@ -1,6 +1,6 @@
 # Privacybeleid van NavXS
 
-Laatste update: 30 augustus 2026
+Laatste update: 14 september 2026
 
 ## 1. Algemene informatie
 
@@ -31,15 +31,26 @@ Deze informatie wordt uitsluitend verwerkt om:
 
 ## 4. Toegankelijkheidsservice
 
-NavXS maakt gebruik van een Android-toegankelijkheidsservice.
+NavXS gebruikt de Android-toegankelijkheidsservice-API (AccessibilityService). NavXS is geen toegankelijkheidstool voor mensen met een beperking; de service is nodig voor de kernfunctie van de app, de navigatie-overlay.
 
-Deze service wordt uitsluitend gebruikt voor:
+### 4.1 Toestemming
 
-- het detecteren van de pakketnaam van de app die momenteel op de voorgrond actief is
-- het beslissen of de overlay moet worden weergegeven
-- het activeren van de beoogde navigatieacties
+Voordat de toegankelijkheidsservice wordt aangevraagd, toont NavXS een melding die uitlegt hoe de service wordt gebruikt. De gebruiker kiest tussen twee knoppen: 'Weigeren' en 'Akkoord'. Pas nadat op 'Akkoord' is getikt, opent NavXS de Android-instellingen voor toegankelijkheid, waar de gebruiker de service zelf moet inschakelen. 'Weigeren' sluit de app zonder iets in te schakelen. Het verlaten van de melding op een andere manier geldt niet als toestemming. De service kan op elk moment worden uitgeschakeld in de Android-instellingen voor toegankelijkheid.
 
-Deze service wordt niet gebruikt voor reclame-, tracking- of analysedoeleinden.
+### 4.2 Waarvoor de service wordt gebruikt
+
+De service wordt uitsluitend gebruikt om:
+
+- de pakketnaam te herkennen van de app die momenteel op de voorgrond draait
+- te bepalen of de overlay voor die app moet worden weergegeven
+- de zwevende navigatieknoppen boven de geselecteerde apps weer te geven
+- de navigatieacties Terug, Home en Recente apps uit te voeren wanneer de gebruiker op de betreffende knop tikt
+
+### 4.3 Wat de service niet doet
+
+De toegankelijkheidsservice heeft technisch toegang tot vensterinformatie van de app op de voorgrond. NavXS gebruikt deze toegang uitsluitend om de pakketnaam van die app te bepalen. NavXS leest, bewaart of verzendt geen getypte tekst, wachtwoorden, berichtinhoud of andere scherminhoud. NavXS voert geen acties uit namens de gebruiker, behalve de hierboven genoemde navigatieacties, en alleen wanneer de gebruiker op een knop tikt.
+
+Deze service wordt niet gebruikt voor reclame-, tracking- of analysedoeleinden, en de gegevens worden niet verkocht of gedeeld.
 
 ## 5. Geen overdracht naar externe servers
 

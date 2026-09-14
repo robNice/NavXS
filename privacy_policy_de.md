@@ -1,6 +1,6 @@
 # Datenschutzbestimmung für NavXS
 
-Stand: 30. August 2026
+Stand: 14. September 2026
 
 ## 1. Allgemeines
 
@@ -31,15 +31,26 @@ Die Verarbeitung dieser Informationen erfolgt ausschließlich, um:
 
 ## 4. Bedienungshilfe-Dienst
 
-NavXS verwendet einen Android-Bedienungshilfe-Dienst.
+NavXS verwendet die Android-Schnittstelle für Bedienungshilfen (AccessibilityService API). NavXS ist keine Bedienungshilfe für Menschen mit Behinderungen; der Dienst wird für die Kernfunktion der App, das Navigations-Overlay, benötigt.
 
-Dieser wird ausschließlich dafür genutzt,
+### 4.1 Einwilligung
+
+Bevor der Bedienungshilfe-Dienst angefordert wird, zeigt NavXS einen Hinweis, der die Nutzung des Dienstes erklärt. Der Nutzer wählt zwischen zwei Schaltflächen: „Ablehnen“ und „Zustimmen“. Erst nach Tippen auf „Zustimmen“ öffnet NavXS die Android-Einstellungen für Bedienungshilfen, in denen der Nutzer den Dienst selbst aktivieren muss. „Ablehnen“ schließt die App, ohne etwas zu aktivieren. Ein Verlassen des Hinweises auf andere Weise gilt nicht als Einwilligung. Der Dienst kann jederzeit in den Android-Einstellungen für Bedienungshilfen deaktiviert werden.
+
+### 4.2 Wofür der Dienst genutzt wird
+
+Der Dienst wird ausschließlich dafür genutzt,
 
 - den Paketnamen der aktuell im Vordergrund laufenden App zu erkennen
-- zu entscheiden, ob das Overlay eingeblendet werden soll
-- die vorgesehenen Navigationsaktionen auszulösen
+- zu entscheiden, ob das Overlay für diese App eingeblendet werden soll
+- die schwebenden Navigationsschaltflächen über den ausgewählten Apps anzuzeigen
+- die Navigationsaktionen Zurück, Startbildschirm und Letzte Apps auszuführen, wenn der Nutzer auf die entsprechende Schaltfläche tippt
 
-Es erfolgt keine Nutzung dieses Dienstes zu Werbe-, Tracking- oder Analysezwecken.
+### 4.3 Was der Dienst nicht tut
+
+Der Bedienungshilfe-Dienst hat technisch Zugriff auf Fensterinformationen der App im Vordergrund. NavXS nutzt diesen Zugriff ausschließlich, um den Paketnamen dieser App zu ermitteln. NavXS liest, speichert oder überträgt keine eingegebenen Texte, Passwörter, Nachrichteninhalte oder sonstigen Bildschirminhalte. NavXS führt keine Aktionen im Namen des Nutzers aus, außer den oben genannten Navigationsaktionen, und das nur, wenn der Nutzer auf eine Schaltfläche tippt.
+
+Es erfolgt keine Nutzung dieses Dienstes zu Werbe-, Tracking- oder Analysezwecken, und die Daten werden weder verkauft noch weitergegeben.
 
 ## 5. Keine Übermittlung an externe Server
 

@@ -1,5 +1,6 @@
 package de.robnice.navxs.ui
 
+import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun NavXsApp(
@@ -16,6 +18,7 @@ fun NavXsApp(
     viewModel: MainViewModel,
     snackbarHost: @Composable () -> Unit
 ) {
+    val context = LocalContext.current
     val positionBackgroundPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -31,8 +34,8 @@ fun NavXsApp(
         } else if (!state.accessibilityEnabled) {
             AccessibilityGateScreen(
                 modifier = Modifier.padding(innerPadding),
-                onOpenSettings = viewModel::openAccessibilitySettings,
-                onCheckAgain = viewModel::refreshAccessibilityStatus
+                onAgree = viewModel::openAccessibilitySettings,
+                onDecline = { (context as? Activity)?.finish() }
             )
         } else {
             MainTabsScreen(

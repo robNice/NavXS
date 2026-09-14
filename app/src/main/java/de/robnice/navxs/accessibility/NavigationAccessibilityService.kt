@@ -14,10 +14,12 @@ import de.robnice.navxs.R
 import de.robnice.navxs.data.SettingsRepository
 import de.robnice.navxs.data.models.AppOverlayConfiguration
 import de.robnice.navxs.data.models.NavButtonType
+import de.robnice.navxs.domain.AccessibilitySetupReturnPolicy
 import de.robnice.navxs.domain.OverlayConfigurationResolver
 import de.robnice.navxs.overlay.OverlayController
 import de.robnice.navxs.overlay.OverlayViewport
 import de.robnice.navxs.ui.AppForegroundState
+import de.robnice.navxs.ui.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,6 +28,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+
+private const val TAG_SETUP_RETURN = "NavXsSetupReturn"
 
 private data class ServiceInputs(
     val settings: de.robnice.navxs.data.models.OverlaySettings,
@@ -59,6 +63,15 @@ class NavigationAccessibilityService : AccessibilityService() {
     private var serviceConnected = false
     private var screenStateReceiver: BroadcastReceiver? = null
 
+    private fun returnToAppAfterSetupIfRequested() {
+        if (!AccessibilitySetupReturnPolicy.shared.consumeShouldReturnToApp()) return
+        val intent = Intent(this, MainActivity::class.java).addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+        runCatching { startActivity(intent) }
+            .onFailure { Log.w(TAG_SETUP_RETURN, "Could not return to app after setup", it) }
+    }
+
     override fun onServiceConnected() {
         super.onServiceConnected()
         scope.cancel()
@@ -68,6 +81,7 @@ class NavigationAccessibilityService : AccessibilityService() {
         overlayController = OverlayController(this, ::performAction)
         foregroundResolver = ForegroundPackageResolver(packageName, IgnoredForegroundPackages)
         registerScreenStateReceiver()
+        returnToAppAfterSetupIfRequested()
         scope.launch {
             combine(
                 settingsRepository.settingsFlow,

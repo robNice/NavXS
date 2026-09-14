@@ -1,6 +1,6 @@
 # Política de privacidad de NavXS
 
-Última actualización: 30 de agosto de 2026
+Última actualización: 14 de septiembre de 2026
 
 ## 1. Información general
 
@@ -31,15 +31,26 @@ Esta información se procesa exclusivamente para:
 
 ## 4. Servicio de accesibilidad
 
-NavXS utiliza un servicio de accesibilidad de Android.
+NavXS utiliza la API del servicio de accesibilidad de Android (AccessibilityService). NavXS no es una herramienta de accesibilidad para personas con discapacidad; el servicio es necesario para la función principal de la app: el overlay de navegación.
 
-Este servicio se usa exclusivamente para:
+### 4.1 Consentimiento
 
-- detectar el nombre de paquete de la aplicación actualmente en primer plano
-- decidir si el overlay debe mostrarse
-- activar las acciones de navegación previstas
+Antes de solicitar el servicio de accesibilidad, NavXS muestra un aviso que explica cómo se utiliza el servicio. El usuario elige entre dos botones: «Rechazar» y «Aceptar». Solo después de pulsar «Aceptar», NavXS abre los ajustes de accesibilidad de Android, donde el usuario debe activar el servicio manualmente. «Rechazar» cierra la app sin activar nada. Salir del aviso de cualquier otra forma no se considera consentimiento. El servicio puede desactivarse en cualquier momento en los ajustes de accesibilidad de Android.
 
-Este servicio no se usa con fines publicitarios, de seguimiento ni analíticos.
+### 4.2 Para qué se utiliza el servicio
+
+El servicio se utiliza exclusivamente para:
+
+- detectar el nombre de paquete de la app que se está ejecutando en primer plano
+- decidir si el overlay debe mostrarse para esa app
+- mostrar los botones de navegación flotantes sobre las apps seleccionadas
+- ejecutar las acciones de navegación Atrás, Inicio y Apps recientes cuando el usuario pulsa el botón correspondiente
+
+### 4.3 Lo que el servicio no hace
+
+Técnicamente, el servicio de accesibilidad tiene acceso a la información de las ventanas de la app en primer plano. NavXS utiliza este acceso únicamente para determinar el nombre de paquete de esa app. NavXS no lee, almacena ni transmite textos escritos, contraseñas, contenido de mensajes ni ningún otro contenido de la pantalla. NavXS no realiza acciones en nombre del usuario, salvo las acciones de navegación mencionadas, y solo cuando el usuario pulsa un botón.
+
+Este servicio no se utiliza con fines publicitarios, de seguimiento ni de análisis, y los datos no se venden ni se comparten.
 
 ## 5. Sin transmisión a servidores externos
 

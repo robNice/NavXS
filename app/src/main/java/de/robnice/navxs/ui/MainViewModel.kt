@@ -18,6 +18,7 @@ import de.robnice.navxs.data.models.AppThemeMode
 import de.robnice.navxs.data.models.InstalledAppInfo
 import de.robnice.navxs.data.models.NavButtonType
 import de.robnice.navxs.data.models.OverlaySettings
+import de.robnice.navxs.domain.AccessibilitySetupReturnPolicy
 import de.robnice.navxs.domain.ButtonSettingsUseCase
 import de.robnice.navxs.domain.OverlayConfigurationResolver
 import de.robnice.navxs.overlay.OverlayViewport
@@ -270,6 +271,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun openAccessibilitySettings() {
         accessibilityCheckComplete.value = false
+        AccessibilitySetupReturnPolicy.shared.markSettingsOpenedAfterConsent()
         getApplication<Application>().startActivity(openAccessibilitySettingsIntent())
     }
 
