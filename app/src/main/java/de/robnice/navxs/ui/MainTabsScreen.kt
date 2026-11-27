@@ -1,7 +1,13 @@
 package de.robnice.navxs.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -306,12 +312,15 @@ private fun MainHeaderWordmark(modifier: Modifier = Modifier) {
     }
 }
 
+private const val KOFI_URL = "https://ko-fi.com/robnice"
+
 @Composable
 private fun AppFooter(
     modifier: Modifier = Modifier,
     versionName: String,
     onOpenPrivacy: () -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -330,12 +339,25 @@ private fun AppFooter(
                 text = stringResource(R.string.footer_privacy),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable(onClick = onOpenPrivacy)
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClick = onOpenPrivacy)
+            )
+            Image(
+                painter = painterResource(R.drawable.ic_kofi),
+                contentDescription = stringResource(R.string.footer_kofi),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(6.dp))
+                    .clickable { uriHandler.openUri(KOFI_URL) }
+                    .padding(4.dp)
+                    .height(20.dp)
             )
             Text(
                 text = stringResource(R.string.footer_version, versionName),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
             )
         }
     }

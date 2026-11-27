@@ -46,6 +46,7 @@
     <string name="help_support_email_intro">Oder per E-Mail:</string>
     <string name="footer_privacy">Datenschutz</string>
     <string name="footer_version">Version: %1$s</string>
+    <string name="footer_kofi">NavXS auf Ko-fi unterstützen</string>
     <string name="privacy_dialog_title">Datenschutz</string>
     <string name="privacy_dialog_message">NavXS verarbeitet den Paketnamen der aktuellen Vordergrund-App nur lokal auf deinem Gerät, um zu entscheiden, ob das Overlay angezeigt werden soll. Es werden keine App-Auswahlen oder Vordergrund-App-Daten an externe Dienste gesendet.</string>
     <string name="apps_search_hint">Apps suchen</string>

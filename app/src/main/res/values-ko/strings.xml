@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">또는 이메일로:</string>
     <string name="footer_privacy">개인정보</string>
     <string name="footer_version">버전: %1$s</string>
+    <string name="footer_kofi">Ko-fi에서 NavXS 후원하기</string>
     <string name="privacy_dialog_title">개인정보</string>
     <string name="privacy_dialog_message">NavXS는 오버레이 표시 여부를 결정하기 위해 포그라운드 앱의 패키지 이름을 기기에서만 로컬로 처리합니다. 외부 서비스로 데이터가 전송되지 않습니다.</string>
     <string name="apps_search_hint">앱 검색</string>

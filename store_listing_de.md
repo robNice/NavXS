@@ -1,36 +1,55 @@
-# NavXS – Google-Play-Store-Eintrag (Deutsch)
+NavXS Navigations-Buttons
 
-## App-Name (max. 30)
+NavXS fügt ausgewählten Android-Apps anpassbare Navigationsbuttons auf dem Bildschirm hinzu.
 
-NavXS – Navigations-Overlay
+Manche Apps blenden die Navigationsleiste des Systems aus, nutzen Vollbild-Layouts oder machen die normale Navigation schwer erreichbar. NavXS hilft, indem es ein kleines, konfigurierbares Navigations-Overlay über den Apps einblendet, die du auswählst.
 
-## Kurzbeschreibung (max. 80)
+Anders als ein globales Navigations-Overlay erscheint NavXS nur dort, wo du es wirklich brauchst. Du legst fest, in welchen installierten Apps die Buttons angezeigt werden – alle anderen Apps bleiben unverändert.
 
-Schwebende Buttons für Zurück, Startseite & Letzte Apps in Apps deiner Wahl.
+NavXS bietet drei schwebende Buttons – <b>Zurück</b>, <b>Startbildschirm</b> und <b>Letzte Apps</b>. Platziere sie dort, wo sie am besten erreichbar sind, und passe ihr Aussehen nach deinen Wünschen an.
 
-## Vollständige Beschreibung (max. 4000)
+<b>Typische Einsatzbereiche</b>
 
-NavXS blendet schwebende Navigationsbuttons – Zurück, Startbildschirm und Letzte Apps – über den Apps ein, die du auswählst. Praktisch für Apps, die die Systemnavigation ausblenden, für Vollbild-Apps oder wenn die normale Navigation schwer erreichbar ist.
+• Apps, die die Android-Navigationsleiste ausblenden
+• Apps im Vollbildmodus oder mit immersiven Layouts
+• Geräte, auf denen Navigationsgesten unzuverlässig oder unpraktisch sind
+• Große Smartphones, auf denen die Systemnavigation schwer zu erreichen ist
+• Tablets oder fest montierte Geräte
+• Kiosk-Anwendungen, bei denen die Navigation erreichbar bleiben soll
+• Nutzer, die sichtbare Navigationsbuttons statt Gesten bevorzugen
 
-**Funktionen**
-• Drei feste Buttons: Zurück, Startbildschirm und Letzte Apps
-• Auswahl der Apps, in denen das Overlay erscheinen soll
-• Jeden Button frei per Drag & Drop oder mit Feinjustierung positionieren
-• Größe, Farbe, Transparenz und Theme für jeden Button einzeln anpassen
+<b>Wichtigste Funktionen</b>
+
+• Schwebende Buttons für Zurück, Startbildschirm und Letzte Apps in ausgewählten Apps
+• Genaue Auswahl, welche installierten Apps das Overlay anzeigen
+• Alle anderen Apps bleiben unverändert
+• Freie Positionierung per Drag & Drop oder mit Feinjustierung
+• Größe, Farbe, Transparenz und Theme für jeden Button einzeln anpassbar
 • Optionaler Einbrennschutz für OLED-Displays
 • Heller und dunkler Modus
+• Schlanke Oberfläche, auf das Wesentliche konzentriert
 
-**Nutzung der Bedienungshilfen-Schnittstelle (Accessibility Service API)**
-NavXS benötigt den Android-Bedienungshilfe-Dienst für seine Kernfunktion:
-• um zu erkennen, welche App gerade im Vordergrund ist, damit das Overlay nur in den ausgewählten Apps erscheint
-• um die schwebenden Navigationsbuttons über diesen Apps anzuzeigen
-• um die Aktionen Zurück, Startbildschirm und Letzte Apps auszuführen, wenn du auf einen Button tippst
+<b>Nutzung des Bedienungshilfe-Dienstes</b>
 
-NavXS verwendet ausschließlich den Paketnamen der App im Vordergrund. Eingegebene Texte, Passwörter, Nachrichteninhalte oder andere Bildschirminhalte werden nicht gelesen, und NavXS führt keine Aktionen in deinem Namen aus – außer der Navigationsaktion des Buttons, den du antippst.
+NavXS verwendet die Android-Schnittstelle für Bedienungshilfen (Accessibility Service API). Sie ist für die Kernfunktion der App erforderlich, da Android normalen Apps ohne sie weder das Auslösen von System-Navigationsaktionen noch diese Art von Overlay erlaubt.
 
-Bevor der Dienst angefordert wird, erklärt NavXS dessen Nutzung und fragt mit den Optionen „Ablehnen“ und „Zustimmen“ nach deiner Einwilligung. Du aktivierst den Dienst selbst in den Android-Einstellungen und kannst ihn dort jederzeit wieder deaktivieren.
+Der Bedienungshilfe-Dienst wird ausschließlich genutzt, um:
 
-**Datenschutz**
+• zu erkennen, welche App gerade im Vordergrund ist, damit das Overlay nur in den ausgewählten Apps erscheint
+• die schwebenden Navigationsbuttons über diesen Apps anzuzeigen
+• Zurück, Startbildschirm oder Letzte Apps auszuführen, wenn du auf den entsprechenden Button tippst
+
+Der Dienst hat technisch Zugriff auf Fensterinformationen der App im Vordergrund, NavXS verwendet davon jedoch ausschließlich den Paketnamen dieser App. NavXS liest keine eingegebenen Texte, Passwörter, Nachrichteninhalte oder sonstigen Bildschirminhalte, verfolgt kein Nutzerverhalten und führt keine Aktionen in deinem Namen aus – außer der Navigationsaktion des Buttons, den du antippst.
+
+Bevor der Dienst angefordert wird, erklärt NavXS dessen Nutzung und fragt mit zwei Optionen nach deiner Einwilligung: „Ablehnen“ und „Zustimmen“. Erst nach Tippen auf „Zustimmen“ öffnet NavXS die Android-Einstellungen für Bedienungshilfen, in denen du den Dienst selbst aktivierst. Dort kannst du ihn jederzeit wieder deaktivieren.
+
+<b>Zugriff auf installierte Apps</b>
+
+NavXS benötigt Zugriff auf die Liste der installierten Apps, damit du auswählen kannst, in welchen Apps das Overlay angezeigt werden soll. Diese Liste wird ausschließlich für die App-Auswahl und die Konfiguration innerhalb von NavXS verwendet.
+
+<b>Datenschutz</b>
+
 • Die gesamte Verarbeitung erfolgt lokal auf deinem Gerät
+• Kein Konto und keine personenbezogenen Daten erforderlich
 • Es werden keine Daten erhoben, verkauft oder weitergegeben
 • Keine Werbung, keine Analyse, kein Tracking

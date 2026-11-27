@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">Veya e-posta ile:</string>
     <string name="footer_privacy">Gizlilik</string>
     <string name="footer_version">Sürüm: %1$s</string>
+    <string name="footer_kofi">NavXS\'i Ko-fi\'de destekle</string>
     <string name="privacy_dialog_title">Gizlilik</string>
     <string name="privacy_dialog_message">NavXS, katmanın gösterilip gösterilmeyeceğine karar vermek için ön plandaki uygulamanın paket adını yalnızca cihazınızda yerel olarak işler. Harici hizmetlere hiçbir veri gönderilmez.</string>
     <string name="apps_search_hint">Uygulama ara</string>

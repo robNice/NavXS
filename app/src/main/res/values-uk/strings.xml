@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">Або електронною поштою:</string>
     <string name="footer_privacy">Конфіденційність</string>
     <string name="footer_version">Версія: %1$s</string>
+    <string name="footer_kofi">Підтримати NavXS на Ko-fi</string>
     <string name="privacy_dialog_title">Конфіденційність</string>
     <string name="privacy_dialog_message">NavXS обробляє назву пакету активного застосунку локально на вашому пристрої, щоб вирішити, чи показувати оверлей. Жодні дані не передаються зовнішнім службам.</string>
     <string name="apps_search_hint">Пошук застосунків</string>

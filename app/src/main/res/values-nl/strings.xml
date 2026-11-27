@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">Of per e-mail:</string>
     <string name="footer_privacy">Privacy</string>
     <string name="footer_version">Versie: %1$s</string>
+    <string name="footer_kofi">NavXS steunen op Ko-fi</string>
     <string name="privacy_dialog_title">Privacy</string>
     <string name="privacy_dialog_message">NavXS verwerkt de pakketnaam van de actieve voorgrondapp lokaal op je apparaat om te bepalen of de overlay getoond moet worden. Er worden geen gegevens naar externe diensten verzonden.</string>
     <string name="apps_search_hint">Apps zoeken</string>

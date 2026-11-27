@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">Lub e-mailem:</string>
     <string name="footer_privacy">Prywatność</string>
     <string name="footer_version">Wersja: %1$s</string>
+    <string name="footer_kofi">Wesprzyj NavXS na Ko-fi</string>
     <string name="privacy_dialog_title">Prywatność</string>
     <string name="privacy_dialog_message">NavXS przetwarza nazwę pakietu aktywnej aplikacji lokalnie na Twoim urządzeniu, aby zdecydować, czy wyświetlić nakładkę. Żadne dane nie są przesyłane do zewnętrznych usług.</string>
     <string name="apps_search_hint">Szukaj aplikacji</string>

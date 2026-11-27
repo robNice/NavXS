@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">Oppure via e-mail:</string>
     <string name="footer_privacy">Privacy</string>
     <string name="footer_version">Versione: %1$s</string>
+    <string name="footer_kofi">Sostieni NavXS su Ko-fi</string>
     <string name="privacy_dialog_title">Privacy</string>
     <string name="privacy_dialog_message">NavXS elabora il nome del pacchetto dell\'app in primo piano localmente sul dispositivo per decidere se mostrare l\'overlay. Nessun dato viene trasmesso a servizi esterni.</string>
     <string name="apps_search_hint">Cerca app</string>

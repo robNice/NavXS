@@ -45,6 +45,7 @@
     <string name="help_support_email_intro">またはメールで:</string>
     <string name="footer_privacy">プライバシー</string>
     <string name="footer_version">バージョン: %1$s</string>
+    <string name="footer_kofi">Ko-fiでNavXSを支援</string>
     <string name="privacy_dialog_title">プライバシー</string>
     <string name="privacy_dialog_message">NavXSはオーバーレイを表示するかどうかの判断のみに、フォアグラウンドアプリのパッケージ名をデバイス内でローカルに処理します。外部サービスへのデータ送信は一切行いません。</string>
     <string name="apps_search_hint">アプリを検索</string>
