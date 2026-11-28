@@ -19,20 +19,33 @@ Eine schlanke Android-App, die ein schwebendes Navigations-Overlay mit **Zurück
 
 ## Inhalt
 
-1. [Bedienungshilfe-Dienst](#1-bedienungshilfe-dienst)
-2. [Apps](#2-apps)
-3. [Einstellungen](#3-einstellungen)
-   - [3.1 Buttons positionieren](#31-buttons-positionieren)
-   - [3.2 Button auswählen](#32-button-auswählen)
-   - [3.3 Aktiv](#33-aktiv)
-   - [3.4 Button](#34-button)
-   - [3.5 Button-Hintergrund](#35-button-hintergrund)
-4. [Vorschau-Fahne](#4-vorschau-fahne)
-5. [Lizenz](#5-lizenz)
+1. [Installation](#1-installation)
+2. [Bedienungshilfe-Dienst](#2-bedienungshilfe-dienst)
+3. [Apps](#3-apps)
+4. [Einstellungen](#4-einstellungen)
+   - [4.1 Buttons positionieren](#41-buttons-positionieren)
+   - [4.2 Button auswählen](#42-button-auswählen)
+   - [4.3 Aktiv](#43-aktiv)
+   - [4.4 Button](#44-button)
+   - [4.5 Button-Hintergrund](#45-button-hintergrund)
+5. [Vorschau-Fahne](#5-vorschau-fahne)
+6. [Lizenz](#6-lizenz)
 
 ---
 
-## 1 Bedienungshilfe-Dienst
+## 1 Installation
+
+NavXS ist bei Google Play erhältlich:
+
+<a href="https://play.google.com/store/apps/details?id=de.robnice.navxs">
+  <img src="https://play.google.com/intl/de_de/badges/static/images/badges/de_badge_web_generic.png" height="80" alt="Jetzt bei Google Play">
+</a>
+
+Alternativ stehen signierte APKs auf der Seite [Releases](https://github.com/robNice/NavXS/releases) bereit. Für die manuelle Installation einer APK muss – wenn Android danach fragt – die Installation aus unbekannten Quellen für den Browser bzw. Dateimanager erlaubt werden.
+
+---
+
+## 2 Bedienungshilfe-Dienst
 
 NavXS verwendet den Android-Bedienungshilfe-Dienst, um zu erkennen, welche App gerade im Vordergrund ist. Dies ist der einzige Mechanismus, den Android einer App bietet, um zu wissen, was zu einem bestimmten Zeitpunkt läuft — er wird benötigt, damit das Overlay weiß, wann es erscheinen und wann es sich verstecken soll.
 
@@ -47,14 +60,14 @@ Beim ersten Start erscheint dieser Bildschirm, wenn der Dienst noch nicht aktivi
 | | |
 |---|---|
 | ✅ | Liest den **Paketnamen** der Vordergrund-App, um zu entscheiden, ob das Overlay angezeigt wird. |
-| ❌ | Liest **nicht** den Fensterinhalt, Text oder UI-Elemente anderer Apps (`canRetrieveWindowContent="false"`). |
+| ❌ | Liest **keine** Texte, Inhalte oder UI-Elemente anderer Apps. Der Fensterzugriff (`canRetrieveWindowContent="true"`) dient ausschließlich dazu, den Paketnamen der Vordergrund-App zu ermitteln. |
 | ❌ | Überträgt **keine** Daten. Die gesamte Verarbeitung bleibt auf deinem Gerät. |
 
 Die Berechtigung kann jederzeit unter **Android-Einstellungen → Bedienungshilfen → NavXS** widerrufen werden.
 
 ---
 
-## 2 Apps
+## 3 Apps
 
 <p>
   <img src="docs/apps_light.png" width="270" alt="Apps-Reiter – helles Design">
@@ -68,7 +81,7 @@ Aktivierte Apps erscheinen für schnellen Zugriff oben in der Liste. Das Deaktiv
 
 ---
 
-## 3 Einstellungen
+## 4 Einstellungen
 
 Alle Einstellungen betreffen nur den aktuell ausgewählten Button. Die drei Buttons — Zurück, Home und Letzte Apps — werden unabhängig voneinander konfiguriert.
 
@@ -78,7 +91,7 @@ Alle Einstellungen betreffen nur den aktuell ausgewählten Button. Die drei Butt
   <img src="docs/settings_dark.png" width="270" alt="Einstellungen-Reiter – dunkles Design">
 </p>
 
-### 3.1 Buttons positionieren
+### 4.1 Buttons positionieren
 
 Öffnet einen Vollbild-Editor, in dem du Buttons an die genaue Position ziehst, die sie im Live-Overlay einnehmen sollen. Tippe einen Button an, um ihn zu wählen, ohne ihn zu verschieben. Das Zurücksetzen-Symbol (↺) stellt alle Standardpositionen wieder her. Die Präzisionssteuerung verschiebt den Button um eine einstellbare Schrittweite in Pixeln. Das Bild-Symbol öffnet den Dialog für den Positionierungs-Hintergrund: Wähle einen beliebigen Screenshot aus der Galerie als Editor-Hintergrund, um die Buttons an einer echten App-Oberfläche auszurichten, oder setze ihn auf das gepunktete Standardraster zurück. Sobald ein Bild gesetzt ist, erscheint im selben Dialog ein Regler, der den Screenshot schwächer einblendet, damit die Buttons beim Ziehen gut sichtbar bleiben. Der Dialog bleibt während der Bildauswahl offen, sodass sich der Regler direkt danach anpassen lässt. Gespeichert wird nur die Bild-URI, niemals eine Kopie der Datei; im Live-Overlay erscheint der Screenshot nicht.
 
@@ -90,15 +103,15 @@ Alle Einstellungen betreffen nur den aktuell ausgewählten Button. Die drei Butt
 
 Das Panel **Präzise Positionierung** bietet Schrittweiten von 1 px, 5 px und 10 px und zeigt die genauen Pixelkoordinaten des ausgewählten Buttons in Echtzeit an.
 
-### 3.2 Button auswählen
+### 4.2 Button auswählen
 
 Tippe oben auf dem Einstellungsbildschirm auf **Zurück**, **Home** oder **Letzte Apps**, um einen Button auszuwählen. Alle folgenden Einstellungen betreffen nur den ausgewählten Button.
 
-### 3.3 Aktiv
+### 4.3 Aktiv
 
 Schaltet den ausgewählten Button im Overlay ein oder aus. Mindestens ein Button muss jederzeit aktiv bleiben.
 
-### 3.4 Button
+### 4.4 Button
 
 | Einstellung | Beschreibung |
 |-------------|--------------|
@@ -107,7 +120,7 @@ Schaltet den ausgewählten Button im Overlay ein oder aus. Mindestens ein Button
 | **Deckkraft** | Icon-Transparenz — 0 unsichtbar, 100 vollständig deckend. |
 | **Größe** | Skaliert das Icon relativ zur Standardgröße. |
 
-### 3.5 Button-Hintergrund
+### 4.5 Button-Hintergrund
 
 Ein optionaler Kreis hinter dem Icon zur Verbesserung der Sichtbarkeit auf jedem App-Hintergrund.
 
@@ -120,7 +133,7 @@ Ein optionaler Kreis hinter dem Icon zur Verbesserung der Sichtbarkeit auf jedem
 
 ---
 
-## 4 Vorschau-Fahne
+## 5 Vorschau-Fahne
 
 Die kleine Fahne oben rechts im Einstellungsbildschirm öffnet ein Seitenpanel mit dem ausgewählten Button auf weißem, grauem und schwarzem Hintergrund. So lässt sich beurteilen, wie der Button auf einem beliebigen App-Hintergrund aussieht, ohne die Einstellungen zu verlassen.
 
@@ -133,6 +146,6 @@ Die kleine Fahne oben rechts im Einstellungsbildschirm öffnet ein Seitenpanel m
 
 ---
 
-## 5 Lizenz
+## 6 Lizenz
 
 NavXS steht unter der [MIT-Lizenz](LICENSE.md).
